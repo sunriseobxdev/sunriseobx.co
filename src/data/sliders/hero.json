@@ -3,7 +3,7 @@
         {
             "image": "img/slide1.jpeg",
             "title": "Create the Building You Want Here",
-            "text": "Builty is a construction and architecture environmentally most responsible for any kinds of themes.",
+            "text": "Sunrise OBX is a construction and architecture environmentally most responsible for any kinds of themes.",
             "button": {
                 "label": "Start Consulting",
                 "link": "/contact"
@@ -12,7 +12,7 @@
         {
             "image": "img/project5.jpeg",
             "title": "A Better Way To Build Your Dreams",
-            "text": "Builty is a construction and architecture environmentally most responsible for any kinds of themes.",
+            "text": "Sunrise OBX is a construction and architecture environmentally most responsible for any kinds of themes.",
             "button": {
                 "label": "Estimate Price",
                 "link": "/services"
@@ -20,8 +20,8 @@
         },
         {
             "image": "img/articles6.jpeg",
-            "title": "Builty Innovative & Industrial Solutions",
-            "text": "Builty is a construction and architecture environmentally most responsible for any kinds of themes.",
+            "title": "Sunrise OBX Innovative & Industrial Solutions",
+            "text": "Sunrise OBX is a construction and architecture environmentally most responsible for any kinds of themes.",
             "button": {
                 "label": "Start Consulting",
                 "link": "/contact"
