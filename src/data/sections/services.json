@@ -1,34 +1,34 @@
 {
-    "items": [
-        {
-            "icon": {
-                "light": "/images/icon-1.svg",
-                "dark": "/images/1-icon.png",
-                "alt": "icon"
-            },
-            "title": "Wincore Windows",
-            "text": "Let us handle your Wincore window installation for any model, to protect your OBX home from the elements.",,
-            "link": "/services/service-1"
-        },
-        {
-            "icon": {
-                "light": "/images/icon-2.svg",
-                "dark": "/images/2-icon.png",
-                "alt": "icon"
-            },
-            "title": "Fortified Roofing",
-            "text": "Protect your home against high winds, hurricanes, and hailstorms",
-            "link": "/services/service-2"
-        },
-        {
-            "icon": {
-                "light": "/images/icon-3.svg",
-                "dark": "/images/3-icon.png",
-                "alt": "icon"
-            },
-            "title": "Exterior Construction",
-            "text": "Underpinning, insulation, porches, and more",
-            "link": "/services/service-3"
-        }
-    ]
+  "items": [
+    {
+      "icon": {
+        "light": "/images/icon-1.svg",
+        "dark": "/images/1-icon.png",
+        "alt": "icon"
+      },
+      "title": "Wincore Windows",
+      "text": "Let us handle your Wincore window installation for any model, to protect your OBX home from the elements.",
+      "link": "/services/service-1"
+    },
+    {
+      "icon": {
+        "light": "/images/icon-2.svg",
+        "dark": "/images/2-icon.png",
+        "alt": "icon"
+      },
+      "title": "Fortified Roofing",
+      "text": "Protect your home against high winds, hurricanes, and hailstorms",
+      "link": "/services/service-2"
+    },
+    {
+      "icon": {
+        "light": "/images/icon-3.svg",
+        "dark": "/images/3-icon.png",
+        "alt": "icon"
+      },
+      "title": "Exterior Construction",
+      "text": "Underpinning, insulation, porches, and more",
+      "link": "/services/service-3"
+    }
+  ]
 }
