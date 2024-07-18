@@ -2,17 +2,17 @@
     "items": [
         {
             "image": "img/slide1.jpeg",
-            "title": "Create the Building You Want Here",
-            "text": "Sunrise OBX is a construction and architecture environmentally most responsible for any kinds of themes.",
+            "title": "Licensed Builders in OBX",
+            "text": "All things exterior.",
             "button": {
-                "label": "Start Consulting",
+                "label": "Contact",
                 "link": "/contact"
             }
         },
         {
             "image": "img/project5.jpeg",
-            "title": "A Better Way To Build Your Dreams",
-            "text": "Sunrise OBX is a construction and architecture environmentally most responsible for any kinds of themes.",
+            "title": "Professional Construction Services",
+            "text": "Roofing, sliding, and window replacements",
             "button": {
                 "label": "Estimate Price",
                 "link": "/services"
@@ -20,10 +20,10 @@
         },
         {
             "image": "img/articles6.jpeg",
-            "title": "Sunrise OBX Innovative & Industrial Solutions",
-            "text": "Sunrise OBX is a construction and architecture environmentally most responsible for any kinds of themes.",
+            "title": "Protecting Your OBX Home",
+            "text": "Durable Wincore window installations by a reliable team",
             "button": {
-                "label": "Start Consulting",
+                "label": "Contact",
                 "link": "/contact"
             }
         }
