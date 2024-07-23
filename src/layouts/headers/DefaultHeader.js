@@ -201,7 +201,7 @@ const DefaultHeader = ({ contactButton, cartButton }) => {
           <div className="mobile-nav mobile-menu" id="mobile-nav">
             <div className="res-log">
               <Link href="/">
-                <img src={appData.header.logo.image} alt={appData.header.logo.alt} />
+                <img src={appData.header.logo.image} alt={appData.header.logo.alt} width="60" height="60" />
               </Link>
             </div>
 
