@@ -8,33 +8,39 @@
     "items": [
         {
             "icon": "/img/serv-i-1.svg",
-            "title": "Construction",
-            "text": "Designing and Building The Most Beautiful Custom Homes.",
-            "link": "/services/service-1"
+            "title": "Roofing",
+            "text": "We have a team of experienced roofing professionals ready to handle any reroofing project. Whether it's a small repair or a complete replacement, we ensure the highest quality materials and workmanship every step of the way.",
+            "link": "/#contact"
         },
         {
             "icon": "/img/serv-i-2.svg",
-            "title": "Project Development",
-            "text": "Designing and Building The Most Beautiful Custom Homes.",
-            "link": "/services/service-2"
+            "title": "Windows",
+            "text": "Upgrade your properties windows with our top of the line window replacement services. By choosing energy efficient windows you not only enhance the aesthetic appeal but also improve insulation and potentially reduce energy costs.",
+            "link": "/#contact"
         },
         {
             "icon": "/img/serv-i-3.svg",
-            "title": "Interior Design",
-            "text": "Designing and Building The Most Beautiful Custom Homes.",
-            "link": "/services/service-3"
+            "title": "Siding",
+            "text": "Enhance the appearance and protection of your properties with that expert siding installation services. The offer of a variety of siding options and not your unique style and preferences providing long lasting durability and beauty.",
+            "link": "/#contact"
         },
         {
             "icon": "/img/serv-i-4.svg",
-            "title": "Welding & Laser",
-            "text": "Designing and Building The Most Beautiful Custom Homes.",
-            "link": "/services/service-3"
+            "title": "Repairs",
+            "text": "From minor fixes to significant repairs, we have the skills and knowledge to handle all types of exterior repairs. Our team promptly addresses issues, ensuring your properties always look their best and are structurally sound.",
+            "link": "/#contact"
         },
         {
             "icon": "/img/serv-i-5.svg",
-            "title": "Architecture",
-            "text": "Designing and Building The Most Beautiful Custom Homes.",
-            "link": "/services/service-3"
+            "title": "Waterproofing",
+            "text": "At sunrise we consider ourselves experts in waterproofing. Our techniques and materials are designed to protect your properties from water damage, preventing costly repairs in the future.",
+            "link": "/#contact"
+        },
+        {
+            "icon": "/img/serv-i-5.svg",
+            "title": "Drone Inspection",
+            "text": "We go the extra mile is providing A comprehensive assessment of your properties. Our drone fleet allows us to conduct full exterior inspections, capturing detailed images and identifying potential issues.",
+            "link": "/#contact"
         }
     ]
 }

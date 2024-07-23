@@ -1,7 +1,7 @@
 ---
 #preview
-title: Charles Dedham Workspace
-image: /img/project2.jpeg
+title: Project 2
+image: /img/project-2.jpg
 short: "A modern, technology-enabled, wellness-focused workspace and sustainable office…"
 location: "United Kingdom"
 dates: "1999-2000"

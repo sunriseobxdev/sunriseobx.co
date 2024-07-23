@@ -15,9 +15,11 @@ const Services2Section = () => {
         <div className="row g-0">
             {Data.items.map((item, key) => (
             <div key={`services2-item-${key}`} className="col-lg-4 col-md-6 col-sm-12" >
-            <div className="service-two-box">
+            <div className="service-two-box h-100">
+                <div>
                 <h3><Link href={item.link}>{item.title}</Link></h3>
                 <p>{item.text}</p>
+                </div>
                 <div className="service-two-icon d-flex-all justify-content-start">
                     <img src={item.icon} alt={item.title} />
                     <Link href={item.link}>
@@ -28,16 +30,6 @@ const Services2Section = () => {
             </div>
             ))}
 
-            <div className="col-lg-4 col-md-6 col-sm-12" >
-                <div className="service-two-box last d-flex-all">
-                    <Link href={Data.button.link}>
-                        {Data.button.label}
-                        <span className="d-flex-all d-inline-flex">
-                            <i className="fa-solid fa-angles-right"></i>
-                        </span>
-                    </Link>
-                </div>
-            </div>
         </div>
         </div>
     </section>

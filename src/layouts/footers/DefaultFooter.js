@@ -4,33 +4,6 @@ import appData from "@data/app.json";
 const DefaultFooter = () => {
   return (
     <footer className="footer-style-one">
-        <div className="footer-p-1">
-        <div className="container">
-            <div className="row">
-            <div className="footer-first">
-                <div className="footer-logo">
-                    <Link href="/">
-                        <img src={appData.footer.logo.image} alt={appData.footer.logo.alt} />
-                    </Link>
-                </div>
-                <div className="contact-info d-flex-all">
-                    <div className="images d-flex-all justify-content-start">
-                        <figure>
-                            <img src="/img/blog-author-img.jpg" alt="Contact Images" />
-                        </figure>
-                        <figure>
-                            <img src="/img/blog-author-img-2.jpg" alt="Contact Images" />
-                        </figure>
-                    </div>
-                    <p>Sales representative <span>+1 (251) 344 0 66</span> free call !</p>
-                </div>
-                <Link href="/contact" className="theme-btn">
-                    Get a Consultation <i className="fa-solid fa-angles-right" />
-                </Link>
-            </div>
-            </div>
-        </div>
-        </div>
         <div className="footer-p-2">
         <div className="container">
             <div className="row">
@@ -57,19 +30,6 @@ const DefaultFooter = () => {
                             <p>{appData.footer.info.email}</p>
                         </li>
                     </ul>
-                </div>
-            </div>
-            <div className="col-lg-4 col-md-6 col-sm-12">
-                <div className="footer-col">
-                    <h3>Newsletter</h3>
-                    <p>Signup for our weekly newsletter to get the latest news.</p>
-                    <form action={appData.settings.mailchimp.url} method="post" target="_blank">
-                        <input type="email" name="EMAIL" placeholder="Enter your email." required />
-                        <input type="hidden" name={appData.settings.mailchimp.key} />
-                        <button type="submit">
-                            <i className="fa-solid fa-arrow-up-long" />
-                        </button>
-                    </form>
                 </div>
             </div>
             </div>

@@ -1,7 +1,7 @@
 ---
 #preview
-title: Old Colony Construction
-image: /img/project6.jpeg
+title: Project 6
+image: /img/project-6.jpg
 short: "A modern, technology-enabled, wellness-focused workspace and sustainable office…"
 location: "Lviv"
 dates: "1998-2000"

@@ -1,7 +1,7 @@
 ---
 #preview
-title: Charles Dedham House
-image: /img/project2.jpeg
+title: Project 9
+image: /img/project-10.jpg
 short: "A modern, technology-enabled, wellness-focused workspace and sustainable office…"
 location: "Melbourne"
 dates: "1995-1997"

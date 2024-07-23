@@ -1,7 +1,7 @@
 ---
 #preview
-title: Patient Support Centre
-image: /img/project3.jpeg
+title: Project 3
+image: /img/project-3.jpg
 short: "A modern, technology-enabled, wellness-focused workspace and sustainable office…"
 location: "New York"
 dates: "1994-1999"

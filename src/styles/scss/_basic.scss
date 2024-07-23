@@ -67,10 +67,11 @@
 */
 
 html {
-    scroll-behavior: smooth;
+    scroll-behavior:smooth;
     overflow-x: hidden;
 }
 body {
+    scroll-behavior: smooth;
     overflow-x: hidden;
     font-family: $font-1;
     -webkit-font-smoothing: antialiased;
@@ -3003,6 +3004,10 @@ span.counter {
     border: 1px solid #c1c1c1;
     padding: 40px 40px 0;
     position: relative;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 .service-style-two .service-two-box:before {
     content: "";

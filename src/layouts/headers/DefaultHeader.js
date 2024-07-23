@@ -79,7 +79,7 @@ const DefaultHeader = ({ contactButton, cartButton }) => {
                     <div className="header-logo">
                       <Link href="/">
                         <figure>
-                          <img src={appData.header.logo.image} alt={appData.header.logo.alt} />
+                          <img src={appData.header.logo.image} alt={appData.header.logo.alt} width="72" height="72" />
                         </figure>
                       </Link>
                     </div>
@@ -166,7 +166,7 @@ const DefaultHeader = ({ contactButton, cartButton }) => {
                         }
                         {contactButton != 1 &&
                         <a href="tel:+1-252-619-7966" className="theme-btn">
-                          +1-252-619-7966 
+                          +1 (252) 619-7966 
                           <i>
                             <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" width="40" height="62" viewBox="0 0 40 62">
                               <defs>
@@ -183,7 +183,7 @@ const DefaultHeader = ({ contactButton, cartButton }) => {
                         </a>
                         }
                         {contactButton == 1 &&
-                        <Link href="/contact" className="theme-btn simple">
+                        <Link href="/#contact" className="theme-btn simple">
                           Get a Quote
                         </Link>
                         }
@@ -233,16 +233,12 @@ const DefaultHeader = ({ contactButton, cartButton }) => {
           </div>
 
           <div className="mobile-nav desktop-menu">
-            <h2>We Build Building and Great Homes.</h2>
+            <h2>We&apos;re builders, not salespeople.</h2>
             <p className="des">We successfully cope with tasks of varying complexity, provide long-term guarantees and regularly master new technologies.</p>
-            
-            <figure>
-              <img src="/img/project1.jpeg" alt="image" />
-            </figure>
 
             <h3>Get in touch</h3>
             <p className="num">(+380) 50 318 47 07</p>
-            <p className="adrs">65 Allerton Street 901 N Pitt Str, Suite 170, VA 22314, USA</p>
+            <p className="adrs">5149-5177 N Croatan Hwy, Kitty Hawk, NC 27949</p>
 
             <div className="social-medias">
               {appData.social.map((item, key) => (

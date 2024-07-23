@@ -5,39 +5,28 @@ import dynamic from "next/dynamic";
 import { getSortedPostsData } from "@library/posts";
 import { getSortedProjectsData } from "@library/projects";
 
-import AboutSection from "@components/sections/About";
-import ServicesSection from "@components/sections/Services";
-import CountersSection from "@components/sections/Counters";
-import FeaturesSection from "@components/sections/Features";
-import RenovationSection from "@components/sections/Renovation";
-import LatestPostsSection from "@components/sections/LatestPosts";
+import Hero3Section from "@components/sections/Hero3";
+import About3Section from "@components/sections/About3";
+import CallToActionSection from "@components/sections/CallToAction";
+import ContactFormSection from "@components/sections/ContactForm";
 
-const HeroSlider = dynamic( () => import("@components/sliders/Hero"), { ssr: false } );
-const PartnersSlider = dynamic( () => import("@components/sliders/Partners"), { ssr: false } );
-const TestimonialSlider = dynamic( () => import("@components/sliders/Testimonial"), { ssr: false } );
 const ProjectsSlider = dynamic( () => import("@components/sliders/Projects"), { ssr: false } );
-const TeamSlider = dynamic( () => import("@components/sliders/Team"), { ssr: false } );
 
-const Home1 = (props) => {
+
+const Home3 = (props) => {
   return (
-    <Layouts transparent>
+    <Layouts contactButton>
       <>
-        <HeroSlider />
-        <ServicesSection />
-        <AboutSection />
-        <CountersSection />
+        <Hero3Section />
+        <About3Section />
+        <CallToActionSection />
         <ProjectsSlider projects={props.projects} />
-        <TeamSlider />
-        <FeaturesSection />
-        <PartnersSlider />
-        <RenovationSection />
-        <TestimonialSlider />
-        <LatestPostsSection posts={props.posts} />
+        <ContactFormSection />
       </>
     </Layouts>
   );
 };
-export default Home1;
+export default Home3;
 
 export async function getStaticProps() {
   const allPosts = getSortedPostsData();

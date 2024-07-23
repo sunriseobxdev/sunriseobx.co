@@ -87,7 +87,7 @@ export const sliderProps = {
     },
   },
   projectsSlider: {
-    slidesPerView: 2,
+    slidesPerView: 3,
     spaceBetween: 30,
     speed: 800,
     autoplay: {

@@ -11,7 +11,7 @@ const ContactFormSection = () => {
   }
 
   return (
-    <section className="contact-form-one">
+    <section className="contact-form-one" id="contact">
         <div className="heading">
             <figure>
                 <img src="/images/heading-icon.png" alt="heading-icon" />
@@ -21,7 +21,7 @@ const ContactFormSection = () => {
         </div>
         <div className="container">
         <div className="row align-items-center">
-            <div className="col-lg-6" >
+            {/* <div className="col-lg-6" >
                 <div className="acc2">
                     <Accordion defaultActiveKey="contact-acc-0" alwaysOpen>
                         {Data.items.map((item, key) => (
@@ -36,8 +36,8 @@ const ContactFormSection = () => {
                         ))}
                     </Accordion>
                 </div>
-            </div>
-            <div className="col-lg-6" >
+            </div> */}
+            <div className="col-lg-12" >
                 <div className="c-form-2">
                     <div className="parallax" style={styles.parallax} />
 
@@ -140,7 +140,7 @@ const ContactFormSection = () => {
                               value={values.phone} 
                             />
                         </div>
-                        <div className="row g-0">
+                        {/* <div className="row g-0">
                             <div className="select-wrapper">
                             <select 
                               id="inputState-111" 
@@ -156,7 +156,7 @@ const ContactFormSection = () => {
                                 <option value="3">Subject 3</option>
                             </select>
                             </div>
-                        </div>
+                        </div> */}
                         <div className="row g-0">
                             <textarea 
                               placeholder="Question / Message?"

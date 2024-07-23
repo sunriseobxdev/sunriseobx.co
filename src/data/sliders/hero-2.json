@@ -5,7 +5,7 @@
             "title": "NewBridge on the Dedham",
             "text": "We will go through all the stages of construction.",
             "button": {
-                "link": "/contact",
+                "link": "/#contact",
                 "label": "Get a Consultation"
             }
         },
@@ -14,7 +14,7 @@
             "title": "Reconstruction of The Building",
             "text": "We will go through all the stages of construction.",
             "button": {
-                "link": "/contact",
+                "link": "/#contact",
                 "label": "Get a Consultation"
             }
         },
@@ -23,7 +23,7 @@
             "title": "Old Factory Construction",
             "text": "We will go through all the stages of construction.",
             "button": {
-                "link": "/contact",
+                "link": "/#contact",
                 "label": "Get a Consultation"
             }
         }

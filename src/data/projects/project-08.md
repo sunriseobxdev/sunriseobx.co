@@ -1,7 +1,7 @@
 ---
 #preview
-title: Life Science Center
-image: /img/project8.jpeg
+title: Project 8
+image: /img/project-9.jpg
 short: "A modern, technology-enabled, wellness-focused workspace and sustainable office…"
 location: "Sydney"
 dates: "2003-2006"

@@ -15,7 +15,7 @@
             ],
             "button": {
                 "label": "Select Now",
-                "link": "/contact"
+                "link": "/#contact"
             },
             "image": "/img/pricing1.jpeg"
         },
@@ -32,7 +32,7 @@
             ],
             "button": {
                 "label": "Select Now",
-                "link": "/contact"
+                "link": "/#contact"
             },
             "image": "/img/pricing2.jpeg"
         },
@@ -49,7 +49,7 @@
             ],
             "button": {
                 "label": "Select Now",
-                "link": "/contact"
+                "link": "/#contact"
             },
             "image": "/img/slide3.jpeg"
         }

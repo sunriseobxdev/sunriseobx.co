@@ -6,7 +6,7 @@
         "alt": "image"
     },
     "button": {
-        "link": "/contact",
+        "link": "/#contact",
         "label": "Build a Project"
     }
 }

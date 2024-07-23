@@ -4,16 +4,15 @@ import Layouts from "@layouts/Layouts";
 
 import PageBanner from "@components/PageBanner";
 import CountersSection from "@components/sections/Counters";
-import RenovationSection from "@components/sections/Renovation";
+import ServicesSection from "../components/sections/Services";
+import Services2Section from "../components/sections/Services2";
 
-const TeamSlider = dynamic( () => import("@components/sliders/Team"), { ssr: false } );
-const PartnersSlider = dynamic( () => import("@components/sliders/Partners"), { ssr: false } );
 const TestimonialSlider = dynamic( () => import("@components/sliders/Testimonial"), { ssr: false } );
 
 const About = () => {
   return (
     <Layouts>
-      <PageBanner pageTitle={"About Us"} pageDesc={"our values and vaulted us to the top of our industry."} />
+      <PageBanner pageTitle={"About Us"} />
       
       {/* About-First Start */}
       <section className="gap about-first">
@@ -28,27 +27,14 @@ const About = () => {
               <div className="who-we-are">
                 <div>
                   <h3>Who We Are?</h3>
-                  <p>We are resolute in our mission to not only make a difference to the lives of people today but to also leave a legacy for future generations and the planet we live in. Our portfolio includes dozens of successfully completed projects of houses of different storeys, with high–quality finishes and good repairs. Building houses is our vocation!</p>
+                  <p>At Sunrise Construction, our mission is to redefine excellence in construction on the Outer Banks of North Carolina. Founded in 2023, we stand as a beacon of innovation and commitment, bridging the gap in the market for a medium-sized construction company that prioritizes exceptional craftsmanship, superior customer service, and transparent communication. Our dedicated team, at Sunrise Construction, is driven by a passion for delivering projects that not only meet but exceed our clients' expectations. With a focus on quality, integrity, and collaboration, we embark on every construction endeavor, ensuring that the structures we build not only withstand the test of time but become integral parts of the vibrant Outer Banks community.</p>
                 </div>
-                <figure>
-                  <img className="w-100" src="/img/gallery-1.jpeg" alt="About Image One" />
-                </figure>
               </div>
             </div>
             <div className="col-lg-5 offset-lg-1">
               <div className="who-we-are space">
-                <div>
-                  <h3>What's in it for me?</h3>
-                  <ul>
-                    <li><i className="fa-solid fa-circle-dot" /> High performing, low carbon concrete solution</li>
-                    <li><i className="fa-solid fa-circle-dot" /> Value for workers' skills</li>
-                    <li><i className="fa-solid fa-circle-dot" /> Excellent standards in construction</li>
-                    <li><i className="fa-solid fa-circle-dot" /> An inclusive industry</li>
-                    <li><i className="fa-solid fa-circle-dot" /> Don't take our word for it</li>
-                  </ul>
-                </div>
                 <figure>
-                  <img className="w-100" src="/img/gallery-3.jpeg" alt="About Image Two" />
+                  <img className="w-100" src="/img/about.jpg" alt="About Image Two" />
                 </figure>
               </div>
             </div>
@@ -57,7 +43,7 @@ const About = () => {
       </section>
       {/* About-First End */}
 
-      <CountersSection />
+      {/* <CountersSection /> */}
 
       {/*About How It Works Start */}
       <section className="gap about-how-it-works light-bg-color">
@@ -66,55 +52,52 @@ const About = () => {
             <img src="/images/heading-icon.png" alt="Heading Icon" />
           </figure>
           <span>Plan + Control</span>
-          <h2>How it Works</h2>
-        </div>
-        <div className="container">
-          <figure style={{"position": "relative", "zIndex": "9"}}>
-            <img className="w-100" src="/img/gallery-2.jpeg" alt="About How It Works" />
-          </figure>
+          <h2>Features</h2>
         </div>
         <div className="container">
           <div className="row g-0">
             <div className="col-lg-3 col-md-6 col-sm-12" >
-              <div className="plans">
+              <div className="plans h-100">
                 <div className="y-box d-flex-all">
                   1.
                 </div>
-                <h3>Phase Plan</h3>
-                <p>This step connects the design process and its miles tones with construction.</p>
+                <h3>Free Consultation</h3>
+                <p>We believe that an informed decision is the only decision you should make.</p>
               </div>
             </div>
             <div className="col-lg-3 col-md-6 col-sm-12" >
-              <div className="plans">
+              <div className="plans h-100">
                 <div className="y-box d-flex-all">
                   2.
                 </div>
-                <h3>Design Pull Plan</h3>
-                <p>We work with the design team to establish a detailed plan for reaching our goals.</p>
+                <h3>Frequent Progress Reports</h3>
+                <p>Communication is the key ensure success, we will actively update you about your project.</p>
               </div>
             </div>
             <div className="col-lg-3 col-md-6 col-sm-12" >
-              <div className="plans">
+              <div className="plans h-100">
                 <div className="y-box d-flex-all">
                   3.
                 </div>
-                <h3>Coordinated Layout</h3>
-                <p>This process creates a single point of truth: drawings all project.</p>
+                <h3>Licensed and Insured</h3>
+                <p>Experiance peace of mind with qualified and certified professionals.</p>
               </div>
             </div>
             <div className="col-lg-3 col-md-6 col-sm-12" >
-              <div className="plans">
+              <div className="plans h-100">
                 <div className="y-box d-flex-all">
                   4.
                 </div>
-                <h3>Quality Control</h3>
-                <p>Having geometry worked out in the Layout step, prior to construction.</p>
+                <h3>Competitive Pricing</h3>
+                <p>We are builders, not salesmen, you will always recieve a fair quote for your projects.</p>
               </div>
             </div>
           </div>
         </div>
       </section>
       {/*About How It Works End */}
+
+      <Services2Section />
 
       {/*About Key Benefits Start */}
       <section className="gap about-key-benefits">
@@ -123,29 +106,37 @@ const About = () => {
             <div className="col-lg-6" >
               <div className="data">
                 <figure>
-                  <img className="w-100" src="/img/service2.jpeg" alt="About key Benefits" />
+                  <img className="w-100" src="/img/certifications.png" alt="About key Benefits" />
                 </figure>
               </div>
             </div>
             <div className="col-lg-6" >
               <div className="data">
-                <h2>Key Benefits</h2>
+                <h2>Why Choose Us?</h2>
                 <ul>
                   <li>
                     <i className="fa-solid fa-check" />
-                    <p>Labor expenses are a common target for cost reduction measures in the construction industry</p>
+                    <p>Protect yourself from material liens with no revolving credit accounts.</p>
                   </li>
                   <li>
                     <i className="fa-solid fa-check" />
-                    <p> A good material management system includes proper communication, scheduling,  and tracking tools.</p>
+                    <p>Enjoy a seamless experience with a dedicated on-site project manager</p>
                   </li>
                   <li>
                     <i className="fa-solid fa-check" />
-                    <p>Faster supplies can be used upon delivery to a construction site, the better.</p>
+                    <p>Make informed decisions without high-pressure sales tactics.</p>
                   </li>
                   <li>
                     <i className="fa-solid fa-check" />
-                    <p>Effective material management systems not only ensure that materials are in the right place</p>
+                    <p>Benefit from our owner-managed approach, delivering exceptional results.</p>
+                  </li>
+                  <li>
+                    <i className="fa-solid fa-check" />
+                    <p>Receive unmatched service and craftsmanship</p>
+                  </li>
+                  <li>
+                    <i className="fa-solid fa-check" />
+                    <p>Prioritize craftsmanship with our team of contractors, not salesmen.</p>
                   </li>
                 </ul>
               </div>
@@ -155,13 +146,7 @@ const About = () => {
       </section>
       {/*About Key Benefits End */}
 
-      <TeamSlider noTop />
-
-      <RenovationSection />
-
       <TestimonialSlider />
-
-      <PartnersSlider noTop />
       
     </Layouts>
   );
