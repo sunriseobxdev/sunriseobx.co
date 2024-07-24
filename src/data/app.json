@@ -52,7 +52,7 @@
             },
             {
                 "label": "Contact",
-                "link": "/#contact",
+                "link": "/contact",
                 "children": 0
             }
         ]

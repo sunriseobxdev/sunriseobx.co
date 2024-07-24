@@ -6,7 +6,7 @@
             "text": "All things exterior.",
             "button": {
                 "label": "Contact",
-                "link": "/#contact"
+                "link": "/contact"
             }
         },
         {
@@ -24,7 +24,7 @@
             "text": "Durable Wincore window installations by a reliable team",
             "button": {
                 "label": "Contact",
-                "link": "/#contact"
+                "link": "/contact"
             }
         }
     ]

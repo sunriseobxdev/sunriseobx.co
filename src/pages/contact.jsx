@@ -32,7 +32,7 @@ const Contact = () => {
 
   return (
     <Layouts>
-        <PageBanner pageTitle={"Contact Us"} pageDesc={"our values and vaulted us to the top of our industry."} />
+        <PageBanner pageTitle={"Contact Us"} pageDesc={""} />
 
         {/* Contact Form 2 Start */}
         <section className="gap contact-form-2">
@@ -41,7 +41,7 @@ const Contact = () => {
                 <div className="col-lg-7" >
                     <div className="data">
                         <span>How can we help?</span>
-                        <h2>Quality & Passion With Contact Form</h2>
+                        <h2>Quality & Passion Without Compromise</h2>
                         <p>Have questions or want to chat? Fill out our contact form, and we’ll put you in touch with the right people.</p>
                         <Formik
                         initialValues = {{ email: '', name: '', subject: '', message: '' }}
@@ -103,14 +103,16 @@ const Contact = () => {
                             /* and other goodies */
                         }) => (
                         <form onSubmit={handleSubmit} id="contactForm" action={appData.settings.formspreeURL}>
-                            <div className="row g-0">
-                                <textarea 
-                                  name="message" 
-                                  placeholder="Question / Message?"
-                                  required="required"
+                                                        <div className="row g-0">
+                                <input 
+                                  type="text" 
+                                  className="form-control" 
+                                  id="exampleInputPassword1" 
+                                  placeholder="Subject"
+                                  name="subject"
                                   onChange={handleChange}
                                   onBlur={handleBlur}
-                                  value={values.message}
+                                  value={values.subject} 
                                 />
                             </div>
                             <div className="row g-0">
@@ -140,15 +142,13 @@ const Contact = () => {
                                 />
                             </div>
                             <div className="row g-0">
-                                <input 
-                                  type="text" 
-                                  className="form-control" 
-                                  id="exampleInputPassword1" 
-                                  placeholder="Subject"
-                                  name="subject"
+                                <textarea 
+                                  name="message" 
+                                  placeholder="Question / Message?"
+                                  required="required"
                                   onChange={handleChange}
                                   onBlur={handleBlur}
-                                  value={values.subject} 
+                                  value={values.message}
                                 />
                             </div>
                             <button type="submit" className="theme-btn">Send Message <i className="fa-solid fa-angles-right" /></button>
@@ -162,14 +162,14 @@ const Contact = () => {
                 <div className="col-lg-4 offset-lg-1" >
                 <div className="bio">
                     <div className="data">
-                        <figure>
+                        {/* <figure>
                             <img className="author" src="/img/team-1.jpg" alt="Bio Image" />
-                        </figure>
-                        <h3>Walimes Jonnie</h3>
-                        <p>Director of Constro Company</p>
-                        <figure>
+                        </figure> */}
+                        <h3>Zachary Wayland</h3>
+                        <p>President</p>
+                        {/* <figure>
                             <img src="/img/signature.png" alt="Signature Image" />
-                        </figure>
+                        </figure> */}
                     </div>
                 </div>
                 <div className="info">
@@ -198,17 +198,17 @@ const Contact = () => {
                     </ul>
                     <ul className="social-medias">
                         <li>
-                            <a className="fb" href="https://facebook.com/" target="_blank">
+                            <a className="fb" href={"https://www.facebook.com/sunriseobx"} target="_blank">
                                 <p>Facebook</p>
                                 <i className="fa-brands fa-facebook" />
                             </a>
                         </li>
-                        <li>
+                        {/* <li>
                             <a className="tw" href="https://twitter.com/" target="_blank">
                                 <p>Twitter</p>
                                 <i className="fa-brands fa-twitter" />
                             </a>
-                        </li>
+                        </li> */}
                     </ul>
                 </div>
                 </div>
@@ -218,7 +218,7 @@ const Contact = () => {
         {/* Contact Form 2 End */}
 
         {/* Contact Faqs Start */}
-        <section className="contact-faqs">
+        {/* <section className="contact-faqs">
             <div className="heading">
                 <figure>
                     <img src="/images/heading-icon.png" alt="Heading Icon" />
@@ -246,13 +246,13 @@ const Contact = () => {
                     </div>
                 </div>
             </div>
-        </section>
+        </section> */}
         {/* Contact Faqs End */}
 
         {/* Contact Map Start */}
-        <div className="contact-map">
+        {/* <div className="contact-map">
             <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14143117.941545919!2d60.32337114882688!3d30.068124090484673!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x38db52d2f8fd751f%3A0x46b7a1f7e614925c!2sPakistan!5e0!3m2!1sen!2s!4v1655124094484!5m2!1sen!2s" width="600" height="760" style={{border: 0}} allowFullScreen="" loading="lazy" referrerPolicy="no-referrer-when-downgrade"></iframe>
-        </div>
+        </div> */}
         {/* Contact Map End */}
       
     </Layouts>

@@ -183,7 +183,7 @@ const DefaultHeader = ({ contactButton, cartButton }) => {
                         </a>
                         }
                         {contactButton == 1 &&
-                        <Link href="/#contact" className="theme-btn simple">
+                        <Link href="/contact" className="theme-btn simple">
                           Get a Quote
                         </Link>
                         }
