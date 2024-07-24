@@ -19,7 +19,7 @@ const CallToActionSection = () => {
                 <div className="col-lg-5" >
                     <div className="cta-data">
                         <figure>
-                            <img src={Data.image.url} alt={Data.image.alt} />
+                            <img src={Data.image.url} alt={Data.image.alt} width="600" height="600" />
                         </figure>
                     </div>
                 </div>

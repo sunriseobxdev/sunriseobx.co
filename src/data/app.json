@@ -28,19 +28,25 @@
                 "children": []
             },
             {
-                "label": "Roof Replacements",
+                "label": "Services",
                 "link": "/about",
-                "children": []
-            },
-            {
-                "label": "New Siding Makeover",
-                "link": "/about",
-                "children": []
-            },
-            {
-                "label": "Window Replacement",
-                "link": "/about",
-                "children": []
+                "children": [
+                    {
+                        "label": "Roof Replacements",
+                        "link": "/about",
+                        "children": []
+                    },
+                    {
+                        "label": "Siding Makeover",
+                        "link": "/about",
+                        "children": []
+                    },
+                    {
+                        "label": "Window Replacement",
+                        "link": "/about",
+                        "children": []
+                    }
+                ]
             },
             {
                 "label": "Contact",
