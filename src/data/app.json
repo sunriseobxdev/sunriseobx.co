@@ -28,6 +28,21 @@
                 "children": []
             },
             {
+                "label": "Roof Replacements",
+                "link": "/about",
+                "children": []
+            },
+            {
+                "label": "New Siding Makeover",
+                "link": "/about",
+                "children": []
+            },
+            {
+                "label": "Window Replacement",
+                "link": "/about",
+                "children": []
+            },
+            {
                 "label": "Contact",
                 "link": "/#contact",
                 "children": 0
