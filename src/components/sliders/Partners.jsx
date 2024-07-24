@@ -15,7 +15,9 @@ const PartnersSlider = ({ noTop }) => {
             >
                 {Data.items.map((item, key) => (
                 <SwiperSlide key={`ps-slide-${key}`} className="swiper-slide">
-                <img className="w-auto m-auto" src={item.image} alt={item.alt} />
+                  <div style={{ maxWidth: "250px", margin: "0 auto" }}>
+                    <img className="w-auto m-auto" src={item.image} alt={item.alt} />
+                  </div>
                 </SwiperSlide>
                 ))}
             </Swiper>

@@ -6,6 +6,7 @@ import PageBanner from "@components/PageBanner";
 import CountersSection from "@components/sections/Counters";
 import ServicesSection from "../components/sections/Services";
 import Services2Section from "../components/sections/Services2";
+import PartnersSlider from "../components/sliders/Partners";
 
 const TestimonialSlider = dynamic( () => import("@components/sliders/Testimonial"), { ssr: false } );
 
@@ -147,6 +148,8 @@ const About = () => {
       {/*About Key Benefits End */}
 
       <TestimonialSlider />
+
+      <PartnersSlider />
       
     </Layouts>
   );

@@ -9,6 +9,7 @@ import Hero3Section from "@components/sections/Hero3";
 import About3Section from "@components/sections/About3";
 import CallToActionSection from "@components/sections/CallToAction";
 import ContactFormSection from "@components/sections/ContactForm";
+import PartnersSlider from "../components/sliders/Partners";
 
 const ProjectsSlider = dynamic( () => import("@components/sliders/Projects"), { ssr: false } );
 
@@ -21,6 +22,7 @@ const Home3 = (props) => {
         <About3Section />
         <CallToActionSection />
         <ProjectsSlider projects={props.projects} />
+        <PartnersSlider />
         <ContactFormSection />
       </>
     </Layouts>

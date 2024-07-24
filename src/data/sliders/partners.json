@@ -1,24 +1,44 @@
 {
     "items": [
         {
-            "image": "/img/client-1.png",
-            "alt": "img"
+            "image": "/img/slider/fortified.png",
+            "alt": "Fortified Roofing"
         },
         {
-            "image": "/img/client-2.png",
-            "alt": "img"
+            "image": "/img/slider/plygem.png",
+            "alt": "Plygem"
         },
         {
-            "image": "/img/client-3.png",
-            "alt": "img"
+            "image": "/img/slider/low-e.png",
+            "alt": "Low-E"
         },
         {
-            "image": "/img/client-4.png",
-            "alt": "img"
+            "image": "/img/slider/select.png",
+            "alt": "Select"
         },
         {
-            "image": "/img/client-5.png",
-            "alt": "img"
+            "image": "/img/slider/timber-tech.png",
+            "alt": "Timber Tech"
+        },
+        {
+            "image": "/img/slider/Wincore.png",
+            "alt": "Wincore"
+        },
+        {
+            "image": "/img/slider/bbb.png",
+            "alt": "Better Business Bureau"
+        },
+        {
+            "image": "/img/slider/board.png",
+            "alt": "Board"
+        },
+        {
+            "image": "/img/slider/dpor.png",
+            "alt": "DPOR"
+        },
+        {
+            "image": "/img/slider/drone-pilot.png",
+            "alt": "Drone Pilot Certified"
         }
     ]
 }
