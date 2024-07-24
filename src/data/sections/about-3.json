@@ -6,19 +6,19 @@
             "image": "/img/roofReplacements.jpeg",
             "title": "Roof Replacements",
             "text": "",
-            "link": "/about"
+            "link": "/services/service-1"
         },
         {
             "image": "/img/newSidingMakeover.jpeg",
             "title": "New Siding Makeover",
             "text": "",
-            "link": "/about"
+            "link": "/services/service-2"
         },
         {
             "image": "/img/windowReplacements.jpg",
             "title": "Window Replacements",
             "text": "",
-            "link": "/about"
+            "link": "/services/service-3"
         }
     ]
 }
