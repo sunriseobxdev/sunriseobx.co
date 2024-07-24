@@ -106,7 +106,7 @@ const About = () => {
             <div className="col-lg-6" >
               <div className="data">
                 <figure>
-                  <img className="w-100" src="/img/certifications.png" alt="About key Benefits" />
+                  <img className="w-100" src="/img/WhyChooseUs.jpg" alt="About key Benefits" />
                 </figure>
               </div>
             </div>
