@@ -35,17 +35,17 @@
                 "children": [
                     {
                         "label": "Roof Replacements",
-                        "link": "/service-1",
+                        "link": "/services/service-1",
                         "children": []
                     },
                     {
                         "label": "Siding Makeover",
-                        "link": "/service-2",
+                        "link": "/services/service-2",
                         "children": []
                     },
                     {
                         "label": "Window Replacement",
-                        "link": "/service-3",
+                        "link": "/services/service-3",
                         "children": []
                     }
                 ]
