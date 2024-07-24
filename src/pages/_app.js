@@ -1,6 +1,7 @@
 import React from "react";
 import Head from "next/head";
 import appData from "@data/app.json";
+import { NextSeo } from 'next-seo';
 
 import '../styles/scss/style.scss';
 import "../styles/globals.css";
@@ -12,12 +13,26 @@ register();
 function MyApp({ Component, pageProps }) {
   return (
     <>
-      <Head>
-          {/* seo begin */}
-          <title>{appData.settings.siteName}</title>
-          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-          {/* seo end */}        
-      </Head>
+      <NextSeo
+      title={appData.settings.siteName}
+      description={appData.settings.description}
+      canonical={appData.settings.url}
+      openGraph={{
+        url: appData.settings.url,
+        title: appData.settings.siteName,
+        description: appData.settings.description,
+        images: [
+          {
+            url: `${appData.settings.url}android-chrome-512x512.png`,
+            width: 512,
+            height: 512,
+            alt: appData.settings.siteName,
+            type: 'image/png',
+          },
+        ],
+        siteName: appData.settings.siteName,
+      }}
+    />
       <Component {...pageProps} />
     </>
   );
