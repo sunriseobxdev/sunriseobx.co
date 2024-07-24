@@ -18,6 +18,11 @@ module.exports = {
     '/cart',
     '/blog',
     '/blog-2',
+    '/services/*',
+    '/team/*',
+    '/projects/*',
+    '/blog/*',
+    '/product-detail'
   ]
   // ...other options
 }
