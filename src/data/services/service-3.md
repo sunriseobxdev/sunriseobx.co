@@ -12,9 +12,6 @@ description0:
     <p>New windows will not only improve the comfort of your home by regulating temperature and reducing drafts but also enhance its appearance and increase its value. Our expert installation of high-quality Wincore® Windows offers both beautiful aesthetics and optimal functionality. With industry-leading warranties, you can trust that your investment in new windows will brighten your home for years to come.</p>
   "
   text2: "
-    <h3>And There's a Bonus</h3>
-    <p>Investing in your home now comes with a bonus. Through your purchase of [Wincore® products](https://www.wincorewindows.com/), a portion of your sales price will be earmarked for an annual donation to [Tough Enough To Wear Pink™](https://www.wincorewindows.com/pink/), a non-profit organization striving to increase awareness and fundraising to support breast cancer research. 
-    </p>
   "
 
 gallery: 
