@@ -1,8 +1,8 @@
 ---
 #preview details
 image: "/img/serv-i-1.svg"
-title: "Construction"
-short: "Designing and Building The Most Beautiful Custom Homes."
+title: "Roof Replacements"
+short: "Installing and Maintaining."
 
 #full details
 description0:
@@ -17,7 +17,7 @@ description0:
   "
 
 gallery: 
-  enabled: 1
+  enabled: 0
   items:
       - image: /img/GuysOnARoof.jpg
         alt: "image"
@@ -35,7 +35,7 @@ gallery:
         alt: "image"          
 
 checklist:
-  enabled: 1
+  enabled: 0
   title: What can we support with?
   items:
     - Dedication to client satisfaction
@@ -46,7 +46,7 @@ checklist:
     - Dedication to client satisfaction
 
 accordion:
-  enabled: 1
+  enabled: 0
   title: Reporting and Cost Control
   items:
     - heading: Occupational Health Risk Management?
