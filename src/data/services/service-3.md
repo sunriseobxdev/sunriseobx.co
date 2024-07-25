@@ -65,3 +65,7 @@ accordion:
     - heading: Prepare a construction project schedule?
       content: Commercial management in construction ensures the planning, execution, and coordination of a construction project from the start to finish. These are often for specific projects such as building or renovation projects that are sold or leased.
 ---
+
+### And There's a Bonus
+
+Investing in your home now comes with a bonus. Through your purchase of [Wincore® products](https://www.wincorewindows.com/), a portion of your sales price will be earmarked for an annual donation to [Tough Enough To Wear Pink™](https://www.wincorewindows.com/pink/), a non-profit organization striving to increase awareness and fundraising to support breast cancer research.
