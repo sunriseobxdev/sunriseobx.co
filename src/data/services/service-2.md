@@ -14,8 +14,8 @@ description0:
   text2: "
     <h3>Introducing LOW-E HOUSEWRAP</h3>
     <ul>
-      <li> LOW-E HOUSEWRAP is Used by Top Builders and Remodelers Nationwide https://low-e.com/products/low-e-housewrap/ </li>
-      <li Adds R-Value To Wall System</li>
+      <li>Used by Top Builders and Remodelers Nationwide</li>
+      <li>Adds R-Value To Wall System</li>
       <li>Increases Energy Savings</li>
       <li>Improves Insulation System Performance</li>
       <li>For Use Behind Most Any Exterior Cladding</li>
