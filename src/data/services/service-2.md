@@ -2,20 +2,20 @@
 #preview details
 image: "img/serv-i-2.svg"
 title: "New Siding Makeover"
-short: "Designing and Building The Most Beautiful Custom Homes."
+short: "Seamless installation of classic or modern designs."
 
 #full details
 description0:
   enabled: 1
   text1: "
     <h3>Service Details</h3>
-    <p>At Sunrise Construction, craftsmanship is at the heart of everything we do. Our team of skilled artisans brings years of experience and expertise to every siding installation and trim project, ensuring seamless integration and exceptional attention to detail. Whether you prefer classic styles or modern designs, we approach each siding project with a commitment to craftsmanship that transforms your vision into reality. !</p>
+    <p>At Sunrise Construction, craftsmanship is at the heart of everything we do. Our team of skilled artisans brings years of experience and expertise to every siding installation and trim project, ensuring seamless integration and exceptional attention to detail. Whether you prefer classic styles or modern designs, we approach each siding project with a commitment to craftsmanship that transforms your vision into reality.</p>
   "
   text2: "
     <h3>Introducing LOW-E HOUSEWRAP</h3>
     <ul>
-      <li> [LOW-E HOUSEWRAP](https://low-e.com/products/low-e-housewrap/) is Used by Top Builders and Remodelers Nationwide</li>
-      <liAdds R-Value To Wall System</li>
+      <li> LOW-E HOUSEWRAP is Used by Top Builders and Remodelers Nationwide https://low-e.com/products/low-e-housewrap/ </li>
+      <li Adds R-Value To Wall System</li>
       <li>Increases Energy Savings</li>
       <li>Improves Insulation System Performance</li>
       <li>For Use Behind Most Any Exterior Cladding</li>
