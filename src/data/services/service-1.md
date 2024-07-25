@@ -9,11 +9,11 @@ description0:
   enabled: 1
   text1: "
     <h3>Service Details</h3>
-    <p>When it's time to replace your roof, our consultants will meet with you to inspect your current roof and discuss replacement options to determine the best solution for you and your family. Our goal is to ensure your new roof performs efficiently and effectively. We specialize in the installation, service, and maintenance of Shingle and TPO roof systems. !</p>
+    <p>When it's time to replace your roof, our consultants will meet with you to inspect your current roof and discuss replacement options to determine the best solution for you and your family. Our goal is to ensure your new roof performs efficiently and effectively. We specialize in the installation, service, and maintenance of Shingle and TPO roof systems.</p>
   "
   text2: "
     <h3>Certified Professionals</h3>
-    <p>We are Certified CertainTeed® Shingle Masters! This means homeowners benefit from enhanced warranty coverage. Because our installers are trained and certified by CertainTeed, the company fully trusts their craftsmanship and provides homeowners with Sure Start Plus extended warranty coverage.!</p>
+    <p>We are Certified CertainTeed® Shingle Masters! This means homeowners benefit from enhanced warranty coverage. Because our installers are trained and certified by CertainTeed, the company fully trusts their craftsmanship and provides homeowners with Sure Start Plus extended warranty coverage!</p>
   "
 
 gallery: 
