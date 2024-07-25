@@ -17,7 +17,7 @@ description0:
   "
 
 gallery: 
-  enabled: 1
+  enabled: 0
   items:
       - image: /img/GuysOnARoof.jpg
         alt: "image"
@@ -55,6 +55,7 @@ accordion:
     - heading: Prepare a construction project schedule?
       content: Commercial management in construction ensures the planning, execution, and coordination of a construction project from the start to finish. These are often for specific projects such as building or renovation projects that are sold or leased.
 ---
+<img src="GuysOnARoof.jpg" alt="drawing" width="200"/>
 
 ### For Extra Energy Savings add [Low-E ThermaSheet®](https://low-e.com/)
 
