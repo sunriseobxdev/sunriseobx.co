@@ -17,22 +17,13 @@ description0:
   "
 
 gallery: 
-  enabled: 0
+  enabled: 1
   items:
       - image: /img/GuysOnARoof.jpg
         alt: "image"
 
       - image: /img/ShingleMaster.png
-        alt: "image"
-
-      - image: /img/gallery-1.jpeg
-        alt: "image"
-
-      - image: /img/gallery-4.jpeg
-        alt: "image"
-
-      - image: /img/gallery-5.jpeg
-        alt: "image"          
+        alt: "image"   
 
 checklist:
   enabled: 0
@@ -69,13 +60,3 @@ accordion:
 
 Low-E ThermaSheet® Insulated Roofing Underlayment provides a thermal break between the blazing heat of the sun and your cool air conditioned house. Low-E ThermaSheet® reduces the temperature below your roof deck which means your house uses less energy and your pockets lose less money! Low-E ThermaSheet® may be installed directly under shingles, metal roofing, etc. and is ICC approved (ESR-3652) to be used as a stand alone alternative to felt paper and other traditional underlayments that do nothing to protect your home from heat gain/loss. Isn’t it time your roofing underlayment did more? Now it can, with Low-E ThermaSheet®. Do more, with less. Save energy. Save money. Period.
 
-{
-    "image1": {
-        "url": "/img/GuysOnARoof.jpg",
-        "alt": "Image One"
-    },
-    "image2": {
-        "url": "/img/Shinglemaster.png",
-        "alt": "Image One"
-    },
-}
