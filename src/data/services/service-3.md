@@ -1,29 +1,24 @@
 ---
 #preview details
 image: "img/serv-i-3.svg"
-title: "Interior Design"
-short: "Designing and Building The Most Beautiful Custom Homes."
+title: "Window Replacement"
+short: "High Quality and Energy Efficient."
 
 #full details
 description0:
   enabled: 1
   text1: "
-    <h3>Service Details</h3>
-    <p>We successfully cope with tasks of varying complexity, provide long-term guarantees and regularly master new technologies. Our portfolio includes <span>dozens of successfully</span> completed projects of houses of different storeys, with high–quality finishes and good repairs. Building houses is our vocation!</p>
+    <h3>Replacement Windows</h3>
+    <p>New windows will not only improve the comfort of your home by regulating temperature and reducing drafts but also enhance its appearance and increase its value. Our expert installation of high-quality Wincore® Windows offers both beautiful aesthetics and optimal functionality. With industry-leading warranties, you can trust that your investment in new windows will brighten your home for years to come.</p>
   "
   text2: "
-    <h3>Service Benefits</h3>
-    <ul>
-      <li>Better defined projects, reducing risk and increasing success</li>
-      <li>We provide legislative compliance</li>
-      <li>Cost savings by getting expert advice during the project strategy and estimating</li>
-      <li>Realistic pricing and project timescales</li>
-      <li>Global access to services from world-wide construction consultancy</li>
-    </ul>
+    <h3>And There's a Bonus</h3>
+    <p>Investing in your home now comes with a bonus. Through your purchase of [Wincore® products](https://www.wincorewindows.com/), a portion of your sales price will be earmarked for an annual donation to [Tough Enough To Wear Pink™](https://www.wincorewindows.com/pink/), a non-profit organization striving to increase awareness and fundraising to support breast cancer research. 
+    </p>
   "
 
 gallery: 
-  enabled: 1
+  enabled: 0
   items:
       - image: /img/gallery-5.jpeg
         alt: "image"
@@ -41,7 +36,7 @@ gallery:
         alt: "image"          
 
 checklist:
-  enabled: 1
+  enabled: 0
   title: What can we support with?
   items:
     - Dedication to client satisfaction
@@ -52,7 +47,7 @@ checklist:
     - Dedication to client satisfaction
 
 accordion:
-  enabled: 1
+  enabled: 0
   title: Reporting and Cost Control
   items:
     - heading: Occupational Health Risk Management?
@@ -70,9 +65,3 @@ accordion:
     - heading: Prepare a construction project schedule?
       content: Commercial management in construction ensures the planning, execution, and coordination of a construction project from the start to finish. These are often for specific projects such as building or renovation projects that are sold or leased.
 ---
-
-### Highest Expectations
-
-Our knowledgeable cost management experts understand the importance of delivering a project to meet your expectations in terms of cost, time, and quality. We will work with you to find the right, flexible and valuable solutions. No matter what sector you operate in, or the **scale of your project**, our team have the experience and know-how to support you with your goals.
-
-In addition to construction consultancy services **Bureau Veritas is a global leader in testing**, inspection and certification (TIC) and we have more than 190+ years of experience meaning that we also can assist you in other areas of your business if needed.
