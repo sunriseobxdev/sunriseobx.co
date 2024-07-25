@@ -1,6 +1,6 @@
 {
     "settings": {
-        "siteName": "Sunrise OBX",
+        "siteName": "Sunrise Construction",
         "description": "At Sunrise Construction, our mission is to redefine excellence in construction on the Outer Banks of North Carolina. Founded in 2023, we stand as a beacon of innovation and commitment, bridging the gap in the market for a medium-sized construction company that prioritizes exceptional craftsmanship, superior customer service, and transparent communication.",
         "url": "https://sunriseobx.co/",
         "preloader": {
@@ -67,7 +67,7 @@
             "tel": "+1 (252) 619-7966",
             "email": "hello@sunriseobx.co"
         },
-        "copy": "Sunrise OBX <i class='fa-solid fa-heart'></i> © 2024 All rights reserved"
+        "copy": "Sunrise Construction Services LLC <i class='fa-solid fa-heart'></i> © 2024 All rights reserved"
     },
     "social": [
         {
