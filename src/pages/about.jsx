@@ -19,7 +19,7 @@ const About = () => {
       <section className="gap about-first">
         <div className="container">
           <div className="row">
-            <h2> The Outer Banks Premier Residental Exterior Construction Service</h2>
+            <h2> The Outer Banks<br/>Premier Residental Exterior<br/>Construction  Service</h2>
           </div>
         </div>
         <div className="container">
