@@ -11,8 +11,8 @@ description0:
     <h3>Service Details</h3>
     <p>At Sunrise Construction, craftsmanship is at the heart of everything we do. Our team of skilled artisans brings years of experience and expertise to every siding installation and trim project, ensuring seamless integration and exceptional attention to detail. Whether you prefer classic styles or modern designs, we approach each siding project with a commitment to craftsmanship that transforms your vision into reality. !</p>
   "
-  text2: Introducing [LOW-E HOUSEWRAP](https://low-e.com/products/low-e-housewrap/)"
-    <h3>Product Details</h3>
+  text2: "
+    <h3>Introducing [LOW-E HOUSEWRAP](https://low-e.com/products/low-e-housewrap/)</h3>
     <ul>
       <li>Used by Top Builders and Remodelers Nationwide</li>
       <liAdds R-Value To Wall System</li>
