@@ -19,7 +19,7 @@ description0:
 gallery: 
   enabled: 1
   items:
-      - image: /img/GuysOnARoof.jpg
+      - image: /img/GuysOnARoof-min.jpg
         alt: "image"
 
       - image: /img/ShingleMaster.png
