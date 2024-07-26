@@ -234,7 +234,7 @@ const DefaultHeader = ({ contactButton, cartButton }) => {
 
           <div className="mobile-nav desktop-menu">
             <h2>We&apos;re builders, not salespeople.</h2>
-            <p className="des">We successfully cope with tasks of varying complexity, provide long-term guarantees and regularly master new technologies.</p>
+            <p className="des">At Sunrise Construction, we serve the Outer Banks with dedication and humility. As a growing company, we build trust and community through integrity and professionalism. Our mission is to uplift and positively impact those we serve with honest work and unwavering commitment to excellence.</p>
 
             <h3>Get in touch</h3>
             <p className="num">(+380) 50 318 47 07</p>
