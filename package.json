@@ -25,5 +25,8 @@
     "sass": "^1.49.7",
     "swiper": "^9.0.0"
   },
-  "license": "UNLICENSED"
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "nextjs-google-analytics": "^2.3.3"
+  }
 }

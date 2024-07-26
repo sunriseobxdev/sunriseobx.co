@@ -4,7 +4,20 @@ class MyDocument extends Document {
   render() {
     return (
       <Html lang="en">
-        <Head>
+        <Head>// pages/_app.js
+import { GoogleAnalytics } from "nextjs-google-analytics";
+
+const App = ({ Component, pageProps }) => {
+  return (
+    <>
+      <GoogleAnalytics trackPageViews />
+      <Component {...pageProps} />
+    </>
+  );
+};
+
+export default App;
+          
           {/* meta begin */}
           <meta charSet="UTF-8" />
           <meta httpEquiv="X-UA-Compatible" content="ie=edge" />
