@@ -9,7 +9,7 @@ const DefaultFooter = () => {
             <div className="row">
             <div className="col-lg-4 col-md-6 col-sm-12">
                 <div className="footer-col">
-                    <h3>Information</h3>
+                    <h3>Mission</h3>
                     <p>At Sunrise Construction, we serve the Outer Banks with dedication and humility. As a growing company, we build trust and community through integrity and professionalism. Our mission is to uplift and positively impact those we serve with honest work and unwavering commitment to excellence.</p>
                 </div>
             </div>
