@@ -1,23 +1,12 @@
 import Document, { Html, Head, Main, NextScript } from "next/document";
+import { GoogleAnalytics } from "nextjs-google-analytics";
 
 class MyDocument extends Document {
   render() {
     return (
       <Html lang="en">
         <Head>// pages/_app.js
-import { GoogleAnalytics } from "nextjs-google-analytics";
-
-const App = ({ Component, pageProps }) => {
-  return (
-    <>
-      <GoogleAnalytics trackPageViews />
-      <Component {...pageProps} />
-    </>
-  );
-};
-
-export default App;
-          
+          <GoogleAnalytics trackPageViews />
           {/* meta begin */}
           <meta charSet="UTF-8" />
           <meta httpEquiv="X-UA-Compatible" content="ie=edge" />
