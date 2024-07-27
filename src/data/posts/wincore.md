@@ -1,3 +1,39 @@
+---
+title: '10 Content Proofreading Tips to Catch More Avoidable'
+date: '2024-07-26'
+image: "/img/wincore.png"
+category:
+    - Construction
+    - Outer Banks
+    - Wincore
+    - Window Installation
+
+#full details
+author:
+    name: "Zachary Wayland"
+    avatar: "/img/hardhat.jpg"
+
+gallery:
+    enabled: 0
+    items:
+        - image: /img/gallery-7.jpeg
+          alt: "image"
+
+        - image: /img/gallery-6.jpeg
+          alt: "image"
+
+        - image: /img/gallery-5.jpeg
+          alt: "image"
+
+    cols: 3 # 2 or 3
+
+additional:
+    enabled: 0
+    content: "
+        <h5>Voluptatem odit ullam veritatis</h5>
+        <p>Modi sint reprehenderit vitae officiis pariatur, ab debitis voluptate ea eius assumenda beatae, tempora, dolores deserunt, ipsam ipsum! Quod ipsam consequuntur distinctio velit sed ipsum quisquam, itaque placeat error non animi quam aut similique nulla ab. Quaerat dicta, dolores veritatis magnam quae aut omnis in porro.</p>
+    "
+---
 # Building With Wincore
 
 When it comes to building homes in the Outer Banks, our company, Sunrise Construction, understands the unique challenges and requirements posed by the coastal environment. From the constant threat of high winds and water to the corrosive effects of salt and sand, constructing durable and resilient homes is our top priority. That's why we choose Wincore windows for our projects. In this blog post, we’ll explain why Wincore windows are the ideal choice for Outer Banks homes and walk you through our installation procedure.
@@ -21,22 +57,19 @@ At Sunrise Construction, we follow a meticulous procedure to ensure that every W
 Step 1: Site Preparation
 Before installation begins, we thoroughly inspect the site and prepare the window openings. This involves ensuring that the openings are level, plumb, and free of any debris or obstructions.
 
-Step 2: Installing the Pilings
-Given the unique foundation requirements of the Outer Banks, we often use pilings to elevate homes and protect them from flood waters. For windows on the ground level, we ensure that they are supported by a concrete slab that is at least 4 inches thick.
-
-Step 3: Placing the Windows
+Step 2: Placing the Windows
 We carefully place the Wincore windows into the prepared openings, ensuring a tight fit. The integral J-channel design of the Wincore windows helps us achieve a neat and tidy finish, whether the exterior is brick or siding.
 
-Step 4: Securing and Sealing
+Step 3: Securing and Sealing
 Once the windows are in place, we secure them using the appropriate fasteners. We then apply high-quality sealants around the edges to prevent water and air infiltration. This step is crucial for maintaining the energy efficiency and durability of the windows.
 
-Step 5: Insulation and Weatherproofing
+Step 4: Insulation and Weatherproofing
 To further enhance the energy efficiency of the windows, we add insulation around the frames. We also install weatherstripping at key points to reduce air flow and protect against the harsh coastal elements.
 
-Step 6: Final Inspection
+Step 5: Final Inspection
 After installation, we conduct a thorough inspection to ensure that each window operates smoothly and meets our high standards of quality. We check for proper alignment, secure sealing, and smooth operation of all moving parts.
 
-Step 7: Cleanup and Customer Walkthrough
+Step 6: Cleanup and Customer Walkthrough
 We believe in leaving the job site cleaner than we found it. After the installation is complete, we clean up any debris and conduct a final walkthrough with the homeowner to ensure their complete satisfaction.
 
 ### Wincore Certified

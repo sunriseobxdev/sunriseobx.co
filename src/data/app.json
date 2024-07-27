@@ -49,6 +49,16 @@
                         "children": []
                     }
                 ]
+            }, {
+                "label": "Blog",
+                "link": "/blog",
+                "children": [
+                    {
+                        "label": "Building With Wincore",
+                        "link": "/blog/wincore",
+                        "children": 0
+                    }
+                ]
             },
             {
                 "label": "Contact",
@@ -73,6 +83,10 @@
         {
             "link": "https://www.facebook.com/sunriseobx",
             "title": "Facebook"
-        }
+        },
+	{
+	    "link": "https://x.com/@sunriseobx",
+	    "title": "Twitter"
+	}
     ]
 }
