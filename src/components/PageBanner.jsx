@@ -3,7 +3,7 @@ import Link from "next/link";
 import appData from "@data/app.json";
 import { NextSeo } from 'next-seo';
 
-const PageBanner = ({ pageTitle, pageDesc }) => {
+const PageBanner = ({ pageTitle, pageDesc, pageImage }) => {
   const styles = {
     "parallax": {
       "backgroundImage": "url(/images/pattren-3.png)"
@@ -23,7 +23,7 @@ const PageBanner = ({ pageTitle, pageDesc }) => {
         description: appData.settings.description,
         images: [
           {
-            url: `${appData.settings.url}android-chrome-512x512.png`,
+            url: pageTitle ? appData.settings.url.replace(/\/$/, '') + pageImage : appData.settings.url + 'android-chrome-512x512.png',
             width: 512,
             height: 512,
             alt: appData.settings.siteName,
@@ -31,6 +31,11 @@ const PageBanner = ({ pageTitle, pageDesc }) => {
           },
         ],
         siteName: appData.settings.siteName,
+      }}
+      twitter={{
+        handle: '@sunriseobx',
+        site: '@sunriseobx',
+        cardType: 'summary_large_image'
       }}
     />
       <section className="banner-style-one">

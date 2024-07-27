@@ -2,13 +2,18 @@ import React from "react";
 import Head from "next/head";
 import appData from "@data/app.json";
 import { NextSeo } from 'next-seo';
+import { TitleContext } from "@common/title";
 
 import '../styles/scss/style.scss';
 import "../styles/globals.css";
 
 import { register } from "swiper/element/bundle";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 // register Swiper custom elements
 register();
+
+const defaultImage = `${appData.settings.url}android-chrome-512x512.png`;
 
 function MyApp({ Component, pageProps }) {
   return (
@@ -23,7 +28,7 @@ function MyApp({ Component, pageProps }) {
         description: appData.settings.description,
         images: [
           {
-            url: `${appData.settings.url}android-chrome-512x512.png`,
+            url: defaultImage,
             width: 512,
             height: 512,
             alt: appData.settings.siteName,
@@ -32,6 +37,12 @@ function MyApp({ Component, pageProps }) {
         ],
         siteName: appData.settings.siteName,
       }}
+      twitter={{
+        handle: '@sunriseobx',
+        site: '@sunriseobx',
+        cardType: 'summary_large_image'
+      }}
+
     />
       <Component {...pageProps} />
     </>

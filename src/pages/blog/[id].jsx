@@ -7,6 +7,9 @@ import { FacebookShareButton, FacebookIcon } from "next-share";
 
 import PageBanner from "@components/PageBanner";
 import globalThis from "the-global-object";
+import { TitleContext } from "@common/title";
+import { useEffect, useContext } from "react";
+import appData from "@data/app.json";
 
 const getHref = () => globalThis.location;
 
@@ -18,7 +21,7 @@ const PostsDetail = ( props ) => {
 
   return (
     <Layouts>
-      <PageBanner pageTitle={"Sunrise Construction Blog"} pageDesc={"Building for the Outer Banks & Related Musings."} />
+      <PageBanner pageImage={ appData.settings.url + postData.image } pageTitle={postData.title} pageDesc={"Building for the Outer Banks & Related Musings."} />
 
       {/* Blog Style Three Start */}
       <section className="gap blog-style-one blog-detail detail-page">
