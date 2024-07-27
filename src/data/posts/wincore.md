@@ -1,5 +1,5 @@
 ---
-title: '10 Content Proofreading Tips to Catch More Avoidable'
+title: 'Building With Wincore'
 date: '2024-07-26'
 image: "/img/wincore.png"
 category:
@@ -34,8 +34,6 @@ additional:
         <p>Modi sint reprehenderit vitae officiis pariatur, ab debitis voluptate ea eius assumenda beatae, tempora, dolores deserunt, ipsam ipsum! Quod ipsam consequuntur distinctio velit sed ipsum quisquam, itaque placeat error non animi quam aut similique nulla ab. Quaerat dicta, dolores veritatis magnam quae aut omnis in porro.</p>
     "
 ---
-# Building With Wincore
-
 When it comes to building homes in the Outer Banks, our company, Sunrise Construction, understands the unique challenges and requirements posed by the coastal environment. From the constant threat of high winds and water to the corrosive effects of salt and sand, constructing durable and resilient homes is our top priority. That's why we choose Wincore windows for our projects. In this blog post, we’ll explain why Wincore windows are the ideal choice for Outer Banks homes and walk you through our installation procedure.
 
 ## The Wincore Advantage

@@ -89,36 +89,6 @@ const PostsDetail = ( props ) => {
 
               </div>
             </div>
-
-            <div className="col-lg-4">
-              <aside className="sidebar">
-                <div className="box categories">
-                  <h3>Categories</h3>
-                  <ul>
-                    <li>
-                      <a href="#" onClick={(e) => {e.preventDefault();}}>
-                        <p>Uncategorized</p>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#" onClick={(e) => {e.preventDefault();}}>
-                        <p>Construction</p>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#" onClick={(e) => {e.preventDefault();}}>
-                        <p>Projects</p>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#" onClick={(e) => {e.preventDefault();}}>
-                        <p>Expansion</p>
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-              </aside>
-            </div>
           </div>
         </div>
       </section>
