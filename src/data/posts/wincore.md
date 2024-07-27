@@ -11,7 +11,7 @@ category:
 #full details
 author:
     name: "Zachary Wayland"
-    avatar: "/img/hardhat.jpg"
+    avatar: "/img/hardhat.jpeg"
 
 gallery:
     enabled: 0
