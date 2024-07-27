@@ -18,7 +18,7 @@ const PostsDetail = ( props ) => {
 
   return (
     <Layouts>
-      <PageBanner pageTitle={"Sunrise Construction Blog"} pageDesc={"building for the Outer Banks, related musings."} />
+      <PageBanner pageTitle={"Sunrise Construction Blog"} pageDesc={"Building for the Outer Banks & Related Musings."} />
 
       {/* Blog Style Three Start */}
       <section className="gap blog-style-one blog-detail detail-page">
