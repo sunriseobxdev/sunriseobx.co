@@ -237,7 +237,7 @@ const DefaultHeader = ({ contactButton, cartButton }) => {
             <p className="des">At Sunrise Construction, we serve the Outer Banks with dedication and humility. As a growing company, we build trust and community through integrity and professionalism. Our mission is to uplift and positively impact those we serve with honest work and unwavering commitment to excellence.</p>
 
             <h3>Get in touch</h3>
-            <p className="num">(+380) 50 318 47 07</p>
+            <p className="num">(252) 619-7966</p>
             <p className="adrs">5149-5177 N Croatan Hwy, Kitty Hawk, NC 27949</p>
 
             <div className="social-medias">
