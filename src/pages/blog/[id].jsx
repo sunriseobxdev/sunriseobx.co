@@ -74,10 +74,6 @@ const PostsDetail = ( props ) => {
                   </>
                 }
 
-                <div className="category shape">
-                  <p>Posted in {postData.category.map((cat, key) => (<a key={`category-item-${key}`}>{cat}</a>))}</p>
-                </div>
-
                 <div className="category shape social-medias">
                     <p>
                       Share this:
