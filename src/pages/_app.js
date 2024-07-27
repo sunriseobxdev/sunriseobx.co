@@ -32,6 +32,12 @@ function MyApp({ Component, pageProps }) {
         ],
         siteName: appData.settings.siteName,
       }}
+      twitter={{
+        handle: '@sunriseobx',
+        site: '@sunriseobx',
+        cardType: 'summary_large_image'
+      }}
+
     />
       <Component {...pageProps} />
     </>
