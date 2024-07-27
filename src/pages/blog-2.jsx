@@ -10,7 +10,7 @@ import { getPaginatedPostsData } from "@library/posts";
 const Blog = ( { posts, totalPosts, currentPage } ) => {
   return (
     <Layouts>
-      <PageBanner pageTitle={"Sunrise Construction Blog"} pageDesc={"Building for the Outer Banks & Related Musings"}
+      <PageBanner pageTitle={"Sunrise Construction Blog"} pageDesc={"Building for the Outer Banks & Related Musings"} />
 
       {/* Blog Style Three Start */}
       <section className="gap blog-style-one blog-style-three">
@@ -170,8 +170,6 @@ const Blog = ( { posts, totalPosts, currentPage } ) => {
           </div>
         </div>
       </section>
-      {/* Blog Style Three End */}
-      
     </Layouts>
   );
 };
