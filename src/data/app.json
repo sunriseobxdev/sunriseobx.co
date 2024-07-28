@@ -54,10 +54,15 @@
                 "link": "/blog",
                 "children": [
                     {
-                        "label": "Building With Wincore",
+                        "label": "Building With Wincore (Windows)",
                         "link": "/blog/wincore",
                         "children": 0
-                    }
+                    },
+		    {
+                        "label": "The Salt Box Package (Roofing)",
+			"link": "/blog/saltbox",
+			"children": 0
+		    }
                 ]
             },
             {
