@@ -1,5 +1,6 @@
 ---
 title: 'Building With Wincore'
+description: 'Building for the Outer Banks & Related Musings.'
 date: '2024-07-26'
 image: "/img/wincore.png"
 category:

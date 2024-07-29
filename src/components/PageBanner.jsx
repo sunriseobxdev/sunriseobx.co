@@ -3,7 +3,7 @@ import Link from "next/link";
 import appData from "@data/app.json";
 import { NextSeo } from 'next-seo';
 
-const PageBanner = ({ pageTitle, pageDesc, pageImage }) => {
+const PageBanner = ({ pageTitle, pageDesc, pageImage, metaDescription }) => {
   const styles = {
     "parallax": {
       "backgroundImage": "url(/images/pattren-3.png)"
@@ -15,12 +15,12 @@ const PageBanner = ({ pageTitle, pageDesc, pageImage }) => {
     <>
             <NextSeo
       title={headTitle}
-      description={appData.settings.description}
+      description={metaDescription ?? appData.settings.description}
       canonical={appData.settings.url}
       openGraph={{
         url: appData.settings.url,
-        title: appData.settings.siteName,
-        description: appData.settings.description,
+        title: headTitle,
+        description: metaDescription ?? appData.settings.description,
         images: [
           {
             url: pageTitle ? appData.settings.url.replace(/\/$/, '') + pageImage : appData.settings.url + 'android-chrome-512x512.png',

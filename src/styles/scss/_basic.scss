@@ -1981,6 +1981,11 @@ span.counter {
 .blog-style-one .blog-post .blog-image {
     position: relative;
 }
+.blog-style-one .blog-post .blog-image .blog-post-thumbnail-image {
+    height: 250px;
+    object-fit: cover;
+    object-position: center;
+}
 .blog-style-one .blog-post {
     border: 1px solid #c1c1c1;
     overflow: hidden;
