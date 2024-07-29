@@ -16,9 +16,9 @@ const PageBanner = ({ pageTitle, pageDesc, pageImage, metaDescription }) => {
             <NextSeo
       title={headTitle}
       description={metaDescription || appData.settings.description}
-      canonical={appData.settings.url}
+      // canonical={appData.settings.url}
       openGraph={{
-        url: appData.settings.url,
+        // url: appData.settings.url,
         title: headTitle,
         description: metaDescription || appData.settings.description,
         images: [
