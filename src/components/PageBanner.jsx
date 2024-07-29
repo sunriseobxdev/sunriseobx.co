@@ -13,7 +13,13 @@ const PageBanner = ({ pageTitle, pageDesc, pageImage, metaDescription }) => {
 
   return (
     <>
-            <NextSeo
+    <Head>
+      <title>{headTitle}</title>
+      <meta name='description' content={metaDescription} />
+      <meta property="og:title" content={headTitle} />
+      <meta property="og:description" content={metaDescription} />
+    </Head>
+            {/* <NextSeo
       title={headTitle}
       description={metaDescription ?? appData.settings.description}
       canonical={appData.settings.url}
@@ -37,7 +43,7 @@ const PageBanner = ({ pageTitle, pageDesc, pageImage, metaDescription }) => {
         site: '@sunriseobx',
         cardType: 'summary_large_image'
       }}
-    />
+    /> */}
       <section className="banner-style-one">
         <div className="parallax" style={styles.parallax} />
 
