@@ -26,6 +26,7 @@ const PostsDetail = ( props ) => {
         pageTitle={postData?.title} 
         pageDesc={postData?.description} 
         metaDescription={postData?.description}
+        metaUrl={props?.url}
       />
 
       {/* Blog Style Three Start */}
@@ -113,14 +114,17 @@ export async function getStaticPaths() {
     }
 }
 
-export async function getStaticProps({ params }) {
+export async function getStaticProps(req) {
+  const { params } = req;
     const postData = await getPostData(params.id)
     const relatedPosts = await getRelatedPosts(params.id)
+
 
     return {
       props: {
         data: postData,
-        related: relatedPosts
+        related: relatedPosts,
+        url: `/blog/${params.id}`
       }
     }
 }
