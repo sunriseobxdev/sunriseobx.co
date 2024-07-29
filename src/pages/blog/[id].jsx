@@ -7,8 +7,6 @@ import { FacebookShareButton, FacebookIcon } from "next-share";
 
 import PageBanner from "@components/PageBanner";
 import globalThis from "the-global-object";
-import { TitleContext } from "@common/title";
-import { useEffect, useContext } from "react";
 import appData from "@data/app.json";
 
 const getHref = () => globalThis.location;
@@ -21,7 +19,12 @@ const PostsDetail = ( props ) => {
 
   return (
     <Layouts>
-      <PageBanner pageImage={ appData.settings.url + postData.image } pageTitle={postData.title} pageDesc={"Building for the Outer Banks & Related Musings."} />
+      <PageBanner 
+        pageImage={ appData.settings.url + postData?.image } 
+        pageTitle={postData?.title} 
+        pageDesc={postData?.description} 
+        metaDescription={postData?.description}
+      />
 
       {/* Blog Style Three Start */}
       <section className="gap blog-style-one blog-detail detail-page">
@@ -31,32 +34,32 @@ const PostsDetail = ( props ) => {
               <div className="blog-post ">
                 <div className="blog-image">
                   <figure>
-                    <img src={postData.image} alt={postData.title} />
+                    <img src={postData?.image} alt={postData?.title} />
                   </figure>
                 </div>
                 <div className="blog-data">
-                  <span className="blog-date"><Date dateString={postData.date} /></span>
-                  <h2>{postData.title}</h2>
+                  <span className="blog-date"><Date dateString={postData?.date} /></span>
+                  <h2>{postData?.title}</h2>
                   <div className="blog-author d-flex-all justify-content-start">
                     <div className="author-img">
                       <figure>
-                        <img src={postData.author.avatar} alt={postData.author.name} />
+                        <img src={postData.author.avatar} alt={postData?.author?.name} />
                       </figure>
                     </div>
                     <div className="details">
-                      <h3> <span>by</span> {postData.author.name}</h3>
+                      <h3> <span>by</span> {postData?.author?.name}</h3>
                     </div>
                   </div>
                 </div>
                 
-                <div className="blog-detail-content" dangerouslySetInnerHTML={{ __html: postData.contentHtml }} />
+                <div className="blog-detail-content" dangerouslySetInnerHTML={{ __html: postData?.contentHtml }} />
 
                 {typeof postData.gallery != "undefined" &&
                   <>
-                    {postData.gallery.enabled == 1 &&
+                    {postData?.gallery?.enabled == 1 &&
                       <div className="row justify-content-center">
-                          {postData.gallery.items.map((item, key) => (
-                          <div key={`gallery-item-${key}`} className={ postData.gallery.cols == 3 ? "col-lg-4" : "col-lg-6"}>
+                          {postData?.gallery?.items?.map((item, key) => (
+                          <div key={`gallery-item-${key}`} className={ postData?.gallery?.cols == 3 ? "col-lg-4" : "col-lg-6"}>
                             <figure>
                               <a data-fancybox="gallery" href={item.image}>
                                 <img src={item.image} alt={item.alt} />
@@ -69,9 +72,9 @@ const PostsDetail = ( props ) => {
                   </>
                 }
 
-                {typeof postData.additional != "undefined" &&
+                {typeof postData?.additional != "undefined" &&
                   <>
-                    {postData.additional.enabled == 1 &&
+                    {postData?.additional?.enabled == 1 &&
                     <div className="blog-detail-content" dangerouslySetInnerHTML={{ __html: postData.additional.content }} />
                     }
                   </>

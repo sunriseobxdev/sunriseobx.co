@@ -10,7 +10,7 @@ import { getPaginatedPostsData } from "@library/posts";
 const Blog = ( { posts, totalPosts, currentPage } ) => {
   return (
     <Layouts>
-      <PageBanner pageTitle={"Sunrise Construction Blog"} pageDesc={"Building for the Outer Banks & Related Musings."} />
+      <PageBanner pageTitle={"Blog Posts"} pageDesc={"Building for the Outer Banks & Related Musings."} />
 
       {/* Blog Style Three Start */}
       <section className="gap blog-style-one blog-style-three">

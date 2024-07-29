@@ -1,5 +1,6 @@
 ---
 title: 'The Salt Box Package'
+description: 'The Salt Box system is our base-tier offering, designed specifically for A-framed roofs ranging from 1900 to 2500 square feet.'
 date: '2024-07-26'
 image: "/img/Beach-houses-1500.jpg"
 category:
