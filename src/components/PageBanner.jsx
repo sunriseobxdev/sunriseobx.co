@@ -13,20 +13,14 @@ const PageBanner = ({ pageTitle, pageDesc, pageImage, metaDescription }) => {
 
   return (
     <>
-    <Head>
-      <title>{headTitle}</title>
-      <meta name='description' content={metaDescription} />
-      <meta property="og:title" content={headTitle} />
-      <meta property="og:description" content={metaDescription} />
-    </Head>
-            {/* <NextSeo
+            <NextSeo
       title={headTitle}
-      description={metaDescription ?? appData.settings.description}
+      description={metaDescription || appData.settings.description}
       canonical={appData.settings.url}
       openGraph={{
         url: appData.settings.url,
         title: headTitle,
-        description: metaDescription ?? appData.settings.description,
+        description: metaDescription || appData.settings.description,
         images: [
           {
             url: pageTitle ? appData.settings.url.replace(/\/$/, '') + pageImage : appData.settings.url + 'android-chrome-512x512.png',
@@ -43,7 +37,7 @@ const PageBanner = ({ pageTitle, pageDesc, pageImage, metaDescription }) => {
         site: '@sunriseobx',
         cardType: 'summary_large_image'
       }}
-    /> */}
+    />
       <section className="banner-style-one">
         <div className="parallax" style={styles.parallax} />
 
