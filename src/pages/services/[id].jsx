@@ -5,10 +5,10 @@ import Accordion from 'react-bootstrap/Accordion';
 
 import { getAllServicesIds, getServiceData } from "@library/services";
 
-const ServiceDetail = ( { postData } ) => {
+const ServiceDetail = ( { postData, url } ) => {
   return (
     <Layouts>
-      <PageBanner pageTitle={postData.title} pageDesc={"our values and vaulted us to the top of our industry."} />
+      <PageBanner metaUrl={url} pageTitle={postData.title} pageDesc={"our values and vaulted us to the top of our industry."} />
 
       {/* Service-Detail-First Start */}
       <section className="gap about-first service-detail-first detail-page">
@@ -131,7 +131,8 @@ export async function getStaticProps({ params }) {
 
     return {
       props: {
-        postData
+        postData,
+        url: `services/${params.id}`
       }
     }
 }

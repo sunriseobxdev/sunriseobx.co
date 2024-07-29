@@ -11,7 +11,7 @@ import TestimonialSlider from "../components/sliders/Testimonial";
 const About = () => {
   return (
     <Layouts>
-      <PageBanner pageTitle={"About Us"} />
+      <PageBanner pageTitle={"About Us"} metaUrl="about" />
       
       {/* About-First Start */}
       <section className="gap about-first">

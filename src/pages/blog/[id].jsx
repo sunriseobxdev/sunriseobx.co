@@ -124,7 +124,7 @@ export async function getStaticProps(req) {
       props: {
         data: postData,
         related: relatedPosts,
-        url: `/blog/${params.id}`
+        url: `blog/${params.id}`
       }
     }
 }
