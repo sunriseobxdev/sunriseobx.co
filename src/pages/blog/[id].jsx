@@ -1,3 +1,5 @@
+"use client"
+
 import Layouts from "@layouts/Layouts";
 
 import { getAllPostsIds, getPostData, getRelatedPosts } from "@library/posts";
