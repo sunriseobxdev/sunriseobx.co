@@ -1,4 +1,3 @@
-import dynamic from "next/dynamic";
 
 import Layouts from "@layouts/Layouts";
 
@@ -7,8 +6,7 @@ import CountersSection from "@components/sections/Counters";
 import ServicesSection from "../components/sections/Services";
 import Services2Section from "../components/sections/Services2";
 import PartnersSlider from "../components/sliders/Partners";
-
-const TestimonialSlider = dynamic( () => import("@components/sliders/Testimonial"), { ssr: false } );
+import TestimonialSlider from "../components/sliders/Testimonial";
 
 const About = () => {
   return (

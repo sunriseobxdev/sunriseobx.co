@@ -1,12 +1,11 @@
-import dynamic from "next/dynamic";
 import Link from "next/link";
 
 import Layouts from "@layouts/Layouts";
 
 import PageBanner from "@components/PageBanner";
 import ContactForm2Section from "@components/sections/ContactForm2";
+import TeamSlider from "../components/sliders/Team";
 
-const TeamSlider = dynamic( () => import("@components/sliders/Team"), { ssr: false } );
 
 const Leadership = () => {
   const Content = {

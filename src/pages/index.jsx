@@ -1,6 +1,5 @@
 import React from "react";
 import Layouts from "@layouts/Layouts";
-import dynamic from "next/dynamic";
 
 import { getSortedPostsData } from "@library/posts";
 import { getSortedProjectsData } from "@library/projects";
@@ -10,8 +9,8 @@ import About3Section from "@components/sections/About3";
 import CallToActionSection from "@components/sections/CallToAction";
 import ContactFormSection from "@components/sections/ContactForm";
 import PartnersSlider from "../components/sliders/Partners";
+import ProjectsSlider from "../components/sliders/Projects";
 
-const ProjectsSlider = dynamic( () => import("@components/sliders/Projects"), { ssr: false } );
 
 
 const Home3 = (props) => {
