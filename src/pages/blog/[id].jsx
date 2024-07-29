@@ -20,7 +20,7 @@ const PostsDetail = ( props ) => {
   return (
     <Layouts>
       <PageBanner 
-        pageImage={ appData.settings.url + postData?.image } 
+        pageImage={postData?.image } 
         pageTitle={postData?.title} 
         pageDesc={postData?.description} 
         metaDescription={postData?.description}
