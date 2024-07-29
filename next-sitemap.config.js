@@ -4,7 +4,6 @@ module.exports = {
   generateRobotsTxt: true, // (optional)
   exclude: [
     '/team',
-    '/services',
     '/projects',
     '/projects-2',
     '/product-list',
@@ -16,12 +15,9 @@ module.exports = {
     '/core-values',
     '/checkout',
     '/cart',
-    '/blog',
     '/blog-2',
-    '/services/*',
     '/team/*',
     '/projects/*',
-    '/blog/*',
     '/product-detail'
   ]
   // ...other options
