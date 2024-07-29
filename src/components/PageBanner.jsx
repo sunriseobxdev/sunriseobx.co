@@ -19,6 +19,7 @@ const PageBanner = ({ pageTitle, pageDesc, pageImage, metaDescription }) => {
       // canonical={appData.settings.url}
       openGraph={{
         // url: appData.settings.url,
+        type: 'website',
         title: headTitle,
         description: metaDescription || appData.settings.description,
         images: [
