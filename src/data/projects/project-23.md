@@ -1,7 +1,7 @@
 ---
 #preview
 title: Project 1
-image: /img/project-23.JPG
+image: /img/project-23.jpg
 short: "A modern, technology-enabled, wellness-focused workspace and sustainable office…"
 location: "United States"
 dates: "1999-2000"
