@@ -1,7 +1,7 @@
 ---
 #preview
 title: Project 1
-image: /img/project-19.HEIC
+image: /img/project-19.JPG
 short: "A modern, technology-enabled, wellness-focused workspace and sustainable office…"
 location: "United States"
 dates: "1999-2000"
