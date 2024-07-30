@@ -1,7 +1,7 @@
 ---
 #preview
 title: Project 7
-image: /img/project-8.jpg
+image: /img/project-7.jpg
 short: "A modern, technology-enabled, wellness-focused workspace and sustainable office…"
 location: "Melbourne"
 dates: "1999-2001"
