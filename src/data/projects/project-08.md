@@ -1,7 +1,7 @@
 ---
 #preview
 title: Project 8
-image: /img/project-9.jpg
+image: /img/project-8.jpg
 short: "A modern, technology-enabled, wellness-focused workspace and sustainable office…"
 location: "Sydney"
 dates: "2003-2006"
