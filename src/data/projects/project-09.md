@@ -1,7 +1,7 @@
 ---
 #preview
 title: Project 9
-image: /img/project-10.jpg
+image: /img/project-9.jpg
 short: "A modern, technology-enabled, wellness-focused workspace and sustainable office…"
 location: "Melbourne"
 dates: "1995-1997"
