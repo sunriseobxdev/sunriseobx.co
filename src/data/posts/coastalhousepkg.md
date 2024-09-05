@@ -6,6 +6,8 @@ image: "/img/wincore.png"
 category:
     - Construction
     - Outer Banks
+    - Siding
+    - Insulation
 
 #full details
 author:
