@@ -2,7 +2,7 @@
 title: 'Cool Coastal House Package'
 description: 'Built for Comfort, Efficiency, and Style'
 date: '2024-09-04'
-image: "/img/wincore.png"
+image: "/img/solarDefense.jpg"
 category:
     - Construction
     - Outer Banks
