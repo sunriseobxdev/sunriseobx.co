@@ -62,6 +62,11 @@
                         "label": "The Salt Box Package (Roofing)",
 			"link": "/blog/saltbox",
 			"children": 0
+		    },
+		    {
+                        "label": "Cool Coastal House Package (Siding and Insulation)",
+			"link": "/blog/coolcoastal",
+			"children": 0
 		    }
                 ]
             },
