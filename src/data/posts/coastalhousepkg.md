@@ -31,8 +31,8 @@ additional:
     content: "
         <h5>Voluptatem odit ullam veritatis</h5>
         <p>Modi sint reprehenderit vitae officiis pariatur, ab debitis voluptate ea eius assumenda beatae, tempora, dolores deserunt, ipsam ipsum! Quod ipsam consequuntur distinctio velit sed ipsum quisquam, itaque placeat error non animi quam aut similique nulla ab. Quaerat dicta, dolores veritatis magnam quae aut omnis in porro.</p>
-
-**Sunrise Construction's Cool Coastal House Package: Built for Comfort, Efficiency, and Style**
+    "
+---
 
 The unique coastal environment presents specific challenges for homeowners. Whether it’s the salty air, intense sun, or high winds, the coastal climate requires durable, energy-efficient materials. Sunrise Construction’s *Cool Coastal House Package* meets these demands with two standout products: Low-E House Wrap and SolarDefense Siding. These elements work in harmony to create homes that are resilient, energy-efficient, and visually striking.
 
