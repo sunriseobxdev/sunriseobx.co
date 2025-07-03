@@ -51,3 +51,25 @@ section {
 #theme-icon {
   display: none !important;
 }
+
+/* Partners/Client slider section - white background for logo visibility */
+.client-style-one {
+  background-color: white !important;
+  padding: 60px 0 !important;
+}
+
+.client-style-one .container {
+  background-color: white !important;
+}
+
+.client-slider {
+  background-color: white !important;
+}
+
+.client-slider .swiper-slide {
+  background-color: white !important;
+}
+
+.client-slider img {
+  background-color: transparent !important;
+}
