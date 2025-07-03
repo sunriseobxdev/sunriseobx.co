@@ -73,3 +73,57 @@ section {
 .client-slider img {
   background-color: transparent !important;
 }
+
+/* FIX: Section Overlap Issue - Ensure proper section spacing */
+/* Override Bootstrap py-5 with proper section spacing */
+.py-5 {
+  padding-top: 120px !important;
+  padding-bottom: 120px !important;
+}
+
+/* Ensure sections don't overlap by adding proper margins */
+section + section {
+  margin-top: 0 !important;
+}
+
+/* Fix specific section spacing issues */
+.service-areas,
+.service-coverage,
+.construction-expertise,
+.cta-section {
+  padding: 120px 0 !important;
+  margin: 0 !important;
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+/* Ensure proper spacing between sections */
+.service-areas + .service-coverage {
+  margin-top: 0 !important;
+}
+
+.service-coverage + .construction-expertise {
+  margin-top: 0 !important;
+}
+
+.construction-expertise + .cta-section {
+  margin-top: 0 !important;
+}
+
+/* Fix any negative margins that might cause overlap */
+section {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+/* Ensure containers have proper spacing */
+.container {
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+/* Fix any absolute positioning that might cause overlap */
+section:before,
+section:after {
+  z-index: -1 !important;
+}

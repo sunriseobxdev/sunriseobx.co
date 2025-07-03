@@ -152,7 +152,7 @@ const LocationsPage = () => {
           ]}
         />
         
-        <section className="service-areas py-5">
+        <section className="service-areas gap">
           <div className="container">
             <div className="row">
               <div className="col-lg-8 mx-auto text-center mb-5">
@@ -206,7 +206,7 @@ const LocationsPage = () => {
           </div>
         </section>
         
-        <section className="service-coverage py-5 bg-light">
+        <section className="service-coverage gap bg-light">
           <div className="container">
             <div className="row">
               <div className="col-lg-6">
@@ -264,7 +264,7 @@ const LocationsPage = () => {
           </div>
         </section>
         
-        <section className="construction-expertise py-5">
+        <section className="construction-expertise gap">
           <div className="container">
             <div className="row">
               <div className="col-lg-8 mx-auto text-center mb-5">
@@ -320,7 +320,7 @@ const LocationsPage = () => {
           </div>
         </section>
         
-        <section className="cta-section py-5 bg-primary text-white">
+        <section className="cta-section gap bg-primary text-white">
           <div className="container">
             <div className="row">
               <div className="col-lg-8 mx-auto text-center">
