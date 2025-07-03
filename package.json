@@ -18,6 +18,7 @@
     "test:coverage": "jest --coverage"
   },
   "dependencies": {
+    "crypto-js": "^4.2.0",
     "date-fns": "^2.30.0",
     "formik": "^2.4.5",
     "gray-matter": "^4.0.3",
