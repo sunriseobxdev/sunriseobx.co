@@ -67,6 +67,7 @@ const Portfolio = (props) => {
     </Layouts>
   );
 };
+
 export default Portfolio;
 
 export async function getStaticProps() {

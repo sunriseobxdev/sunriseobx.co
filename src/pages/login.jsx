@@ -80,4 +80,5 @@ const Login = () => {
     </Layouts>
   );
 };
+
 export default Login;

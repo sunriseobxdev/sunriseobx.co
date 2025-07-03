@@ -30,6 +30,7 @@ export default function usePagination(
       totalPages,
     ]
   }
+
   // -> 1 ... 7 8 9 10
   return [1, dotts, ...getPages(4, totalPages - 3)]
 }

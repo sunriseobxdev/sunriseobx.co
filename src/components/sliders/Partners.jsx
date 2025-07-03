@@ -27,4 +27,5 @@ const PartnersSlider = ({ noTop }) => {
     </div>
   );
 };
+
 export default PartnersSlider;

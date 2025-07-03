@@ -35,4 +35,5 @@ const RelatedProjects = ({ projects }) => {
     </>
   );
 };
+
 export default RelatedProjects;

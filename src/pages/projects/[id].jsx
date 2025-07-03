@@ -138,6 +138,7 @@ const ProjectDetail = ( props ) => {
     </Layouts>
   );
 };
+
 export default ProjectDetail;
 
 export async function getStaticPaths() {

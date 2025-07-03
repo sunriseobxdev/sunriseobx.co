@@ -2,9 +2,10 @@ import { Fragment, useEffect, useState } from "react";
 import useClickOutside from "@common/useClickOutside";
 
 const ImgViews = ({ close, src }) => {
-  let domNode = useClickOutside(() => {
+  const domNode = useClickOutside(() => {
     close(false);
   });
+
   return (
     <Fragment>
       <div className="mfp-bg mfp-ready" onClick={() => close(false)}></div>
@@ -35,6 +36,7 @@ const ImageView = () => {
   useEffect(() => {
     setTimeout(() => {
       const a = document.querySelectorAll("a");
+
       a.forEach((a) => {
         if (a.href.includes("img/") || a.href.includes("images/")) {
           if (a.getAttribute("download") === null) {
@@ -48,10 +50,12 @@ const ImageView = () => {
       });
     }, 1500);
   }, []);
+
   return (
     <Fragment>
       {img && <ImgViews close={() => setImg(false)} src={imgValue} />}
     </Fragment>
   );
 };
+
 export default ImageView;

@@ -26,6 +26,7 @@ export function getSortedTeamData() {
       ...matterResult.data
     }
   })
+
   // Sort posts by date
   return allData.sort((a, b) => {
     if (a.id > b.id) {
@@ -38,6 +39,7 @@ export function getSortedTeamData() {
 
 export function getAllTeamIds() {
   const fileNames = fs.readdirSync(teamDirectory)
+
   return fileNames.map(fileName => {
     return {
       params: {

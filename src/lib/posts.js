@@ -26,6 +26,7 @@ export function getSortedPostsData() {
       ...matterResult.data
     }
   })
+
   // Sort posts by date
   return allPostsData.sort((a, b) => {
     if (a.date < b.date) {
@@ -56,6 +57,7 @@ export function getPaginatedPostsData(limit, page) {
       ...matterResult.data
     }
   })
+
   // Sort posts by date
   allPostsData.sort((a, b) => {
     if (a.date < b.date) {
@@ -66,6 +68,7 @@ export function getPaginatedPostsData(limit, page) {
   })
 
   const paginatedPosts = allPostsData.slice((page - 1) * limit, page * limit)
+
   return { posts: paginatedPosts, total: allPostsData.length }
 }
 
@@ -108,6 +111,7 @@ export function getRelatedPosts(current_id) {
 
 export function getAllPostsIds() {
   const fileNames = fs.readdirSync(postsDirectory)
+
   return fileNames.map(fileName => {
     return {
       params: {

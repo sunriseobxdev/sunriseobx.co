@@ -165,4 +165,5 @@ const Cart = () => {
     </Layouts>
   );
 };
+
 export default Cart;

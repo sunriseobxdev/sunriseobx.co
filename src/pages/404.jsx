@@ -40,4 +40,5 @@ const E404 = () => {
     </Layouts>
   );
 };
+
 export default E404;

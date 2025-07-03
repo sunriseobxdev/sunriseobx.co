@@ -166,4 +166,5 @@ const Checkout = () => {
     </Layouts>
   );
 };
+
 export default Checkout;

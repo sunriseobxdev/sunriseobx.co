@@ -19,4 +19,5 @@ const Header = ({ header, contactButton, cartButton }) => {
       );
   }
 };
+
 export default Header;

@@ -1,44 +1,20 @@
-import SwiperCore, {
-  A11y,
-  Autoplay,
-  EffectCreative,
-  EffectFade,
-  Grid,
-  HashNavigation,
-  History,
-  Keyboard,
-  Mousewheel,
-  Navigation,
-  Pagination,
-  Scrollbar,
-  Thumbs,
-  Virtual,
-} from "swiper";
+// Swiper v11+ imports - modules are imported from separate paths
+import { Autoplay, Navigation, Pagination, EffectFade, Grid, EffectCreative, Virtual, HashNavigation, History, Thumbs, Scrollbar, Keyboard, A11y, Mousewheel } from 'swiper/modules';
 
-SwiperCore.use([
-  Mousewheel,
-  Pagination,
-  Navigation,
-  EffectFade,
-  Autoplay,
-  Grid,
-  EffectCreative,
-  Virtual,
-  Pagination,
-  HashNavigation,
-  History,
-  Thumbs,
-  Scrollbar,
-  Keyboard,
-  A11y,
-]);
-
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
+// Import Swiper styles
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import 'swiper/css/effect-fade';
+import 'swiper/css/grid';
+import 'swiper/css/effect-creative';
+import 'swiper/css/virtual';
+import 'swiper/css/thumbs';
+import 'swiper/css/scrollbar';
 
 export const sliderProps = {
   heroSlider: {
+    modules: [Navigation, Autoplay],
     slidesPerView: 1,
     spaceBetween: 0,
     speed: 800,
@@ -53,6 +29,7 @@ export const sliderProps = {
     },
   },
   hero2Slider: {
+    modules: [Navigation, Autoplay],
     slidesPerView: 1,
     spaceBetween: 0,
     speed: 800,
@@ -67,6 +44,7 @@ export const sliderProps = {
     },
   },
   partnersSlider: {
+    modules: [Autoplay],
     slidesPerView: 3,
     spaceBetween: 0,
     speed: 800,
@@ -75,6 +53,7 @@ export const sliderProps = {
     },
   },
   testimonialSlider: {
+    modules: [Pagination, Autoplay],
     slidesPerView: 1,
     spaceBetween: 30,
     speed: 800,
@@ -87,6 +66,7 @@ export const sliderProps = {
     },
   },
   projectsSlider: {
+    modules: [Pagination, Autoplay],
     slidesPerView: 4,
     spaceBetween: 20,
     speed: 800,
@@ -99,6 +79,7 @@ export const sliderProps = {
     },
   },
   projects2Slider: {
+    modules: [Navigation, Autoplay, EffectFade],
     slidesPerView: 1,
     spaceBetween: 30,
     speed: 800,
@@ -115,6 +96,7 @@ export const sliderProps = {
     },
   },
   teamSlider: {
+    modules: [Navigation],
     slidesPerView: 'auto',
     spaceBetween: 30,
     speed: 800,
@@ -126,6 +108,7 @@ export const sliderProps = {
     },
   },
   certificatesSlider: {
+    modules: [Navigation, Autoplay],
     slidesPerView: 1,
     spaceBetween: 30,
     speed: 800,
@@ -139,6 +122,7 @@ export const sliderProps = {
     },
   },
   blogSlider: {
+    modules: [Pagination, Autoplay],
     slidesPerView: 3,
     spaceBetween: 10,
     speed: 800,
@@ -152,6 +136,7 @@ export const sliderProps = {
     },
   },
   productsSlider: {
+    modules: [Pagination, Autoplay],
     slidesPerView: 3,
     spaceBetween: 0,
     speed: 800,
@@ -165,6 +150,7 @@ export const sliderProps = {
     },
   },
   projDetailsSlider: {
+    modules: [Pagination, Autoplay],
     slidesPerView: 1,
     spaceBetween: 0,
     speed: 800,

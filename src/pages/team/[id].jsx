@@ -111,6 +111,7 @@ const TeamDetail = ( { postData, projects } ) => {
     </Layouts>
   );
 };
+
 export default TeamDetail;
 
 export async function getStaticPaths() {

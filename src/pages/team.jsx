@@ -78,6 +78,7 @@ const Team = ( props ) => {
     </Layouts>
   );
 };
+
 export default Team;
 
 export async function getStaticProps() {

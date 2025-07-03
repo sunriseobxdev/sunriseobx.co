@@ -60,4 +60,5 @@ const TeamSlider = ({ noTop }) => {
     </section>
   );
 };
+
 export default TeamSlider;

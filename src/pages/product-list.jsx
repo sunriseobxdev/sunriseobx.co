@@ -234,4 +234,5 @@ const ProductList = () => {
     </Layouts>
   );
 };
+
 export default ProductList;

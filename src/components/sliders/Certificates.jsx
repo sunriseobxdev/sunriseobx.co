@@ -63,4 +63,5 @@ const CertificatesSlider = () => {
     </section>
   );
 };
+
 export default CertificatesSlider;

@@ -5,7 +5,7 @@ import { Formik } from 'formik';
 const ContactForm2Section = () => {
   return (
     <div className="contact-form-one contact-form-two">
-        <div className="parallax" style={{backgroundImage: 'url('+Data.bg_image+')'}} />
+        <div className="parallax" style={{backgroundImage: `url(${Data.bg_image})`}} />
 
         <div className="container">
           <div className="row align-items-center">
@@ -19,6 +19,7 @@ const ContactForm2Section = () => {
                     initialValues = {{ email: '', name: '', subject: '', message: '', phone: '' }}
                     validate = { values => {
                         const errors = {};
+
                         if (!values.email) {
                             errors.email = 'Required';
                         } else if (
@@ -26,6 +27,7 @@ const ContactForm2Section = () => {
                         ) {
                             errors.email = 'Invalid email address';
                         }
+
                         return errors;
                     }}
                     onSubmit = {( values, { setSubmitting } ) => {

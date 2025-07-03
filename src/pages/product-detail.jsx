@@ -280,4 +280,5 @@ const ProductDetail = () => {
     </Layouts>
   );
 };
+
 export default ProductDetail;

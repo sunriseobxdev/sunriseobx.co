@@ -26,6 +26,7 @@ export function getSortedServicesData() {
       ...matterResult.data
     }
   })
+
   // Sort posts by date
   return allData.sort((a, b) => {
     if (a.id > b.id) {
@@ -38,6 +39,7 @@ export function getSortedServicesData() {
 
 export function getAllServicesIds() {
   const fileNames = fs.readdirSync(servicesDirectory)
+
   return fileNames.map(fileName => {
     return {
       params: {

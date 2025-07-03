@@ -58,15 +58,15 @@ const Blog = ( { posts, totalPosts, currentPage } ) => {
                     </li>
                     <li>
                       <p>Consulted admitting is power acuteness.</p>
-                      <a href="/blog/play-to-your-strength-and-supercharge-your-business">
+                      <Link href="/blog/play-to-your-strength-and-supercharge-your-business">
                         <i className="fa-solid fa-arrow-up-long"></i>
-                      </a>
+                      </Link>
                     </li>
                     <li>
                       <p>Consulted admitting is power acuteness.</p>
-                      <a href="/blog/play-to-your-strength-and-supercharge-your-business">
+                      <Link href="/blog/play-to-your-strength-and-supercharge-your-business">
                         <i className="fa-solid fa-arrow-up-long"></i>
-                      </a>
+                      </Link>
                     </li>
                   </ul>
                 </div>
@@ -173,6 +173,7 @@ const Blog = ( { posts, totalPosts, currentPage } ) => {
     </Layouts>
   );
 };
+
 export default Blog;
 
 export async function getStaticProps() {

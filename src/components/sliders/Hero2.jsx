@@ -41,4 +41,5 @@ const Hero2Slider = () => {
     </section>
   );
 };
+
 export default Hero2Slider;

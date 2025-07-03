@@ -45,6 +45,7 @@ const ContactFormSection = () => {
                     initialValues = {{ email: '', name: '', subject: '', message: '', phone: '' }}
                     validate = { values => {
                         const errors = {};
+
                         if (!values.email) {
                             errors.email = 'Required';
                         } else if (
@@ -52,6 +53,7 @@ const ContactFormSection = () => {
                         ) {
                             errors.email = 'Invalid email address';
                         }
+
                         return errors;
                     }}
                     onSubmit = {( values, { setSubmitting } ) => {

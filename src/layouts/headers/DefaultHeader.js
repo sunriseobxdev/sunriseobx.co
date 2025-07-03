@@ -12,7 +12,8 @@ const DefaultHeader = ({ contactButton, cartButton }) => {
     if ( item.children != 0 ) {
       s_class1 = 'menu-item-has-children';
     }
-    let newobj = Object.assign({}, item, { "classes" :  s_class1 });
+    const newobj = Object.assign({}, item, { "classes" :  s_class1 });
+
     navItems.push(newobj);
   });
 
@@ -46,6 +47,7 @@ const DefaultHeader = ({ contactButton, cartButton }) => {
     setThemeUIToggle(!themeUI);
     
     const lightmodeToggle = document.querySelector('#theme-icon');
+
     if ( themeUI ) {
       document.body.classList.remove('light-d');
       lightmodeToggle.src = '/images/sun.png';
@@ -110,11 +112,11 @@ const DefaultHeader = ({ contactButton, cartButton }) => {
                       
                       <div className="extras">
                         <div className="theme-color">
-                          <img 
-                            src={ 1 ? "/images/moon.png" : "/images/sun.png"} 
-                            alt="theme color" 
-                            id="theme-icon" 
-                            onClick={() => clickedThemeUI() } 
+                          <img
+                            src={ themeUI ? "/images/moon.png" : "/images/sun.png"}
+                            alt="theme color"
+                            id="theme-icon"
+                            onClick={() => clickedThemeUI() }
                           />
                         </div>
                         <a href="#" id="mobile-menu" className={mobileMenu ? "menu-start open" : "menu-start"} onClick={ (e) => clickedMobileMenu(e) }>
@@ -252,4 +254,5 @@ const DefaultHeader = ({ contactButton, cartButton }) => {
     </header>
   );
 };
+
 export default DefaultHeader;

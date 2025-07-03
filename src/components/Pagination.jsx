@@ -48,4 +48,5 @@ const Pagination = ({ currentPage, totalItems, perPage, renderPageLink }) => {
         </div>
     );
   };
+
   export default Pagination;

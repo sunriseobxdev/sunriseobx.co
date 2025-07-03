@@ -37,5 +37,6 @@ const PaginationPage = ({ items }) => {
       </>
     );
   };
+
   export default PaginationPage;
   

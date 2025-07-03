@@ -8,7 +8,7 @@ export const scrollAnimation = () => {
     const timeline = document.querySelector(".timeline .fill");
     
     window.addEventListener('scroll', function(e) {
-        let last_scroll_position = window.scrollY;
+        const last_scroll_position = window.scrollY;
         
         // Scrolling down
         if (new_scroll_position < last_scroll_position && last_scroll_position > 100) {
@@ -34,8 +34,9 @@ export const scrollAnimation = () => {
         }
 
         if ( timeline != undefined ) {
-            let timelineTop = timeline.offsetTop;
-            timeline.style.height = (last_scroll_position-timelineTop-200)+'px';
+            const timelineTop = timeline.offsetTop;
+
+            timeline.style.height = `${last_scroll_position-timelineTop-200}px`;
         }
     });
 

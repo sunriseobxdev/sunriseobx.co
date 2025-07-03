@@ -163,4 +163,5 @@ const Leadership = () => {
     </Layouts>
   );
 };
+
 export default Leadership;

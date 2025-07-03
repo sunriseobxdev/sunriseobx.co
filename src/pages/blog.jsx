@@ -38,6 +38,7 @@ const Blog = ( { posts, totalPosts, currentPage } ) => {
     </Layouts>
   );
 };
+
 export default Blog;
 
 export async function getStaticProps() {

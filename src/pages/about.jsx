@@ -152,4 +152,5 @@ const About = () => {
     </Layouts>
   );
 };
+
 export default About;

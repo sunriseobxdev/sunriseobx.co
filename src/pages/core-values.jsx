@@ -174,4 +174,5 @@ const CoreValues = () => {
     </Layouts>
   );
 };
+
 export default CoreValues;

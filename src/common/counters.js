@@ -4,12 +4,12 @@ export const countersAnimation = () => {
     const number = document.querySelectorAll('.mil-counter');
 
     number.forEach( (element) => {
-        var count = element,
+        const count = element,
             zero = {
                 val: 0
             },
             num = count.dataset.number,
-            split = (num + "").split("."), // to cover for instances of decimals
+            split = (`${num}`).split("."), // to cover for instances of decimals
             decimals = split.length > 1 ? split[1].length : 0;
 
         gsap.to(zero, {
@@ -19,7 +19,7 @@ export const countersAnimation = () => {
                 trigger: count,
                 toggleActions: 'play none none reverse',
             },
-            onUpdate: function () {
+            onUpdate () {
                 count.innerHTML = zero.val.toFixed(decimals);
             }
         });

@@ -115,6 +115,7 @@ const ServiceDetail = ( { postData, url } ) => {
     </Layouts>
   );
 };
+
 export default ServiceDetail;
 
 export async function getStaticPaths() {

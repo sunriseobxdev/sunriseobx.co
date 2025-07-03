@@ -103,6 +103,7 @@ const PostsDetail = ( props ) => {
     </Layouts>
   );
 };
+
 export default PostsDetail;
 
 export async function getStaticPaths() {

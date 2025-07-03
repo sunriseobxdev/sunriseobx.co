@@ -27,6 +27,7 @@ const Home3 = (props) => {
     </Layouts>
   );
 };
+
 export default Home3;
 
 export async function getStaticProps() {

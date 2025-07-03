@@ -4,9 +4,10 @@ import Link from "next/link";
 const RenovationSection = () => {
   const styles = {
     parallax: {
-        "backgroundImage": "url("+Data.bg_image+")"
+        "backgroundImage": `url(${Data.bg_image})`
     }
   }
+
   return (
     <section className="gap renovation">
         <div className="parallax" style={styles.parallax}></div>

@@ -47,6 +47,7 @@ const Contact = () => {
                         initialValues = {{ email: '', name: '', subject: '', message: '' }}
                         validate = { values => {
                             const errors = {};
+
                             if (!values.email) {
                                 errors.email = 'Required';
                             } else if (
@@ -54,6 +55,7 @@ const Contact = () => {
                             ) {
                                 errors.email = 'Invalid email address';
                             }
+
                             return errors;
                         }}
                         onSubmit = {( values, { setSubmitting } ) => {
@@ -258,4 +260,5 @@ const Contact = () => {
     </Layouts>
   );
 };
+
 export default Contact;

@@ -33,6 +33,7 @@ const EstimatedPriceSection = () => {
                     initialValues = {{ email: '', name: '', message: '', materials: '1', area: '', room: '', bathroom: '' }}
                     validate = { values => {
                         const errors = {};
+
                         if (!values.email) {
                             errors.email = 'Required';
                         } else if (
@@ -40,6 +41,7 @@ const EstimatedPriceSection = () => {
                         ) {
                             errors.email = 'Invalid email address';
                         }
+
                         return errors;
                     }}
                     onSubmit = {( values, { setSubmitting } ) => {

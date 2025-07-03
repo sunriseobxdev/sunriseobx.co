@@ -1,74 +1,189 @@
-import Head from 'next/head';
-import Link from "next/link";
-import appData from "@data/app.json";
+import { useMemo } from 'react';
+import Link from 'next/link';
 import { NextSeo } from 'next-seo';
+import appData from '@data/app.json';
 
-const PageBanner = ({ pageTitle, pageDesc, pageImage, metaDescription, metaUrl }) => {
-  const styles = {
-    "parallax": {
-      "backgroundImage": "url(/images/pattren-3.png)"
-    }
-  }
-  const headTitle = `${appData.settings.siteName} - ${pageTitle}`;
+const PageBanner = ({
+  pageTitle,
+  pageDesc,
+  pageImage,
+  metaDescription,
+  metaUrl,
+  breadcrumbs = [],
+  className = '',
+}) => {
+  // Memoize computed values for better performance
+  const seoData = useMemo(() => {
+    const headTitle = pageTitle
+      ? `${pageTitle} | ${appData.settings.siteName}`
+      : appData.settings.siteName;
+    
+    const description = metaDescription || pageDesc || appData.settings.description;
+    const canonicalUrl = metaUrl
+      ? `${appData.settings.url.replace(/\/$/, '')}${metaUrl}`
+      : appData.settings.url;
+    
+    const imageUrl = pageImage
+      ? `${appData.settings.url.replace(/\/$/, '')}${pageImage}`
+      : `${appData.settings.url}android-chrome-512x512.png`;
 
-  return (
-    <>
-            <NextSeo
-      title={headTitle}
-      description={metaDescription || appData.settings.description}
-      canonical={metaUrl ? appData.settings.url + metaUrl : appData.settings.url}
-      openGraph={{
-        url: metaUrl ? appData.settings.url + metaUrl : appData.settings.url,
+    return {
+      title: headTitle,
+      description,
+      canonical: canonicalUrl,
+      openGraph: {
+        url: canonicalUrl,
         type: 'website',
         title: headTitle,
-        description: metaDescription || appData.settings.description,
+        description,
         images: [
           {
-            url: pageTitle ? appData.settings.url.replace(/\/$/, '') + pageImage : appData.settings.url + 'android-chrome-512x512.png',
-            width: 512,
-            height: 512,
-            alt: appData.settings.siteName,
+            url: imageUrl,
+            width: 1200,
+            height: 630,
+            alt: pageTitle || appData.settings.siteName,
             type: 'image/png',
           },
         ],
         siteName: appData.settings.siteName,
-      }}
-      twitter={{
+      },
+      twitter: {
         handle: '@sunriseobx',
         site: '@sunriseobx',
-        cardType: 'summary_large_image'
-      }}
-    />
-      <section className="banner-style-one">
-        <div className="parallax" style={styles.parallax} />
+        cardType: 'summary_large_image',
+      },
+    };
+  }, [pageTitle, pageDesc, pageImage, metaDescription, metaUrl]);
+
+  // Generate breadcrumb schema
+  const breadcrumbSchema = useMemo(() => {
+    const items = [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: appData.settings.url,
+      },
+    ];
+
+    if (breadcrumbs.length > 0) {
+      breadcrumbs.forEach((crumb, index) => {
+        items.push({
+          '@type': 'ListItem',
+          position: index + 2,
+          name: crumb.name,
+          item: crumb.url ? `${appData.settings.url.replace(/\/$/, '')}${crumb.url}` : undefined,
+        });
+      });
+    } else if (pageTitle) {
+      items.push({
+        '@type': 'ListItem',
+        position: 2,
+        name: pageTitle,
+      });
+    }
+
+    return {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: items,
+    };
+  }, [breadcrumbs, pageTitle]);
+
+  const parallaxStyle = {
+    backgroundImage: 'url(/images/pattren-3.png)',
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
+  };
+
+  return (
+    <>
+      <NextSeo
+        {...seoData}
+        additionalMetaTags={[
+          {
+            name: 'robots',
+            content: 'index,follow',
+          },
+          {
+            property: 'article:author',
+            content: appData.settings.siteName,
+          },
+        ]}
+      />
+
+      {/* Structured data for breadcrumbs */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(breadcrumbSchema),
+        }}
+      />
+
+      <section className={`banner-style-one ${className}`}>
+        <div
+          className="parallax"
+          style={parallaxStyle}
+          role="img"
+          aria-label="Page banner background"
+        />
 
         <div className="container">
           <div className="row">
-            <div className="banner-details">
-              <h2>{pageTitle}</h2>
-              <p>{pageDesc}</p>
+            <div className="col-12">
+              <div className="banner-details">
+                <h1 className="banner-title">{pageTitle}</h1>
+                {pageDesc && (
+                  <p className="banner-description">{pageDesc}</p>
+                )}
+              </div>
             </div>
           </div>
         </div>
-        <div className="breadcrums">
+
+        <nav className="breadcrums" aria-label="Breadcrumb navigation">
           <div className="container">
             <div className="row">
-              <ul>
-                <li>
-                  <Link href="/">
-                    <i className="fa-solid fa-house"></i>
-                    <p>Home</p>
-                  </Link>
-                </li>
-                <li className="current">
-                  <p>{pageTitle}</p>
-                </li>
-              </ul>
+              <div className="col-12">
+                <ol className="breadcrumb-list">
+                  <li className="breadcrumb-item">
+                    <Link href="/" aria-label="Go to homepage">
+                      <i className="fa-solid fa-house" aria-hidden="true" />
+                      <span>Home</span>
+                    </Link>
+                  </li>
+                  
+                  {breadcrumbs.length > 0 ? (
+                    breadcrumbs.map((crumb, index) => (
+                      <li
+                        key={index}
+                        className={`breadcrumb-item ${
+                          index === breadcrumbs.length - 1 ? 'current' : ''
+                        }`}
+                      >
+                        {crumb.url && index !== breadcrumbs.length - 1 ? (
+                          <Link href={crumb.url}>
+                            <span>{crumb.name}</span>
+                          </Link>
+                        ) : (
+                          <span>{crumb.name}</span>
+                        )}
+                      </li>
+                    ))
+                  ) : (
+                    <li className="breadcrumb-item current">
+                      <span>{pageTitle}</span>
+                    </li>
+                  )}
+                </ol>
+              </div>
             </div>
           </div>
-        </div>
+        </nav>
       </section>
     </>
   );
 };
+
 export default PageBanner;

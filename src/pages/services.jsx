@@ -157,6 +157,7 @@ const Services = (props) => {
     </Layouts>
   );
 };
+
 export default Services;
 
 export async function getStaticProps() {

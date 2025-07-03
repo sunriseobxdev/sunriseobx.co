@@ -94,4 +94,5 @@ const History = () => {
     </Layouts>
   );
 };
+
 export default History;

@@ -26,6 +26,7 @@ export function getSortedProjectsData() {
       ...matterResult.data
     }
   })
+
   // Sort posts by date
   return allData.sort((a, b) => {
     if (a.id > b.id) {
@@ -41,6 +42,7 @@ export function getFeaturedProjectsData(ids) {
   // Get file names under /posts
   const fileNames = fs.readdirSync(projectsDirectory)
   const allData = []
+
   fileNames.map(fileName => {
     // Remove ".md" from file name to get id
     const id = fileName.replace(/\.md$/, '')
@@ -110,6 +112,7 @@ export function getRelatedProjects(current_id) {
 
 export function getAllProjectsIds() {
   const fileNames = fs.readdirSync(projectsDirectory)
+
   return fileNames.map(fileName => {
     return {
       params: {

@@ -40,6 +40,7 @@ const Blog = ( { posts, currentPage, totalPosts } ) => {
     </Layouts>
   );
 };
+
 export default Blog;
 
 export async function getStaticPaths() {
