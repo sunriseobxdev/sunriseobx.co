@@ -4,31 +4,31 @@
       "icon": {
         "light": "/images/icon-1.svg",
         "dark": "/images/1-icon.png",
-        "alt": "icon"
+        "alt": "Wincore Windows Installation OBX"
       },
-      "title": "Wincore Windows",
-      "text": "Let us handle your Wincore window installation for any model, to protect your OBX home from the elements.",
-      "link": "/services/service-1"
+      "title": "Wincore Windows Installation - Outer Banks",
+      "text": "Professional Wincore window installation services for Outer Banks homes. Hurricane-resistant windows designed to protect your OBX property from coastal storms and salt air damage.",
+      "link": "/services/wincore-windows-outer-banks"
     },
     {
       "icon": {
         "light": "/images/icon-2.svg",
         "dark": "/images/2-icon.png",
-        "alt": "icon"
+        "alt": "Fortified Roofing OBX Hurricane Protection"
       },
-      "title": "Fortified Roofing",
-      "text": "Protect your home against high winds, hurricanes, and hailstorms",
-      "link": "/services/service-2"
+      "title": "Fortified Roofing - Hurricane Protection OBX",
+      "text": "IBHS Fortified roofing systems for Outer Banks homes. Protect your coastal property against hurricanes, high winds, and severe coastal weather with our certified roofing solutions.",
+      "link": "/services/fortified-roofing-outer-banks"
     },
     {
       "icon": {
         "light": "/images/icon-3.svg",
         "dark": "/images/3-icon.png",
-        "alt": "icon"
+        "alt": "Exterior Construction Outer Banks"
       },
-      "title": "Exterior Construction",
-      "text": "Underpinning, insulation, porches, and more",
-      "link": "/services/service-3"
+      "title": "Coastal Exterior Construction - OBX",
+      "text": "Complete exterior construction services for Outer Banks homes including underpinning, coastal insulation, hurricane-resistant porches, and beachfront structural improvements.",
+      "link": "/services/exterior-construction-outer-banks"
     }
   ]
 }

@@ -1,20 +1,20 @@
 {
     "image1": {
         "url": "/img/about-one.jpeg",
-        "alt": "Image One"
+        "alt": "Outer Banks Construction Company - Sunrise Construction Team"
     },
     "image2": {
         "url": "/img/about-two.jpeg",
-        "alt": "Image One"
+        "alt": "OBX Beachfront Home Construction Project"
     },
-    "title": "Sunrise Construction offers a full range of services",
-    "subtitle": "Welcome to our company!",
-    "text": "We successfully plan and manage projects of varying complexity, provide long-term guarantees and regularly master new technologies. Our portfolio includes dozens of successfully completed projects in the OBX and elsewhere, with excelllent quality. Beachfront home repair is what we do!",
+    "title": "Outer Banks Construction Experts - Full-Service Coastal Builders",
+    "subtitle": "Premier OBX Construction Company",
+    "text": "Sunrise Construction is the Outer Banks' most trusted construction company, specializing in hurricane-resistant coastal homes and beachfront construction. We successfully plan and manage complex OBX construction projects, providing long-term guarantees and mastering cutting-edge coastal building technologies. Our portfolio includes dozens of successfully completed hurricane-resistant homes and beachfront renovations across the Outer Banks, with exceptional quality that withstands coastal weather. Beachfront home repair and coastal construction is what we do best!",
     "signature": {
         "light": "/img/signature.png",
         "dark": "/img/signature-1.png",
-        "alt": "Signature"
+        "alt": "Zachary Wayland Signature - Director of Sunrise Construction OBX"
     },
     "name": "Zachary Wayland",
-    "role": "Director of Sunrise Construction"
+    "role": "Director of Sunrise Construction - Outer Banks"
 }

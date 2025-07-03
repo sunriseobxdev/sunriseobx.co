@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Data from "@data/sections/features.json";
 import Accordion from 'react-bootstrap/Accordion';
 import ModalVideo from 'react-modal-video';
+import Image from "next/image";
 import 'react-modal-video/css/modal-video.css';
 
 const FeaturesSection = () => {
@@ -45,7 +46,7 @@ const FeaturesSection = () => {
                 <div className="shape">
                     <div className="video">
                         <figure>
-                            <img src={Data.image.url} alt={Data.image.alt} />
+                            <Image src={Data.image.url} alt={Data.image.alt} width={600} height={400} />
                         </figure>
                         <a className="video-play-btn" onClick={() => setOpen(true)} style={{ "cursor" : "pointer" }}>
                             <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" width="35" height="56" viewBox="0 0 35 56"> <defs> <clipPath id="clip-video_arrow"> <rect width="35" height="56"/> </clipPath> </defs> <g id="video_arrow" data-name="video arrow" clipPath="url(#clip-video_arrow)"> <path id="Shape_1" data-name="Shape 1" d="M1362,5000.8,1327,4972V5027Z" transform="translate(-1326.998 -4971.996)" fill="rgba(0,0,0,0)"/> <path id="Shape_1_-_Outline" data-name="Shape 1 - Outline" d="M1333,5015.017l19.29-14.437L1333,4984.7v30.313M1327,5027V4972l35,28.807Z" transform="translate(-1326.998 -4971.996)"/> </g> </svg>

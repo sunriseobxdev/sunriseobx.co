@@ -1,4 +1,5 @@
 import Data from "../../data/sections/about.json";
+import Image from "next/image";
 
 const AboutSection = () => {
     return (
@@ -8,10 +9,10 @@ const AboutSection = () => {
             <div className="col-lg-6" >
               <div className="about-data-left">
                 <figure>
-                  <img src={Data.image1.url} alt={Data.image1.alt} />
+                  <Image src={Data.image1.url} alt={Data.image1.alt} width={500} height={400} />
                 </figure>
                 <figure className="about-image">
-                  <img src={Data.image2.url} alt={Data.image2.alt} />
+                  <Image src={Data.image2.url} alt={Data.image2.alt} width={400} height={300} />
                 </figure>
               </div>
             </div>
@@ -24,8 +25,8 @@ const AboutSection = () => {
                     {Data.text}
                   </p>
                   <figure>
-                    <img className="light-icon" src={Data.signature.light} alt={Data.signature.alt} />
-                    <img className="dark-icon" src={Data.signature.dark} alt={Data.signature.alt} />
+                    <Image className="light-icon" src={Data.signature.light} alt={Data.signature.alt} width={200} height={100} />
+                    <Image className="dark-icon" src={Data.signature.dark} alt={Data.signature.alt} width={200} height={100} />
                   </figure>
                   <h3>{Data.name}</h3>
                   <h4>{Data.role}</h4>

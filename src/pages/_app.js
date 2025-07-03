@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { DefaultSeo } from 'next-seo';
 import { register } from 'swiper/element/bundle';
 
 import appData from '@data/app.json';
 import { TitleContext } from '@common/title';
 import ErrorBoundary from '@components/ErrorBoundary';
+import DefaultSEO from '@components/SEO/DefaultSEO';
+import StructuredData from '@components/SEO/StructuredData';
 
 import '../styles/scss/style.scss';
 import '../styles/globals.css';
@@ -14,73 +15,8 @@ import '../styles/globals.css';
 // Register Swiper custom elements
 register();
 
-const defaultImage = `${appData.settings.url}android-chrome-512x512.png`;
-
-// Default SEO configuration
-const defaultSEO = {
-  title: appData.settings.siteName,
-  description: appData.settings.description,
-  canonical: appData.settings.url,
-  openGraph: {
-    type: 'website',
-    locale: 'en_US',
-    url: appData.settings.url,
-    site_name: appData.settings.siteName,
-    title: appData.settings.siteName,
-    description: appData.settings.description,
-    images: [
-      {
-        url: defaultImage,
-        width: 512,
-        height: 512,
-        alt: appData.settings.siteName,
-        type: 'image/png',
-      },
-    ],
-  },
-  twitter: {
-    handle: '@sunriseobx',
-    site: '@sunriseobx',
-    cardType: 'summary_large_image',
-  },
-  additionalMetaTags: [
-    {
-      name: 'viewport',
-      content: 'width=device-width, initial-scale=1',
-    },
-    {
-      name: 'theme-color',
-      content: '#ffffff',
-    },
-    {
-      name: 'msapplication-TileColor',
-      content: '#da532c',
-    },
-    {
-      name: 'apple-mobile-web-app-capable',
-      content: 'yes',
-    },
-    {
-      name: 'apple-mobile-web-app-status-bar-style',
-      content: 'default',
-    },
-  ],
-  additionalLinkTags: [
-    {
-      rel: 'icon',
-      href: '/favicon.ico',
-    },
-    {
-      rel: 'apple-touch-icon',
-      href: '/apple-touch-icon.png',
-      sizes: '180x180',
-    },
-    {
-      rel: 'manifest',
-      href: '/site.webmanifest',
-    },
-  ],
-};
+// Register Swiper custom elements
+register();
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
@@ -123,7 +59,8 @@ function MyApp({ Component, pageProps }) {
   return (
     <ErrorBoundary>
       <TitleContext.Provider value={appData.settings.siteName}>
-        <DefaultSeo {...defaultSEO} />
+        <DefaultSEO />
+        <StructuredData />
         
         <Head>
           <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -144,40 +81,8 @@ function MyApp({ Component, pageProps }) {
           {/* DNS prefetch for external domains */}
           <link rel="dns-prefetch" href="//fonts.googleapis.com" />
           <link rel="dns-prefetch" href="//formspree.io" />
-          
-          {/* Structured data for business */}
-          <script
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{
-              __html: JSON.stringify({
-                '@context': 'https://schema.org',
-                '@type': 'LocalBusiness',
-                name: appData.settings.siteName,
-                description: appData.settings.description,
-                url: appData.settings.url,
-                telephone: appData.footer.info.tel,
-                email: appData.footer.info.email,
-                address: {
-                  '@type': 'PostalAddress',
-                  streetAddress: appData.footer.info.address,
-                  addressLocality: 'Kitty Hawk',
-                  addressRegion: 'NC',
-                  postalCode: '27949',
-                  addressCountry: 'US',
-                },
-                sameAs: appData.social.map(social => social.link),
-                serviceArea: {
-                  '@type': 'GeoCircle',
-                  geoMidpoint: {
-                    '@type': 'GeoCoordinates',
-                    latitude: 36.1063,
-                    longitude: -75.7135,
-                  },
-                  geoRadius: '50000', // 50km radius
-                },
-              }),
-            }}
-          />
+          <link rel="dns-prefetch" href="//www.google-analytics.com" />
+          <link rel="dns-prefetch" href="//googletagmanager.com" />
         </Head>
 
         {/* Loading indicator */}
