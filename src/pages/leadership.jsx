@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 import Layouts from "@layouts/Layouts";
 
@@ -146,7 +147,7 @@ const Leadership = () => {
                     </div>
                 </div>
                 <figure className="team-image">
-                    <img src={item.image} alt={item.name} />
+                    <Image src={item.image} alt={item.name} width={300} height={400} />
                 </figure>
               </div>
             </div>

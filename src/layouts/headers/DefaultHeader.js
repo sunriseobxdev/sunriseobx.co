@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { useState, useEffect } from "react";
 import appData from "@data/app.json";
 
@@ -65,7 +66,7 @@ const DefaultHeader = ({ contactButton, cartButton }) => {
                     <div className="header-logo">
                       <Link href="/">
                         <figure>
-                          <img src={appData.header.logo.image} alt={appData.header.logo.alt} width="72" height="72" />
+                          <Image src={appData.header.logo.image} alt={appData.header.logo.alt} width={72} height={72} priority />
                         </figure>
                       </Link>
                     </div>
@@ -110,7 +111,7 @@ const DefaultHeader = ({ contactButton, cartButton }) => {
                               <ul>
                                 <li className="d-flex align-items-center position-relative">
                                   <div className="p-img light-bg">
-                                    <img src="/img/product1.jpeg" alt="Product Image" />
+                                    <Image src="/img/product1.jpeg" alt="Product Image" width={60} height={60} />
                                   </div>
                                   <div className="p-data">
                                     <h3 className="font-semi-bold">Pastoral Principles Cards</h3>
@@ -120,7 +121,7 @@ const DefaultHeader = ({ contactButton, cartButton }) => {
                                 </li>
                                 <li className="d-flex align-items-center position-relative">
                                   <div className="p-img light-bg">
-                                    <img src="/img/product2.jpeg" alt="Product Image" />
+                                    <Image src="/img/product2.jpeg" alt="Product Image" width={60} height={60} />
                                   </div>
                                   <div className="p-data">
                                     <h3 className="font-semi-bold">Pastoral Principles Cards</h3>
@@ -179,7 +180,7 @@ const DefaultHeader = ({ contactButton, cartButton }) => {
           <div className="mobile-nav mobile-menu" id="mobile-nav">
             <div className="res-log">
               <Link href="/">
-                <img src={appData.header.logo.image} alt={appData.header.logo.alt} width="60" height="60" />
+                <Image src={appData.header.logo.image} alt={appData.header.logo.alt} width={60} height={60} />
               </Link>
             </div>
 

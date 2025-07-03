@@ -1,4 +1,5 @@
 import Data from "@data/sections/hero-3.json";
+import Image from "next/image";
 
 const Hero3Section = () => {
     const styles = {
@@ -34,7 +35,12 @@ const Hero3Section = () => {
                                 Your browser does not support the video tag.
                             </video>
                             <figure>
-                                <img src={Data.video.poster} alt={Data.video.alt} />
+                                <Image 
+                                    src={Data.video.poster} 
+                                    alt={Data.video.alt || "Video poster"} 
+                                    fill
+                                    style={{ objectFit: 'cover' }}
+                                />
                                 <figcaption />
                             </figure>
                         </div>

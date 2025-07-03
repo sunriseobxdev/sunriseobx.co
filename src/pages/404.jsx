@@ -1,5 +1,6 @@
 import Layouts from "@/src/layouts/Layouts";
 import Link from "next/link";
+import Image from "next/image";
 
 const E404 = () => {
   return (
@@ -29,7 +30,7 @@ const E404 = () => {
             <div className="col-lg-6">
               <div className="sb-404__img">
                 <figure>
-                  <img src="/img/building-2.png" alt="404" className="sb-man" />
+                  <Image src="/img/building-2.png" alt="404" className="sb-man" width={400} height={300} />
                 </figure>
               </div>
             </div>
