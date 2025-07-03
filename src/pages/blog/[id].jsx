@@ -9,7 +9,6 @@ import { FacebookShareButton, FacebookIcon } from "next-share";
 
 import PageBanner from "@components/PageBanner";
 import globalThis from "the-global-object";
-import appData from "@data/app.json";
 
 const getHref = () => globalThis.location;
 

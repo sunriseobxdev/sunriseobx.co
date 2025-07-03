@@ -78,7 +78,7 @@ export const useFormValidation = (initialValues, validationRules) => {
       try {
         await onSubmit(values);
       } catch (error) {
-        console.error('Form submission error:', error);
+        // Form submission error handled
       }
     }
     

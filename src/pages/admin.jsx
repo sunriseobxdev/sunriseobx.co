@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
 import CryptoJS from 'crypto-js';
 
 const AdminCMS = () => {
@@ -10,7 +9,6 @@ const AdminCMS = () => {
   const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
-  const router = useRouter();
 
   // Configuration - These should be environment variables in production
   const ENCRYPTED_GITHUB_TOKEN = process.env.NEXT_PUBLIC_ENCRYPTED_GITHUB_TOKEN;
@@ -36,12 +34,13 @@ const AdminCMS = () => {
       // Decrypt GitHub token using the master password
       try {
         const decryptedToken = decryptData(ENCRYPTED_GITHUB_TOKEN, inputPassword);
+
         if (decryptedToken) {
           setGithubToken(decryptedToken);
+
           return true;
         }
       } catch (error) {
-        console.error('Failed to decrypt GitHub token:', error);
         return false;
       }
     }
@@ -49,14 +48,11 @@ const AdminCMS = () => {
     return isValidPassword;
   };
 
-  // Encrypt/Decrypt functions
-  const encryptData = (data, password) => {
-    return CryptoJS.AES.encrypt(JSON.stringify(data), password).toString();
-  };
-
+  // Decrypt function
   const decryptData = (encryptedData, password) => {
     try {
       const bytes = CryptoJS.AES.decrypt(encryptedData, password);
+
       return JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
     } catch (error) {
       return null;
@@ -66,7 +62,6 @@ const AdminCMS = () => {
   // GitHub API functions
   const getFileContent = async (path) => {
     if (!githubToken) {
-      console.error('GitHub token not available');
       return null;
     }
     
@@ -77,24 +72,24 @@ const AdminCMS = () => {
           'Accept': 'application/vnd.github.v3+json',
         },
       });
-      
+
       if (response.ok) {
         const data = await response.json();
+
         return {
           content: atob(data.content),
           sha: data.sha
         };
       }
+
       return null;
     } catch (error) {
-      console.error('Error fetching file:', error);
       return null;
     }
   };
 
   const updateFile = async (path, content, message, sha) => {
     if (!githubToken) {
-      console.error('GitHub token not available');
       return false;
     }
     
@@ -107,16 +102,15 @@ const AdminCMS = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          message: message,
+          message,
           content: btoa(content),
-          sha: sha,
+          sha,
           branch: 'main' // or 'master' depending on your default branch
         }),
       });
 
       return response.ok;
     } catch (error) {
-      console.error('Error updating file:', error);
       return false;
     }
   };
@@ -147,28 +141,33 @@ const AdminCMS = () => {
     }
   };
 
+
   const handleFileSelect = async (filePath) => {
     setSelectedFile(filePath);
     setLoading(true);
     
     const fileData = await getFileContent(filePath);
+
     if (fileData) {
       setContent(fileData.content);
     } else {
       setMessage('Error loading file');
     }
+
     setLoading(false);
   };
 
   const handleSave = async () => {
     if (!selectedFile || !content) {
       setMessage('Please select a file and add content');
+
       return;
     }
 
     setLoading(true);
-    
+
     const fileData = await getFileContent(selectedFile);
+
     if (fileData) {
       const success = await updateFile(
         selectedFile,

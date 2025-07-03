@@ -76,7 +76,7 @@ const EstimatedPriceSection = () => {
                                     }
                                 })
                             }
-                        }).catch(error => {
+                        }).catch(() => {
                             status.innerHTML = "Oops! There was a problem submitting your form"
                         });
 
@@ -85,12 +85,9 @@ const EstimatedPriceSection = () => {
                     >
                     {({
                         values,
-                        errors,
-                        touched,
                         handleChange,
                         handleBlur,
                         handleSubmit,
-                        isSubmitting,
                         /* and other goodies */
                     }) => (
                     <form onSubmit={handleSubmit} id="contactForm" action={appData.settings.formspreeURL}>

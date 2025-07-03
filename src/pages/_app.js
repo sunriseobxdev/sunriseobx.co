@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { NextSeo, DefaultSeo } from 'next-seo';
+import { DefaultSeo } from 'next-seo';
 import { register } from 'swiper/element/bundle';
 
 import appData from '@data/app.json';

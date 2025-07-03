@@ -13,7 +13,7 @@ export const safeQuerySelector = (selector, context = document) => {
   try {
     return context.querySelector(selector);
   } catch (error) {
-    console.warn(`Invalid selector: ${selector}`, error);
+    // Invalid selector handled
 
     return null;
   }
@@ -29,7 +29,7 @@ export const safeQuerySelectorAll = (selector, context = document) => {
   try {
     return context.querySelectorAll(selector);
   } catch (error) {
-    console.warn(`Invalid selector: ${selector}`, error);
+    // Invalid selector handled
 
     return [];
   }
@@ -86,7 +86,7 @@ export const projectsListHover = () => {
   const allProjectsItems = safeQuerySelectorAll('.wwb-ul li');
   
   if (!allProjectsItems.length) {
-    console.warn('No project items found for hover functionality');
+    // No project items found for hover functionality
 
     return;
   }
@@ -125,7 +125,7 @@ export const estimatedFormSteps = () => {
     .map(([key]) => key);
 
   if (missingElements.length > 0) {
-    console.warn('Missing form elements:', missingElements);
+    // Missing form elements handled
 
     return;
   }
@@ -181,7 +181,7 @@ export const contactUsNavigation = () => {
   const contactCards = safeQuerySelectorAll('.c-cards .card');
 
   if (!contactItems.length || !contactCards.length) {
-    console.warn('Contact navigation elements not found');
+    // Contact navigation elements not found
 
     return;
   }
@@ -234,7 +234,7 @@ export const smoothScrollTo = (target, offset = 0, behavior = 'smooth') => {
   const element = typeof target === 'string' ? safeQuerySelector(target) : target;
   
   if (!element) {
-    console.warn('Scroll target not found:', target);
+    // Scroll target not found
 
     return;
   }
@@ -318,7 +318,7 @@ export const copyToClipboard = async (text) => {
 
     return true;
   } catch (error) {
-    console.warn('Clipboard API not available, using fallback');
+    // Clipboard API not available, using fallback
     
     // Fallback for older browsers
     const textArea = document.createElement('textarea');
@@ -338,7 +338,7 @@ export const copyToClipboard = async (text) => {
       return true;
     } catch (fallbackError) {
       document.body.removeChild(textArea);
-      console.error('Failed to copy text:', fallbackError);
+      // Failed to copy text
 
       return false;
     }

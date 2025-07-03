@@ -1,12 +1,11 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import appData from "@data/app.json";
-import { useLocalStorage } from "@common/useLocalStorage";
 
 const DefaultHeader = ({ contactButton, cartButton }) => {
   const navItems = [];
 
-  appData.header.menu.forEach((item, index) => {
+  appData.header.menu.forEach((item) => {
     let s_class1 = '';
 
     if ( item.children != 0 ) {
@@ -17,7 +16,6 @@ const DefaultHeader = ({ contactButton, cartButton }) => {
     navItems.push(newobj);
   });
 
-  const [themeUI, setThemeUIToggle] = useLocalStorage('theme_ui', true);
   const [desktopMenu, desktopMenuToggle] = useState(false);
   const [mobileMenu, mobileMenuToggle] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
@@ -43,29 +41,17 @@ const DefaultHeader = ({ contactButton, cartButton }) => {
     e.target.parentNode.classList.toggle('active');
   }
 
-  const clickedThemeUI = () => {
-    setThemeUIToggle(!themeUI);
-    
-    const lightmodeToggle = document.querySelector('#theme-icon');
-
-    if ( themeUI ) {
-      document.body.classList.remove('light-d');
-      lightmodeToggle.src = '/images/sun.png';
-    } else {
-      document.body.classList.add('light-d');
-      lightmodeToggle.src = '/images/moon.png';
-    }
-  }
-
   useEffect(() => {
     // Always set dark mode as default
     document.body.classList.add('light-d');
     
     const lightmodeToggle = document.querySelector('#theme-icon');
+
     if (lightmodeToggle) {
       lightmodeToggle.src = '/images/moon.png';
     }
   }, []);
+
 
   return (
     <header className="header-style-one" >

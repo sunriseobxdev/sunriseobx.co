@@ -1,34 +1,9 @@
 import PageBanner from "@components/PageBanner";
 import Layouts from "@layouts/Layouts";
-import Accordion from 'react-bootstrap/Accordion';
 import appData from "@data/app.json";
 import { Formik } from 'formik';
 
 const Contact = () => {
-  const faqData = {
-    "items": [
-        {
-            "title": "Occupational Health Risk Management?",
-            "text": "Commercial management in construction ensures the planning, execution, and coordination of a construction project from the start to finish. These are often for specific projects such as building or renovation projects that are sold or leased."
-        },
-        {
-            "title": "What is commercial management in construction?",
-            "text": "Commercial management in construction ensures the planning, execution, and coordination of a construction project from the start to finish. These are often for specific projects such as building or renovation projects that are sold or leased."
-        },
-        {
-            "title": "Start a construction management?",
-            "text": "Commercial management in construction ensures the planning, execution, and coordination of a construction project from the start to finish. These are often for specific projects such as building or renovation projects that are sold or leased."
-        },
-        {
-            "title": "Measure quality in construction projects?",
-            "text": "Commercial management in construction ensures the planning, execution, and coordination of a construction project from the start to finish. These are often for specific projects such as building or renovation projects that are sold or leased."
-        },
-        {
-            "title": "Prepare a construction project schedule?",
-            "text": "Commercial management in construction ensures the planning, execution, and coordination of a construction project from the start to finish. These are often for specific projects such as building or renovation projects that are sold or leased."
-        }
-    ]
-  }
 
   return (
     <Layouts>
@@ -87,7 +62,7 @@ const Contact = () => {
                                         }
                                     })
                                 }
-                            }).catch(error => {
+                            }).catch(() => {
                                 status.innerHTML = "Oops! There was a problem submitting your form"
                             });
 
@@ -96,12 +71,9 @@ const Contact = () => {
                         >
                         {({
                             values,
-                            errors,
-                            touched,
                             handleChange,
                             handleBlur,
                             handleSubmit,
-                            isSubmitting,
                             /* and other goodies */
                         }) => (
                         <form onSubmit={handleSubmit} id="contactForm" action={appData.settings.formspreeURL}>

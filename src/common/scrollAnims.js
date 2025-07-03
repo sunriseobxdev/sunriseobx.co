@@ -2,12 +2,11 @@
 export const scrollAnimation = () => {
     // Sticky Header
     let new_scroll_position = 0;
-    let last_scroll_position;
     const header = document.getElementById("stickyHeader");
     const scrollTopButton = document.getElementById('scrollTop');
     const timeline = document.querySelector(".timeline .fill");
     
-    window.addEventListener('scroll', function(e) {
+    window.addEventListener('scroll', function() {
         const last_scroll_position = window.scrollY;
         
         // Scrolling down

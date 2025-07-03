@@ -1,5 +1,5 @@
 // Swiper v11+ imports - modules are imported from separate paths
-import { Autoplay, Navigation, Pagination, EffectFade, Grid, EffectCreative, Virtual, HashNavigation, History, Thumbs, Scrollbar, Keyboard, A11y, Mousewheel } from 'swiper/modules';
+import { Autoplay, Navigation, Pagination, EffectFade } from 'swiper/modules';
 
 // Import Swiper styles
 import 'swiper/css';

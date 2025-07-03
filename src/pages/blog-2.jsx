@@ -7,7 +7,7 @@ import Layouts from "@layouts/Layouts";
 
 import { getPaginatedPostsData } from "@library/posts";
 
-const Blog = ( { posts, totalPosts, currentPage } ) => {
+const Blog = ( { posts } ) => {
   return (
     <Layouts>
       <PageBanner pageTitle={"Blog Posts"} pageDesc={"Building for the Outer Banks & Related Musings."} />

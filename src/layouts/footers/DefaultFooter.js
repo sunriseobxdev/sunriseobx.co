@@ -1,4 +1,3 @@
-import Link from "next/link";
 import appData from "@data/app.json";
 
 const DefaultFooter = () => {

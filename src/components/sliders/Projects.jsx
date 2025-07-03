@@ -1,7 +1,6 @@
 import Data from "@data/sliders/projects.json";
 import { sliderProps } from "@common/sliderProps";
 import { Swiper, SwiperSlide } from "swiper/react";
-import Link from "next/link";
 
 const ProjectsSlider = ( { projects } ) => {
 

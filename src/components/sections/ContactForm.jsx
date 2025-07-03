@@ -1,5 +1,4 @@
 import Data from "@data/sections/contact-form.json";
-import Accordion from 'react-bootstrap/Accordion';
 import appData from "@data/app.json";
 import { Formik } from 'formik';
 
@@ -86,7 +85,7 @@ const ContactFormSection = () => {
                                     }
                                 })
                             }
-                        }).catch(error => {
+                        }).catch(() => {
                             status.innerHTML = "Oops! There was a problem submitting your form"
                         });
 
@@ -95,12 +94,9 @@ const ContactFormSection = () => {
                     >
                     {({
                         values,
-                        errors,
-                        touched,
                         handleChange,
                         handleBlur,
                         handleSubmit,
-                        isSubmitting,
                         /* and other goodies */
                     }) => (
                     <form onSubmit={handleSubmit} id="contactForm" action={appData.settings.formspreeURL}>

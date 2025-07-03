@@ -31,7 +31,7 @@ const Layouts = ({
         }, 100);
       }
     } catch (error) {
-      console.warn('Preloader initialization failed:', error);
+      // Preloader initialization failed
     }
   }, []);
 
@@ -46,7 +46,7 @@ const Layouts = ({
       scrollAnimation();
       handlePreloader();
     } catch (error) {
-      console.error('Layout initialization failed:', error);
+      // Layout initialization failed
     }
   }, [handlePreloader]);
 
