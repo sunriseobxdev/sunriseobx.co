@@ -1,4 +1,11 @@
-/* Custom Bootstrap Overrides */
+/* Custom Bootstrap Overrides - Force Dark Mode as Default */
+
+/* Force dark mode class on body by default */
+body {
+  /* Ensure dark mode is always active */
+  background-color: #000000 !important;
+  color: white !important;
+}
 
 /* Override Bootstrap body color to white with maximum specificity */
 :root {
@@ -10,12 +17,37 @@ html:root {
   --bs-body-color: white !important;
 }
 
-/* Direct body color override as additional insurance */
-body {
+/* Ensure all dark mode styles are applied by default */
+body,
+body.light-d {
+  background-color: #000000 !important;
   color: white !important;
 }
 
 /* Override any potential Bootstrap utility classes */
 .text-body {
   color: white !important;
+}
+
+/* Force dark theme styles to be applied globally */
+h1, h2, h3, h4, h5, h6 {
+  color: white !important;
+}
+
+p {
+  color: #b7b7b7 !important;
+}
+
+/* Ensure sections have dark backgrounds */
+section {
+  background-color: #000000 !important;
+}
+
+/* Hide theme toggle completely */
+.theme-color {
+  display: none !important;
+}
+
+#theme-icon {
+  display: none !important;
 }
