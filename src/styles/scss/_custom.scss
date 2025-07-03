@@ -1,0 +1,21 @@
+/* Custom Bootstrap Overrides */
+
+/* Override Bootstrap body color to white with maximum specificity */
+:root {
+  --bs-body-color: white !important;
+}
+
+/* Additional fallback with higher specificity to ensure it can't be overridden */
+html:root {
+  --bs-body-color: white !important;
+}
+
+/* Direct body color override as additional insurance */
+body {
+  color: white !important;
+}
+
+/* Override any potential Bootstrap utility classes */
+.text-body {
+  color: white !important;
+}
