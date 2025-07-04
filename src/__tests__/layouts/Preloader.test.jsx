@@ -60,8 +60,8 @@ describe('Preloader Component - Simple Black Fade', () => {
       // Initially should not have loaded class
       expect(preloader).not.toHaveClass('loaded');
 
-      // Fast-forward time by 800ms (fade duration)
-      jest.advanceTimersByTime(800);
+      // Fast-forward time by 200ms (fade duration)
+      jest.advanceTimersByTime(200);
 
       await waitFor(() => {
         expect(preloader).toHaveClass('loaded');
@@ -72,8 +72,8 @@ describe('Preloader Component - Simple Black Fade', () => {
       const { container } = render(<Preloader />);
       const preloader = container.querySelector('.preloader');
 
-      // Fast-forward time by 400ms (half of fade duration)
-      jest.advanceTimersByTime(400);
+      // Fast-forward time by 100ms (half of fade duration)
+      jest.advanceTimersByTime(100);
 
       expect(preloader).not.toHaveClass('loaded');
     });
@@ -160,7 +160,7 @@ describe('Preloader Component - Simple Black Fade', () => {
       
       render(<Preloader />);
       
-      expect(setTimeoutSpy).toHaveBeenCalledWith(expect.any(Function), 800);
+      expect(setTimeoutSpy).toHaveBeenCalledWith(expect.any(Function), 200);
     });
 
     test('has minimal DOM footprint', () => {

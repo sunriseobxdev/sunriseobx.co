@@ -11,7 +11,7 @@ const Preloader = () => {
     // Simple timer for fade duration
     const timer = setTimeout(() => {
       setIsComplete(true);
-    }, 800); // 800ms fade duration
+    }, 200); // 200ms fade duration - much shorter
 
     return () => clearTimeout(timer);
   }, []);
