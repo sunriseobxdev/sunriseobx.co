@@ -12,11 +12,15 @@ import LocationsPage from '../../pages/locations/index';
 
 // Mock Next.js components
 jest.mock('next/link', () => {
-  return ({ children, href, ...props }) => (
+  const MockLink = ({ children, href, ...props }) => (
     <a href={href} {...props}>
       {children}
     </a>
   );
+
+  MockLink.displayName = 'MockLink';
+
+  return MockLink;
 });
 
 jest.mock('next-seo', () => ({
@@ -24,16 +28,24 @@ jest.mock('next-seo', () => ({
 }));
 
 jest.mock('../../layouts/Layouts', () => {
-  return ({ children }) => <div data-testid="layouts">{children}</div>;
+  const MockLayouts = ({ children }) => <div data-testid="layouts">{children}</div>;
+
+  MockLayouts.displayName = 'MockLayouts';
+
+  return MockLayouts;
 });
 
 jest.mock('../../components/PageBanner', () => {
-  return ({ title, subtitle, breadcrumb }) => (
+  const MockPageBanner = ({ title, subtitle }) => (
     <div data-testid="page-banner">
       <h1>{title}</h1>
       <p>{subtitle}</p>
     </div>
   );
+
+  MockPageBanner.displayName = 'MockPageBanner';
+
+  return MockPageBanner;
 });
 
 describe('Locations Page Layout', () => {
@@ -95,6 +107,7 @@ describe('Locations Page Layout', () => {
     
     // Check that sections are properly structured by finding section elements
     const sections = document.querySelectorAll('section');
+
     expect(sections.length).toBe(4); // Should have 4 main sections
     
     // Check for proper heading hierarchy (there are multiple h1s due to PageBanner and main content)
@@ -112,6 +125,7 @@ describe('Locations Page Layout', () => {
     
     // Check that location cards are present
     const locationCards = document.querySelectorAll('.location-card');
+
     expect(locationCards.length).toBe(6); // Should have 6 location cards
     
     // Check that each card has proper structure
@@ -128,12 +142,15 @@ describe('Locations Page Layout', () => {
     
     // Check for responsive grid classes
     const containers = document.querySelectorAll('.container');
+
     expect(containers.length).toBeGreaterThan(0);
     
     const rows = document.querySelectorAll('.row');
+
     expect(rows.length).toBeGreaterThan(0);
     
     const cols = document.querySelectorAll('[class*="col-"]');
+
     expect(cols.length).toBeGreaterThan(0);
   });
 
@@ -142,10 +159,12 @@ describe('Locations Page Layout', () => {
     
     // Check that service coverage section has light background
     const serviceCoverageSection = screen.getByText('Complete Outer Banks Coverage').closest('section');
+
     expect(serviceCoverageSection).toHaveClass('bg-light');
     
     // Check that CTA section has primary background
     const ctaSection = screen.getByText('Ready to Start Your OBX Construction Project?').closest('section');
+
     expect(ctaSection).toHaveClass('bg-primary');
     expect(ctaSection).toHaveClass('text-white');
   });
@@ -155,10 +174,12 @@ describe('Locations Page Layout', () => {
     
     // Check for structured data script
     const structuredDataScript = document.querySelector('script[type="application/ld+json"]');
+
     expect(structuredDataScript).toBeInTheDocument();
     
     if (structuredDataScript) {
       const structuredData = JSON.parse(structuredDataScript.textContent);
+
       expect(structuredData['@context']).toBe('https://schema.org');
       expect(structuredData['@type']).toBe('ItemList');
       expect(structuredData.itemListElement).toHaveLength(6);
@@ -170,6 +191,7 @@ describe('Locations Page Layout', () => {
     
     // Check that all location links are present and properly formatted
     const locationLinks = screen.getAllByText(/Learn More About .+ Services/);
+
     expect(locationLinks).toHaveLength(6);
     
     locationLinks.forEach(link => {

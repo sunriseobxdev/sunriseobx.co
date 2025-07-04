@@ -12,11 +12,15 @@ import Home3 from '../../pages/index';
 
 // Mock Next.js components
 jest.mock('next/link', () => {
-  return ({ children, href, ...props }) => (
+  const MockLink = ({ children, href, ...props }) => (
     <a href={href} {...props}>
       {children}
     </a>
   );
+
+  MockLink.displayName = 'MockLink';
+
+  return MockLink;
 });
 
 jest.mock('next-seo', () => ({
@@ -24,7 +28,11 @@ jest.mock('next-seo', () => ({
 }));
 
 jest.mock('../../layouts/Layouts', () => {
-  return ({ children }) => <div data-testid="layouts">{children}</div>;
+  const MockLayouts = ({ children }) => <div data-testid="layouts">{children}</div>;
+
+  MockLayouts.displayName = 'MockLayouts';
+
+  return MockLayouts;
 });
 
 // Mock the data files
@@ -75,7 +83,7 @@ jest.mock('../../lib/projects', () => ({
 
 // Mock all section components
 jest.mock('../../components/sections/Hero3', () => {
-  return () => (
+  const MockHero3 = () => (
     <section className="featured-section-three" data-testid="hero-section">
       <div className="container">
         <div className="row space align-items-center">
@@ -93,32 +101,56 @@ jest.mock('../../components/sections/Hero3', () => {
       </div>
     </section>
   );
+
+  MockHero3.displayName = 'MockHero3';
+
+  return MockHero3;
 });
 
 jest.mock('../../components/sections/About3', () => {
-  return () => (
+  const MockAbout3 = () => (
     <section className="gap history-style-one" data-testid="about-section">
       <div className="heading heading-style-3">
         <h2>Sunrise Construction has a proud tradition of service as a General Contractor <span>since 2023</span></h2>
       </div>
     </section>
   );
+
+  MockAbout3.displayName = 'MockAbout3';
+
+  return MockAbout3;
 });
 
 jest.mock('../../components/sections/CallToAction', () => {
-  return () => <section data-testid="cta-section">CTA Section</section>;
+  const MockCallToAction = () => <section data-testid="cta-section">CTA Section</section>;
+
+  MockCallToAction.displayName = 'MockCallToAction';
+
+  return MockCallToAction;
 });
 
 jest.mock('../../components/sections/ContactForm', () => {
-  return () => <section data-testid="contact-section">Contact Section</section>;
+  const MockContactForm = () => <section data-testid="contact-section">Contact Section</section>;
+
+  MockContactForm.displayName = 'MockContactForm';
+
+  return MockContactForm;
 });
 
 jest.mock('../../components/sliders/Partners', () => {
-  return () => <section data-testid="partners-section">Partners Section</section>;
+  const MockPartners = () => <section data-testid="partners-section">Partners Section</section>;
+
+  MockPartners.displayName = 'MockPartners';
+
+  return MockPartners;
 });
 
 jest.mock('../../components/sliders/Projects', () => {
-  return () => <section data-testid="projects-section">Projects Section</section>;
+  const MockProjects = () => <section data-testid="projects-section">Projects Section</section>;
+
+  MockProjects.displayName = 'MockProjects';
+
+  return MockProjects;
 });
 
 describe('Homepage Layout', () => {
@@ -141,6 +173,7 @@ describe('Homepage Layout', () => {
 
   test('renders hero and about sections without overlap', () => {
     const props = { posts: [], projects: [] };
+
     render(<Home3 {...props} />);
     
     // Check that both sections are present
@@ -153,23 +186,28 @@ describe('Homepage Layout', () => {
 
   test('hero section has proper CSS classes for spacing', () => {
     const props = { posts: [], projects: [] };
+
     render(<Home3 {...props} />);
     
     const heroSection = screen.getByTestId('hero-section');
+
     expect(heroSection).toHaveClass('featured-section-three');
   });
 
   test('about section has proper CSS classes for spacing', () => {
     const props = { posts: [], projects: [] };
+
     render(<Home3 {...props} />);
     
     const aboutSection = screen.getByTestId('about-section');
+
     expect(aboutSection).toHaveClass('gap');
     expect(aboutSection).toHaveClass('history-style-one');
   });
 
   test('sections contain the overlapping text content', () => {
     const props = { posts: [], projects: [] };
+
     render(<Home3 {...props} />);
     
     // Check for the specific text that was overlapping - using more flexible text matching
@@ -187,6 +225,7 @@ describe('Homepage Layout', () => {
 
   test('all main sections are rendered in correct order', () => {
     const props = { posts: [], projects: [] };
+
     render(<Home3 {...props} />);
     
     // Check that all sections are present
@@ -200,14 +239,17 @@ describe('Homepage Layout', () => {
 
   test('sections have proper semantic structure', () => {
     const props = { posts: [], projects: [] };
+
     render(<Home3 {...props} />);
     
     // Check that sections are properly structured
     const sections = document.querySelectorAll('section');
+
     expect(sections.length).toBeGreaterThan(0);
     
     // Check for proper heading hierarchy
     const h2s = screen.getAllByRole('heading', { level: 2 });
+
     expect(h2s.length).toBeGreaterThan(0);
   });
 });
