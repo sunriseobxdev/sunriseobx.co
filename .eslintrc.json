@@ -20,7 +20,9 @@
     "react/prop-types": "off",
     "react/react-in-jsx-scope": "off",
     "react/no-unescaped-entities": "off",
-    "react-hooks/exhaustive-deps": "warn"
+    "react-hooks/exhaustive-deps": "warn",
+    "@next/next/no-img-element": "off",
+    "@next/next/no-css-tags": "off"
   },
   "env": {
     "browser": true,
@@ -41,7 +43,8 @@
         "jest": true
       },
       "rules": {
-        "no-console": "off"
+        "no-console": "off",
+        "padding-line-between-statements": "off"
       }
     }
   ]

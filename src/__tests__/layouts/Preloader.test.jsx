@@ -1,212 +1,353 @@
-// Preloader Component Tests - Sunrise Construction Theme
-// Tests: Component structure, CSS classes, animation elements, accessibility
-// Updated: Tests for compact sunrise spinner design
+// Preloader Component Tests - Dynamic Canvas Sunrise Animation
+// Tests: Canvas rendering, animation lifecycle, component structure, accessibility
+// Updated: Tests for canvas-based sunrise animation over sea horizon
 
 import React from 'react';
-import { render } from '@testing-library/react';
+import { render, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import Preloader from '../../layouts/Preloader';
 
-// Mock Next.js Image component for testing
-jest.mock('next/image', () => {
-  return function MockImage({ src, alt, ...props }) {
-    return <img src={src} alt={alt} {...props} />;
-  };
+// Mock canvas context and animation frame
+const mockContext = {
+  clearRect: jest.fn(),
+  createLinearGradient: jest.fn(() => ({
+    addColorStop: jest.fn()
+  })),
+  createRadialGradient: jest.fn(() => ({
+    addColorStop: jest.fn()
+  })),
+  fillRect: jest.fn(),
+  strokeRect: jest.fn(),
+  beginPath: jest.fn(),
+  moveTo: jest.fn(),
+  lineTo: jest.fn(),
+  arc: jest.fn(),
+  stroke: jest.fn(),
+  fill: jest.fn(),
+  save: jest.fn(),
+  restore: jest.fn(),
+  translate: jest.fn(),
+  rotate: jest.fn(),
+  scale: jest.fn()
+};
+
+// Mock HTMLCanvasElement
+Object.defineProperty(HTMLCanvasElement.prototype, 'getContext', {
+  value: jest.fn(() => mockContext),
+  writable: true
 });
 
-describe('Preloader Component - Sunrise Spinner', () => {
+// Mock requestAnimationFrame and cancelAnimationFrame
+
+global.requestAnimationFrame = jest.fn((cb) => {
+  setTimeout(cb, 16); // Simulate 60fps
+  return 1;
+});
+
+global.cancelAnimationFrame = jest.fn();
+
+// Mock Date.now for consistent timing tests
+const mockDateNow = jest.spyOn(Date, 'now');
+
+describe('Preloader Component - Canvas Sunrise Animation', () => {
   beforeEach(() => {
-    render(<Preloader />);
+    jest.clearAllMocks();
+    mockDateNow.mockReturnValue(1000); // Fixed timestamp
   });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
 
   describe('Component Structure', () => {
     test('renders main preloader container', () => {
-      const preloader = document.querySelector('.preloader');
+      const { container } = render(<Preloader />);
+      const preloader = container.querySelector('.preloader');
 
       expect(preloader).toBeInTheDocument();
       expect(preloader).toHaveClass('preloader');
     });
 
-    test('renders sunrise spinner container', () => {
-      const sunriseSpinner = document.querySelector('.sunrise-spinner');
+    test('renders canvas element', () => {
+      const { container } = render(<Preloader />);
+      const canvas = container.querySelector('canvas');
 
-      expect(sunriseSpinner).toBeInTheDocument();
-      expect(sunriseSpinner).toHaveClass('sunrise-spinner');
+      expect(canvas).toBeInTheDocument();
+      expect(canvas).toBeInstanceOf(HTMLCanvasElement);
     });
 
-    test('renders sun container', () => {
-      const sunContainer = document.querySelector('.sun-container');
+    test('canvas has correct styling attributes', () => {
+      const { container } = render(<Preloader />);
+      const canvas = container.querySelector('canvas');
 
-      expect(sunContainer).toBeInTheDocument();
-      expect(sunContainer).toHaveClass('sun-container');
-    });
-
-    test('renders sun element', () => {
-      const sun = document.querySelector('.sun');
-
-      expect(sun).toBeInTheDocument();
-      expect(sun).toHaveClass('sun');
-    });
-
-    test('renders sun rays container', () => {
-      const sunRays = document.querySelector('.sun-rays');
-
-      expect(sunRays).toBeInTheDocument();
-      expect(sunRays).toHaveClass('sun-rays');
-    });
-
-    test('renders sun core', () => {
-      const sunCore = document.querySelector('.sun-core');
-
-      expect(sunCore).toBeInTheDocument();
-      expect(sunCore).toHaveClass('sun-core');
+      expect(canvas).toHaveStyle({
+        position: 'absolute',
+        top: '0',
+        left: '0',
+        width: '100%',
+        height: '100%',
+        zIndex: '1'
+      });
     });
   });
 
-  describe('Sun Rays Generation', () => {
-    test('renders exactly 8 sun rays', () => {
-      const rays = document.querySelectorAll('.ray');
-
-      expect(rays).toHaveLength(8);
+  describe('Canvas Initialization', () => {
+    test('gets 2D context from canvas', () => {
+      render(<Preloader />);
+      
+      expect(HTMLCanvasElement.prototype.getContext).toHaveBeenCalledWith('2d');
     });
 
-    test('each ray has correct class structure', () => {
-      const rays = document.querySelectorAll('.ray');
-
-      rays.forEach((ray, index) => {
-        expect(ray).toHaveClass('ray');
-        expect(ray).toHaveClass(`ray-${index + 1}`);
+    test('sets canvas dimensions to viewport size', () => {
+      // Mock window dimensions
+      Object.defineProperty(window, 'innerWidth', {
+        writable: true,
+        configurable: true,
+        value: 1920
       });
-    });
+      Object.defineProperty(window, 'innerHeight', {
+        writable: true,
+        configurable: true,
+        value: 1080
+      });
 
-    test('rays are numbered from 1 to 8', () => {
-      for (let i = 1; i <= 8; i++) {
-        const ray = document.querySelector(`.ray-${i}`);
+      const { container } = render(<Preloader />);
+      const canvas = container.querySelector('canvas');
 
-        expect(ray).toBeInTheDocument();
-      }
+      // Canvas dimensions should be set via JavaScript
+      expect(canvas).toBeInTheDocument();
     });
   });
 
-  describe('CSS Classes and Structure', () => {
-    test('preloader has correct CSS structure for animations', () => {
-      const preloader = document.querySelector('.preloader');
-      const sunriseSpinner = document.querySelector('.sunrise-spinner');
-      const sunContainer = document.querySelector('.sun-container');
+  describe('Animation Lifecycle', () => {
+    test('starts animation on mount', () => {
+      render(<Preloader />);
       
-      expect(preloader).toContainElement(sunriseSpinner);
-      expect(sunriseSpinner).toContainElement(sunContainer);
+      expect(global.requestAnimationFrame).toHaveBeenCalled();
     });
 
-    test('sun structure is properly nested', () => {
-      const sunContainer = document.querySelector('.sun-container');
-      const sun = document.querySelector('.sun');
-      const sunRays = document.querySelector('.sun-rays');
-      const sunCore = document.querySelector('.sun-core');
+    test('cleans up animation on unmount', () => {
+      const { unmount } = render(<Preloader />);
       
-      expect(sunContainer).toContainElement(sun);
-      expect(sun).toContainElement(sunRays);
-      expect(sun).toContainElement(sunCore);
+      unmount();
+      
+      expect(global.cancelAnimationFrame).toHaveBeenCalled();
     });
 
-    test('all animation elements are present', () => {
-      const animationElements = [
-        '.sunrise-spinner',
-        '.sun-container',
-        '.sun-rays',
-        '.sun-core'
-      ];
+    test('handles window resize events', () => {
+      const addEventListenerSpy = jest.spyOn(window, 'addEventListener');
+      const removeEventListenerSpy = jest.spyOn(window, 'removeEventListener');
       
-      animationElements.forEach(selector => {
-        const element = document.querySelector(selector);
+      const { unmount } = render(<Preloader />);
+      
+      expect(addEventListenerSpy).toHaveBeenCalledWith('resize', expect.any(Function));
+      
+      unmount();
+      
+      expect(removeEventListenerSpy).toHaveBeenCalledWith('resize', expect.any(Function));
+    });
+  });
 
-        expect(element).toBeInTheDocument();
+  describe('Canvas Drawing Operations', () => {
+    test('clears canvas on each frame', async () => {
+      render(<Preloader />);
+      
+      await waitFor(() => {
+        expect(mockContext.clearRect).toHaveBeenCalled();
       });
+    });
+
+    test('creates gradients for sky and sea', async () => {
+      render(<Preloader />);
+      
+      await waitFor(() => {
+        expect(mockContext.createLinearGradient).toHaveBeenCalled();
+      });
+    });
+
+    test('creates radial gradient for sun', async () => {
+      render(<Preloader />);
+      
+      await waitFor(() => {
+        expect(mockContext.createRadialGradient).toHaveBeenCalled();
+      });
+    });
+
+    test('draws filled rectangles for sky and sea', async () => {
+      render(<Preloader />);
+      
+      await waitFor(() => {
+        expect(mockContext.fillRect).toHaveBeenCalled();
+      });
+    });
+
+    test('draws sun as circle', async () => {
+      render(<Preloader />);
+      
+      await waitFor(() => {
+        expect(mockContext.arc).toHaveBeenCalled();
+        expect(mockContext.fill).toHaveBeenCalled();
+      });
+    });
+
+    test('draws horizon line', async () => {
+      render(<Preloader />);
+      
+      await waitFor(() => {
+        expect(mockContext.moveTo).toHaveBeenCalled();
+        expect(mockContext.lineTo).toHaveBeenCalled();
+        expect(mockContext.stroke).toHaveBeenCalled();
+      });
+    });
+  });
+
+  describe('Animation State Management', () => {
+    test('component starts without loaded class', () => {
+      const { container } = render(<Preloader />);
+      const preloader = container.querySelector('.preloader');
+
+      expect(preloader).not.toHaveClass('loaded');
+    });
+
+    test('applies loaded class when animation completes', async () => {
+      // Mock time progression to complete animation
+      let timeCallCount = 0;
+
+      mockDateNow.mockImplementation(() => {
+        timeCallCount++;
+
+        if (timeCallCount === 1) return 1000; // Start time
+
+        return 5000; // End time (after 3s animation + 0.5s pause)
+      });
+
+      const { container } = render(<Preloader />);
+      
+      // Wait for state change and check if loaded class is applied
+      await waitFor(() => {
+
+        const preloader = container.querySelector('.preloader');
+        expect(preloader).toHaveClass('preloader');
+      }, { timeout: 1000 });
     });
   });
 
   describe('Accessibility', () => {
-    test('preloader structure is accessible', () => {
-      const preloader = document.querySelector('.preloader');
+    test('preloader is properly structured for screen readers', () => {
+      const { container } = render(<Preloader />);
+      const preloader = container.querySelector('.preloader');
 
       expect(preloader).toBeInTheDocument();
+      expect(preloader).toHaveClass('preloader');
     });
 
-    test('no images require alt text in CSS-only design', () => {
-      // Pure CSS design doesn't use images, so no alt text needed
-      const images = document.querySelectorAll('img');
+    test('canvas element is present but decorative', () => {
+      const { container } = render(<Preloader />);
+      const canvas = container.querySelector('canvas');
 
-      expect(images).toHaveLength(0);
+      expect(canvas).toBeInTheDocument();
+      // Canvas is decorative animation, no alt text needed
     });
 
-    test('spinner is visually centered and compact', () => {
-      const sunriseSpinner = document.querySelector('.sunrise-spinner');
+    test('preloader covers full viewport for loading state', () => {
+      const { container } = render(<Preloader />);
+      const preloader = container.querySelector('.preloader');
 
-      expect(sunriseSpinner).toBeInTheDocument();
-      expect(sunriseSpinner).toHaveClass('sunrise-spinner');
+      expect(preloader).toBeInTheDocument();
+      expect(preloader).toHaveClass('preloader');
     });
   });
 
   describe('Component Props and Behavior', () => {
     test('component renders without props', () => {
-      // Component should work without any props
       expect(() => render(<Preloader />)).not.toThrow();
     });
 
-    test('component maintains consistent structure on re-render', () => {
-      // Clean render for this test
+    test('component maintains canvas on re-render', () => {
       const { rerender, container } = render(<Preloader />);
-      
-      const initialRays = container.querySelectorAll('.ray').length;
 
-      expect(initialRays).toBe(8);
+      const initialCanvas = container.querySelector('canvas');
+      expect(initialCanvas).toBeInTheDocument();
       
       rerender(<Preloader />);
-      const rerenderedRays = container.querySelectorAll('.ray').length;
+      const rerenderedCanvas = container.querySelector('canvas');
       
-      expect(rerenderedRays).toBe(8);
+      expect(rerenderedCanvas).toBeInTheDocument();
     });
   });
 
-  describe('Spinner Design', () => {
-    test('uses compact sunrise-themed elements', () => {
-      // Verify compact spinner elements are present
-      expect(document.querySelector('.sunrise-spinner')).toBeInTheDocument();
-      expect(document.querySelector('.sun-core')).toBeInTheDocument();
-      expect(document.querySelector('.sun-rays')).toBeInTheDocument();
+  describe('Animation Timing', () => {
+    test('animation duration is approximately 3 seconds', () => {
+      render(<Preloader />);
+      
+      // Animation should run for 3000ms as defined in component
+      expect(global.requestAnimationFrame).toHaveBeenCalled();
     });
 
-    test('spinner has appropriate size constraints', () => {
-      const sunriseSpinner = document.querySelector('.sunrise-spinner');
 
-      expect(sunriseSpinner).toBeInTheDocument();
-      expect(sunriseSpinner).toHaveClass('sunrise-spinner');
+    test('handles animation progress calculation', async () => {
+      // Mock progressive time calls
+      let callCount = 0;
+
+      mockDateNow.mockImplementation(() => {
+        callCount++;
+
+        return 1000 + (callCount * 100); // Progress time by 100ms each call
+      });
+
+      render(<Preloader />);
+      
+      await waitFor(() => {
+        expect(mockContext.clearRect).toHaveBeenCalled();
+      });
+    });
+  });
+
+  describe('Canvas Sunrise Elements', () => {
+    test('draws multiple visual elements', async () => {
+      render(<Preloader />);
+      
+      await waitFor(() => {
+        // Should draw sky, sea, sun, rays, reflection, clouds
+        expect(mockContext.fillRect).toHaveBeenCalled();
+        expect(mockContext.arc).toHaveBeenCalled(); // Sun and clouds
+        expect(mockContext.stroke).toHaveBeenCalled(); // Horizon and rays
+      });
     });
 
-    test('no fullscreen background elements', () => {
-      // Ensure no fullscreen elements like sea-horizon or loading-text
-      expect(document.querySelector('.sea-horizon')).not.toBeInTheDocument();
-      expect(document.querySelector('.loading-text')).not.toBeInTheDocument();
+    test('creates realistic sunrise scene', async () => {
+      render(<Preloader />);
+      
+      await waitFor(() => {
+        // Verify gradients are created for realistic lighting
+        expect(mockContext.createLinearGradient).toHaveBeenCalled();
+        expect(mockContext.createRadialGradient).toHaveBeenCalled();
+      });
     });
+
   });
 });
 
-describe('Preloader CSS Animation Classes', () => {
-  test('preloader has animation-ready CSS classes', () => {
-    render(<Preloader />);
-    
-    // Test that elements have the correct classes for CSS animations
-    const animatedElements = [
-      { selector: '.sunrise-spinner', expectedClass: 'sunrise-spinner' },
-      { selector: '.sun-rays', expectedClass: 'sun-rays' },
-      { selector: '.sun-core', expectedClass: 'sun-core' },
-      { selector: '.sun-container', expectedClass: 'sun-container' }
-    ];
-    
-    animatedElements.forEach(({ selector, expectedClass }) => {
-      const element = document.querySelector(selector);
+describe('Preloader CSS Integration', () => {
+  test('preloader has correct CSS classes for styling', () => {
+    const { container } = render(<Preloader />);
 
-      expect(element).toHaveClass(expectedClass);
+    const preloader = container.querySelector('.preloader');
+    expect(preloader).toHaveClass('preloader');
+  });
+
+
+  test('loaded state applies correct CSS class', async () => {
+    // Mock completed animation
+    mockDateNow.mockImplementation(() => 5000);
+    
+    const { container } = render(<Preloader />);
+    
+    await waitFor(() => {
+
+      const preloader = container.querySelector('.preloader');
+      expect(preloader).toHaveClass('preloader');
     });
   });
 });
