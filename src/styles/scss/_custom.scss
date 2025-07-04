@@ -127,3 +127,65 @@ section:before,
 section:after {
   z-index: -1 !important;
 }
+
+/* FIX: Homepage Hero and About Section Overlap */
+/* Fix featured-section-three (Hero) overlapping with next section */
+.featured-section-three {
+  height: auto !important; /* Remove fixed height that causes overlap */
+  min-height: auto !important;
+  padding-bottom: 120px !important; /* Add proper bottom padding */
+  margin-bottom: 0 !important;
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+/* Ensure About3 section (history-style-one) has proper spacing */
+.history-style-one {
+  margin-top: 0 !important;
+  padding-top: 120px !important;
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+/* Fix the gap class to ensure consistent spacing */
+.gap.history-style-one {
+  padding: 120px 0 !important;
+}
+
+/* Ensure featured-section-three info section doesn't overlap */
+.featured-section-three .info {
+  padding-top: 55px !important;
+  padding-bottom: 60px !important;
+  position: relative !important;
+  z-index: 3 !important;
+}
+
+/* Fix any responsive height issues */
+@media (max-width: 1199px) {
+  .featured-section-three {
+    height: auto !important;
+    padding-bottom: 80px !important;
+  }
+}
+
+@media (max-width: 991px) {
+  .featured-section-three {
+    height: auto !important;
+    padding-bottom: 60px !important;
+  }
+  
+  .history-style-one {
+    padding-top: 80px !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .featured-section-three {
+    height: auto !important;
+    padding-bottom: 40px !important;
+  }
+  
+  .history-style-one {
+    padding-top: 60px !important;
+  }
+}
