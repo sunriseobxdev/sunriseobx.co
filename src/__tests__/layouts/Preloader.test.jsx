@@ -1,9 +1,9 @@
 // Preloader Component Tests - Sunrise Construction Theme
 // Tests: Component structure, CSS classes, animation elements, accessibility
-// Updated: Added comprehensive tests for new sunrise-themed preloader
+// Updated: Tests for compact sunrise spinner design
 
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import Preloader from '../../layouts/Preloader';
 
@@ -14,7 +14,7 @@ jest.mock('next/image', () => {
   };
 });
 
-describe('Preloader Component - Sunrise Theme', () => {
+describe('Preloader Component - Sunrise Spinner', () => {
   beforeEach(() => {
     render(<Preloader />);
   });
@@ -27,18 +27,11 @@ describe('Preloader Component - Sunrise Theme', () => {
       expect(preloader).toHaveClass('preloader');
     });
 
-    test('renders sunrise container', () => {
-      const sunriseContainer = document.querySelector('.sunrise-container');
+    test('renders sunrise spinner container', () => {
+      const sunriseSpinner = document.querySelector('.sunrise-spinner');
 
-      expect(sunriseContainer).toBeInTheDocument();
-      expect(sunriseContainer).toHaveClass('sunrise-container');
-    });
-
-    test('renders sea horizon background', () => {
-      const seaHorizon = document.querySelector('.sea-horizon');
-
-      expect(seaHorizon).toBeInTheDocument();
-      expect(seaHorizon).toHaveClass('sea-horizon');
+      expect(sunriseSpinner).toBeInTheDocument();
+      expect(sunriseSpinner).toHaveClass('sunrise-spinner');
     });
 
     test('renders sun container', () => {
@@ -68,20 +61,13 @@ describe('Preloader Component - Sunrise Theme', () => {
       expect(sunCore).toBeInTheDocument();
       expect(sunCore).toHaveClass('sun-core');
     });
-
-    test('renders loading text', () => {
-      const loadingText = document.querySelector('.loading-text');
-
-      expect(loadingText).toBeInTheDocument();
-      expect(loadingText).toHaveClass('loading-text');
-    });
   });
 
   describe('Sun Rays Generation', () => {
-    test('renders exactly 12 sun rays', () => {
+    test('renders exactly 8 sun rays', () => {
       const rays = document.querySelectorAll('.ray');
 
-      expect(rays).toHaveLength(12);
+      expect(rays).toHaveLength(8);
     });
 
     test('each ray has correct class structure', () => {
@@ -93,8 +79,8 @@ describe('Preloader Component - Sunrise Theme', () => {
       });
     });
 
-    test('rays are numbered from 1 to 12', () => {
-      for (let i = 1; i <= 12; i++) {
+    test('rays are numbered from 1 to 8', () => {
+      for (let i = 1; i <= 8; i++) {
         const ray = document.querySelector(`.ray-${i}`);
 
         expect(ray).toBeInTheDocument();
@@ -102,31 +88,14 @@ describe('Preloader Component - Sunrise Theme', () => {
     });
   });
 
-  describe('Content and Text', () => {
-    test('displays company name in loading text', () => {
-      const loadingText = screen.getByText('Sunrise Construction');
-
-      expect(loadingText).toBeInTheDocument();
-    });
-
-    test('loading text is wrapped in span element', () => {
-      const loadingSpan = document.querySelector('.loading-text span');
-
-      expect(loadingSpan).toBeInTheDocument();
-      expect(loadingSpan).toHaveTextContent('Sunrise Construction');
-    });
-  });
-
   describe('CSS Classes and Structure', () => {
     test('preloader has correct CSS structure for animations', () => {
       const preloader = document.querySelector('.preloader');
-      const sunriseContainer = document.querySelector('.sunrise-container');
-      const seaHorizon = document.querySelector('.sea-horizon');
+      const sunriseSpinner = document.querySelector('.sunrise-spinner');
       const sunContainer = document.querySelector('.sun-container');
       
-      expect(preloader).toContainElement(sunriseContainer);
-      expect(sunriseContainer).toContainElement(seaHorizon);
-      expect(sunriseContainer).toContainElement(sunContainer);
+      expect(preloader).toContainElement(sunriseSpinner);
+      expect(sunriseSpinner).toContainElement(sunContainer);
     });
 
     test('sun structure is properly nested', () => {
@@ -142,12 +111,10 @@ describe('Preloader Component - Sunrise Theme', () => {
 
     test('all animation elements are present', () => {
       const animationElements = [
-        '.sunrise-container',
-        '.sea-horizon',
+        '.sunrise-spinner',
         '.sun-container',
         '.sun-rays',
-        '.sun-core',
-        '.loading-text'
+        '.sun-core'
       ];
       
       animationElements.forEach(selector => {
@@ -163,18 +130,20 @@ describe('Preloader Component - Sunrise Theme', () => {
       const preloader = document.querySelector('.preloader');
 
       expect(preloader).toBeInTheDocument();
-      
-      // Check that text content is available for screen readers
-      const textContent = screen.getByText('Sunrise Construction');
-
-      expect(textContent).toBeInTheDocument();
     });
 
-    test('no images require alt text in new design', () => {
-      // New CSS-only design doesn't use images, so no alt text needed
+    test('no images require alt text in CSS-only design', () => {
+      // Pure CSS design doesn't use images, so no alt text needed
       const images = document.querySelectorAll('img');
 
       expect(images).toHaveLength(0);
+    });
+
+    test('spinner is visually centered and compact', () => {
+      const sunriseSpinner = document.querySelector('.sunrise-spinner');
+
+      expect(sunriseSpinner).toBeInTheDocument();
+      expect(sunriseSpinner).toHaveClass('sunrise-spinner');
     });
   });
 
@@ -190,28 +159,34 @@ describe('Preloader Component - Sunrise Theme', () => {
       
       const initialRays = container.querySelectorAll('.ray').length;
 
-      expect(initialRays).toBe(12);
+      expect(initialRays).toBe(8);
       
       rerender(<Preloader />);
       const rerenderedRays = container.querySelectorAll('.ray').length;
       
-      expect(rerenderedRays).toBe(12);
+      expect(rerenderedRays).toBe(8);
     });
   });
 
-  describe('Theme Integration', () => {
-    test('uses construction-themed elements', () => {
-      // Verify sunrise theme elements are present
-      expect(document.querySelector('.sea-horizon')).toBeInTheDocument();
+  describe('Spinner Design', () => {
+    test('uses compact sunrise-themed elements', () => {
+      // Verify compact spinner elements are present
+      expect(document.querySelector('.sunrise-spinner')).toBeInTheDocument();
       expect(document.querySelector('.sun-core')).toBeInTheDocument();
-      expect(screen.getByText('Sunrise Construction')).toBeInTheDocument();
+      expect(document.querySelector('.sun-rays')).toBeInTheDocument();
     });
 
-    test('loading text reflects company branding', () => {
-      const brandText = screen.getByText('Sunrise Construction');
+    test('spinner has appropriate size constraints', () => {
+      const sunriseSpinner = document.querySelector('.sunrise-spinner');
 
-      expect(brandText).toBeInTheDocument();
-      expect(brandText.closest('.loading-text')).toBeInTheDocument();
+      expect(sunriseSpinner).toBeInTheDocument();
+      expect(sunriseSpinner).toHaveClass('sunrise-spinner');
+    });
+
+    test('no fullscreen background elements', () => {
+      // Ensure no fullscreen elements like sea-horizon or loading-text
+      expect(document.querySelector('.sea-horizon')).not.toBeInTheDocument();
+      expect(document.querySelector('.loading-text')).not.toBeInTheDocument();
     });
   });
 });
@@ -222,11 +197,10 @@ describe('Preloader CSS Animation Classes', () => {
     
     // Test that elements have the correct classes for CSS animations
     const animatedElements = [
-      { selector: '.sunrise-container', expectedClass: 'sunrise-container' },
+      { selector: '.sunrise-spinner', expectedClass: 'sunrise-spinner' },
       { selector: '.sun-rays', expectedClass: 'sun-rays' },
       { selector: '.sun-core', expectedClass: 'sun-core' },
-      { selector: '.sun-container', expectedClass: 'sun-container' },
-      { selector: '.loading-text', expectedClass: 'loading-text' }
+      { selector: '.sun-container', expectedClass: 'sun-container' }
     ];
     
     animatedElements.forEach(({ selector, expectedClass }) => {

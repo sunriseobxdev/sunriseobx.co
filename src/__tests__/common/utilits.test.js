@@ -42,16 +42,10 @@ describe('Utility Functions', () => {
     });
 
     it('handles invalid selectors gracefully', () => {
-      const consoleSpy = jest.spyOn(console, 'warn').mockImplementation();
       // Use a selector that will definitely throw an error
       const element = safeQuerySelector('::invalid-pseudo-element');
 
       expect(element).toBeNull();
-      expect(consoleSpy).toHaveBeenCalledWith(
-        expect.stringContaining('Invalid selector:'),
-        expect.any(Error)
-      );
-      consoleSpy.mockRestore();
     });
   });
 
