@@ -6571,7 +6571,7 @@ ul.pd-price li:not(:last-child){
 }
 /* 57. Popups */
 
-/* 58. Preloader Start - Dynamic Canvas Sunrise Animation */
+/* 58. Preloader Start - Simple Black Fade */
 .preloader {
   position: fixed;
   top: 0;
@@ -6580,10 +6580,7 @@ ul.pd-price li:not(:last-child){
   height: 100%;
   background: #000000;
   z-index: 9999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: opacity 1s ease-out, visibility 1s ease-out;
+  transition: opacity 0.8s ease-out, visibility 0.8s ease-out;
   opacity: 1;
   visibility: visible;
 }
@@ -6600,12 +6597,6 @@ ul.pd-price li:not(:last-child){
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-}
-
-/* Canvas styling */
-.preloader canvas {
-  display: block;
-  background: transparent;
 }
 /* 58. Preloader End */
 

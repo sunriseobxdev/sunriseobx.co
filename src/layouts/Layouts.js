@@ -17,7 +17,7 @@ const Layouts = ({
   cartButton,
   className = '',
 }) => {
-  // Handle preloader with better error handling
+  // Handle preloader with simple fade
   const handlePreloader = useCallback(() => {
     if (typeof window === 'undefined') return;
 
@@ -25,10 +25,10 @@ const Layouts = ({
       const loader = document.querySelector('.preloader');
 
       if (loader) {
-        // Add a small delay to ensure smooth transition
+        // Simple fade out after a short delay
         setTimeout(() => {
           loader.classList.add('loaded');
-        }, 100);
+        }, 800); // Match the fade duration
       }
     } catch (error) {
       // Preloader initialization failed
