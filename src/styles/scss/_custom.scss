@@ -129,63 +129,94 @@ section:after {
 }
 
 /* FIX: Homepage Hero and About Section Overlap */
-/* Fix featured-section-three (Hero) overlapping with next section */
+/* The original .featured-section-three has height: 1200px which causes overlap */
+/* Remove the fixed height and add proper spacing to prevent overlap */
+
 .featured-section-three {
-  height: auto !important; /* Remove fixed height that causes overlap */
-  min-height: auto !important;
-  padding-bottom: 120px !important; /* Add proper bottom padding */
-  margin-bottom: 0 !important;
+  /* Override the original fixed height: 1200px */
+  height: auto !important;
+  min-height: 800px !important; /* Maintain minimum visual impact */
+  
+  /* Add substantial bottom padding to create separation */
+  padding-bottom: 150px !important;
+  
+  /* Ensure proper positioning */
   position: relative !important;
   z-index: 1 !important;
+  margin-bottom: 0 !important;
 }
 
-/* Ensure About3 section (history-style-one) has proper spacing */
-.history-style-one {
-  margin-top: 0 !important;
-  padding-top: 120px !important;
-  position: relative !important;
-  z-index: 2 !important;
-}
-
-/* Fix the gap class to ensure consistent spacing */
-.gap.history-style-one {
-  padding: 120px 0 !important;
-}
-
-/* Ensure featured-section-three info section doesn't overlap */
+/* The .info section contains the overlapping text "Serving Outer Banks, NC..." */
+/* Add extra spacing to push it away from the following section */
 .featured-section-three .info {
-  padding-top: 55px !important;
-  padding-bottom: 60px !important;
+  padding-top: 80px !important; /* Increased from original 55px */
+  padding-bottom: 100px !important; /* Substantial bottom padding */
   position: relative !important;
   z-index: 3 !important;
 }
 
-/* Fix any responsive height issues */
+/* Ensure the About3 section (history-style-one) has proper top spacing */
+/* This contains "Sunrise Construction has a proud tradition..." text */
+.history-style-one {
+  margin-top: 0 !important;
+  padding-top: 150px !important; /* Extra top padding for separation */
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+/* Override the .gap class when combined with history-style-one */
+.gap.history-style-one {
+  padding: 150px 0 120px 0 !important; /* Extra top padding, normal bottom */
+}
+
+/* Responsive adjustments to maintain spacing on smaller screens */
 @media (max-width: 1199px) {
   .featured-section-three {
     height: auto !important;
+    min-height: 700px !important;
+    padding-bottom: 120px !important;
+  }
+  
+  .featured-section-three .info {
     padding-bottom: 80px !important;
+  }
+  
+  .history-style-one,
+  .gap.history-style-one {
+    padding-top: 120px !important;
   }
 }
 
 @media (max-width: 991px) {
   .featured-section-three {
     height: auto !important;
+    min-height: 600px !important;
+    padding-bottom: 100px !important;
+  }
+  
+  .featured-section-three .info {
     padding-bottom: 60px !important;
   }
   
-  .history-style-one {
-    padding-top: 80px !important;
+  .history-style-one,
+  .gap.history-style-one {
+    padding-top: 100px !important;
   }
 }
 
 @media (max-width: 767px) {
   .featured-section-three {
     height: auto !important;
+    min-height: 500px !important;
+    padding-bottom: 80px !important;
+  }
+  
+  .featured-section-three .info {
     padding-bottom: 40px !important;
   }
   
-  .history-style-one {
-    padding-top: 60px !important;
+  .history-style-one,
+  .gap.history-style-one {
+    padding-top: 80px !important;
   }
 }
