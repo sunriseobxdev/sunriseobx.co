@@ -5,7 +5,7 @@ import Footer from "@/components/Footer";
 import { useState } from "react";
 
 export default function ContactPage() {
-  const [form, setForm] = useState({ name: "", email: "", subject: "", message: "" });
+  const [form, setForm] = useState({ name: "", email: "", phone: "", subject: "", message: "" });
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
 
   async function handleSubmit(e: React.FormEvent) {
@@ -19,7 +19,7 @@ export default function ContactPage() {
       });
       if (res.ok) {
         setStatus("sent");
-        setForm({ name: "", email: "", subject: "", message: "" });
+        setForm({ name: "", email: "", phone: "", subject: "", message: "" });
       } else {
         setStatus("error");
       }
@@ -29,78 +29,227 @@ export default function ContactPage() {
   }
 
   return (
-    <main className="min-h-screen bg-white">
+    <main className="overflow-hidden">
       <Header />
 
-      <section className="pt-28 pb-16 bg-navy-900">
-        <div className="max-w-7xl mx-auto px-6">
-          <h1 className="text-4xl md:text-5xl font-bold text-white">Contact Us</h1>
-          <p className="mt-4 text-lg text-navy-300 max-w-2xl">Ready to start your project? Get in touch for a free consultation and estimate.</p>
+      {/* Hero */}
+      <section className="relative pt-28 pb-20 bg-navy-900">
+        <div className="absolute inset-0 opacity-15">
+          <img src="/img/f-3.jpg" alt="" className="w-full h-full object-cover" />
+        </div>
+        <div className="relative max-w-7xl mx-auto px-6">
+          <p className="text-sunrise-400 font-semibold text-sm tracking-widest uppercase mb-4">
+            Get In Touch
+          </p>
+          <h1 className="text-5xl md:text-6xl font-extrabold text-white leading-tight">
+            Start Your Project
+            <br />
+            <span className="text-sunrise-400">Today</span>
+          </h1>
+          <p className="mt-6 text-xl text-navy-300 max-w-2xl">
+            Free estimates, expert advice, and honest pricing. We respond within 24 hours.
+          </p>
         </div>
       </section>
 
-      <section className="py-20">
-        <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-16">
-          <div>
-            <h2 className="text-2xl font-bold text-navy-900 mb-6">Send Us a Message</h2>
-            {status === "sent" ? (
-              <div className="bg-green-50 border border-green-200 rounded-xl p-8 text-center">
-                <p className="text-green-800 font-semibold text-lg">Thank you for your message!</p>
-                <p className="text-green-600 mt-2">We&#39;ll get back to you within 24 hours.</p>
-                <button onClick={() => setStatus("idle")} className="mt-4 text-sm text-green-700 underline">Send another message</button>
-              </div>
-            ) : (
-              <form onSubmit={handleSubmit} className="space-y-5">
-                <div className="grid sm:grid-cols-2 gap-5">
-                  <div>
-                    <label className="block text-sm font-medium text-navy-700 mb-1">Your Name</label>
-                    <input type="text" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="w-full px-4 py-3 border border-navy-200 rounded-lg focus:outline-none focus:border-sunrise-500 text-navy-800" required />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-navy-700 mb-1">Email Address</label>
-                    <input type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} className="w-full px-4 py-3 border border-navy-200 rounded-lg focus:outline-none focus:border-sunrise-500 text-navy-800" required />
-                  </div>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-navy-700 mb-1">Subject</label>
-                  <input type="text" value={form.subject} onChange={(e) => setForm({ ...form, subject: e.target.value })} className="w-full px-4 py-3 border border-navy-200 rounded-lg focus:outline-none focus:border-sunrise-500 text-navy-800" placeholder="e.g. Roof replacement estimate" />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-navy-700 mb-1">Message</label>
-                  <textarea value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} rows={6} className="w-full px-4 py-3 border border-navy-200 rounded-lg focus:outline-none focus:border-sunrise-500 text-navy-800" placeholder="Tell us about your project..." required />
-                </div>
-                {status === "error" && <p className="text-red-600 text-sm">Something went wrong. Please try again or call us directly.</p>}
-                <button type="submit" disabled={status === "sending"} className="w-full py-3.5 bg-sunrise-600 hover:bg-sunrise-700 text-white rounded-lg font-semibold transition disabled:opacity-50">
-                  {status === "sending" ? "Sending..." : "Send Message"}
-                </button>
-              </form>
-            )}
-          </div>
+      {/* Contact content */}
+      <section className="py-20 lg:py-28 bg-white">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid lg:grid-cols-5 gap-16">
+            {/* Form — takes 3 cols */}
+            <div className="lg:col-span-3">
+              <h2 className="text-2xl font-extrabold text-navy-900 mb-2">
+                Request a Free Estimate
+              </h2>
+              <p className="text-navy-500 mb-8">
+                Tell us about your project and we&apos;ll get back to you with a detailed estimate.
+              </p>
 
-          <div>
-            <h2 className="text-2xl font-bold text-navy-900 mb-6">Get In Touch</h2>
-            <div className="space-y-8">
-              <div>
-                <h3 className="text-sm font-semibold text-navy-400 uppercase tracking-wider mb-2">Office Address</h3>
-                <p className="text-navy-700">5149-5177 N Croatan Hwy<br />Kitty Hawk, NC 27949</p>
+              {status === "sent" ? (
+                <div className="bg-green-50 border border-green-200 rounded-2xl p-10 text-center">
+                  <div className="w-16 h-16 mx-auto bg-green-100 rounded-full flex items-center justify-center mb-4">
+                    <svg className="w-8 h-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                  <p className="text-green-800 font-bold text-xl">Message Sent!</p>
+                  <p className="text-green-600 mt-2">
+                    Thank you for reaching out. We&apos;ll respond within 24 hours.
+                  </p>
+                  <button
+                    onClick={() => setStatus("idle")}
+                    className="mt-6 text-sm text-green-700 font-semibold underline"
+                  >
+                    Send another message
+                  </button>
+                </div>
+              ) : (
+                <form onSubmit={handleSubmit} className="space-y-5">
+                  <div className="grid sm:grid-cols-2 gap-5">
+                    <div>
+                      <label className="block text-sm font-semibold text-navy-700 mb-2">
+                        Full Name *
+                      </label>
+                      <input
+                        type="text"
+                        value={form.name}
+                        onChange={(e) => setForm({ ...form, name: e.target.value })}
+                        className="w-full px-4 py-3.5 bg-navy-50 border border-navy-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-sunrise-500 focus:border-transparent text-navy-800 transition"
+                        placeholder="John Smith"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-navy-700 mb-2">
+                        Email Address *
+                      </label>
+                      <input
+                        type="email"
+                        value={form.email}
+                        onChange={(e) => setForm({ ...form, email: e.target.value })}
+                        className="w-full px-4 py-3.5 bg-navy-50 border border-navy-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-sunrise-500 focus:border-transparent text-navy-800 transition"
+                        placeholder="john@example.com"
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div className="grid sm:grid-cols-2 gap-5">
+                    <div>
+                      <label className="block text-sm font-semibold text-navy-700 mb-2">
+                        Phone Number
+                      </label>
+                      <input
+                        type="tel"
+                        value={form.phone}
+                        onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                        className="w-full px-4 py-3.5 bg-navy-50 border border-navy-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-sunrise-500 focus:border-transparent text-navy-800 transition"
+                        placeholder="(252) 555-0100"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-navy-700 mb-2">
+                        Service Needed
+                      </label>
+                      <select
+                        value={form.subject}
+                        onChange={(e) => setForm({ ...form, subject: e.target.value })}
+                        className="w-full px-4 py-3.5 bg-navy-50 border border-navy-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-sunrise-500 focus:border-transparent text-navy-800 transition"
+                      >
+                        <option value="">Select a service...</option>
+                        <option>Roof Replacement</option>
+                        <option>Siding Installation</option>
+                        <option>Window Replacement</option>
+                        <option>Exterior Construction</option>
+                        <option>FORTIFIED Roofing</option>
+                        <option>Storm Damage Repair</option>
+                        <option>Other</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-navy-700 mb-2">
+                      Project Details *
+                    </label>
+                    <textarea
+                      value={form.message}
+                      onChange={(e) => setForm({ ...form, message: e.target.value })}
+                      rows={5}
+                      className="w-full px-4 py-3.5 bg-navy-50 border border-navy-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-sunrise-500 focus:border-transparent text-navy-800 transition"
+                      placeholder="Tell us about your project — what work is needed, your timeline, and any questions you have..."
+                      required
+                    />
+                  </div>
+                  {status === "error" && (
+                    <div className="bg-red-50 border border-red-200 rounded-xl p-4">
+                      <p className="text-red-700 text-sm">
+                        Something went wrong. Please try again or call us directly at (252) 619-7966.
+                      </p>
+                    </div>
+                  )}
+                  <button
+                    type="submit"
+                    disabled={status === "sending"}
+                    className="w-full py-4 bg-sunrise-600 hover:bg-sunrise-500 text-white rounded-xl text-lg font-bold transition-all shadow-lg shadow-sunrise-600/25 disabled:opacity-50"
+                  >
+                    {status === "sending" ? "Sending..." : "Send Message & Get Free Estimate"}
+                  </button>
+                  <p className="text-xs text-navy-400 text-center">
+                    We respond to all inquiries within 24 hours. Your information is never shared.
+                  </p>
+                </form>
+              )}
+            </div>
+
+            {/* Contact info — takes 2 cols */}
+            <div className="lg:col-span-2 space-y-8">
+              {/* Phone card */}
+              <div className="bg-sunrise-600 rounded-2xl p-8 text-white">
+                <h3 className="text-lg font-bold mb-2">Call Us Directly</h3>
+                <a
+                  href="tel:+12526197966"
+                  className="text-3xl font-extrabold hover:text-sunrise-100 transition block"
+                >
+                  (252) 619-7966
+                </a>
+                <p className="text-sunrise-200 text-sm mt-2">
+                  Mon-Fri 7am-6pm &middot; Sat 8am-2pm
+                </p>
               </div>
-              <div>
-                <h3 className="text-sm font-semibold text-navy-400 uppercase tracking-wider mb-2">Phone</h3>
-                <a href="tel:+12526197966" className="text-navy-700 hover:text-sunrise-600 transition text-lg font-medium">(252) 619-7966</a>
-                <br />
-                <a href="tel:+12522072602" className="text-navy-700 hover:text-sunrise-600 transition">(252) 207-2602</a>
+
+              {/* Info cards */}
+              <div className="bg-navy-50 rounded-2xl p-8 space-y-6">
+                <div>
+                  <h3 className="text-xs font-bold text-navy-400 uppercase tracking-wider mb-2">
+                    Office
+                  </h3>
+                  <p className="text-navy-800 font-medium">
+                    5149-5177 N Croatan Hwy
+                    <br />
+                    Kitty Hawk, NC 27949
+                  </p>
+                </div>
+                <div>
+                  <h3 className="text-xs font-bold text-navy-400 uppercase tracking-wider mb-2">
+                    Email
+                  </h3>
+                  <a
+                    href="mailto:hello@sunriseobx.co"
+                    className="text-sunrise-600 font-medium hover:text-sunrise-700 transition"
+                  >
+                    hello@sunriseobx.co
+                  </a>
+                </div>
+                <div>
+                  <h3 className="text-xs font-bold text-navy-400 uppercase tracking-wider mb-2">
+                    Service Area
+                  </h3>
+                  <p className="text-navy-600 text-sm leading-relaxed">
+                    We serve the entire Outer Banks — Corolla, Duck,
+                    Southern Shores, Kitty Hawk, Kill Devil Hills, Nags Head,
+                    Manteo, Rodanthe, Waves, Avon, Buxton, and Hatteras.
+                  </p>
+                </div>
               </div>
-              <div>
-                <h3 className="text-sm font-semibold text-navy-400 uppercase tracking-wider mb-2">Email</h3>
-                <a href="mailto:hello@sunriseobx.co" className="text-navy-700 hover:text-sunrise-600 transition">hello@sunriseobx.co</a>
-              </div>
-              <div>
-                <h3 className="text-sm font-semibold text-navy-400 uppercase tracking-wider mb-2">Service Area</h3>
-                <p className="text-navy-600 text-sm leading-relaxed">We serve the entire Outer Banks corridor from Corolla to Hatteras, including Duck, Southern Shores, Kitty Hawk, Kill Devil Hills, Nags Head, Manteo, and all communities in between.</p>
-              </div>
-              <div className="bg-navy-50 rounded-xl p-6">
-                <h3 className="font-semibold text-navy-900 mb-2">Free Estimates</h3>
-                <p className="text-sm text-navy-600">We offer free, no-obligation estimates for all our services. Call us or fill out the form and we&#39;ll get back to you within 24 hours.</p>
+
+              {/* Promise card */}
+              <div className="bg-navy-900 rounded-2xl p-8 text-white">
+                <h3 className="text-lg font-bold mb-3">Our Promise</h3>
+                <ul className="space-y-3">
+                  {[
+                    "Free, no-obligation estimates",
+                    "Transparent, itemized pricing",
+                    "Licensed, bonded & fully insured",
+                    "We work with your insurance",
+                    "Industry-leading warranties",
+                  ].map((item) => (
+                    <li key={item} className="flex items-center gap-3 text-sm text-navy-200">
+                      <svg className="w-4 h-4 text-sunrise-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                      </svg>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
               </div>
             </div>
           </div>
