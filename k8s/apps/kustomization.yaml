@@ -5,4 +5,5 @@ resources:
   - web/service.yaml
   - api/deployment.yaml
   - api/service.yaml
+  - pkg/deployment.yaml
   - ingress/ingress.yaml

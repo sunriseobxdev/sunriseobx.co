@@ -12,6 +12,7 @@
     "@alpaca/ts-sdk": "file:../../ts-sdk",
     "@google-cloud/storage": "^7.19.0",
     "bcryptjs": "^3.0.2",
+    "bwip-js": "^4.8.0",
     "cors": "^2.8.5",
     "express": "^5.1.0",
     "helmet": "^8.1.0",
@@ -25,6 +26,7 @@
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
+    "@types/bwip-js": "^3.2.3",
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.2",
     "@types/jsonwebtoken": "^9.0.10",

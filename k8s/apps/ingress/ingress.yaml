@@ -7,6 +7,8 @@ spec:
   domains:
     - sunriseobx.co
     - www.sunriseobx.co
+    - api.sunriseobx.co
+    - pkg.sunriseobx.co
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -19,6 +21,26 @@ metadata:
     kubernetes.io/ingress.class: gce
 spec:
   rules:
+    - host: api.sunriseobx.co
+      http:
+        paths:
+          - path: /*
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: sunriseobx-api
+                port:
+                  number: 8080
+    - host: pkg.sunriseobx.co
+      http:
+        paths:
+          - path: /*
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: sunriseobx-pkg
+                port:
+                  number: 8080
     - host: sunriseobx.co
       http:
         paths:
