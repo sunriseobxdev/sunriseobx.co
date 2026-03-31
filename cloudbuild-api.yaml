@@ -6,7 +6,7 @@ steps:
       - 'us-central1-docker.pkg.dev/$PROJECT_ID/sunriseobx-images/api:${_TAG}'
       - '-f'
       - 'services/api/Dockerfile'
-      - 'services/api'
+      - '.'
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - 'push'
