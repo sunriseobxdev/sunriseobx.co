@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: sunriseobx-web
+  namespace: sunriseobx
+spec:
+  type: ClusterIP
+  selector:
+    app: sunriseobx-web
+  ports:
+    - port: 3000
+      targetPort: 3000
+      protocol: TCP

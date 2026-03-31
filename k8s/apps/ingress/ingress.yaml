@@ -1,0 +1,55 @@
+apiVersion: networking.gke.io/v1
+kind: ManagedCertificate
+metadata:
+  name: sunriseobx-cert
+  namespace: sunriseobx
+spec:
+  domains:
+    - sunriseobx.co
+    - www.sunriseobx.co
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: sunriseobx-ingress
+  namespace: sunriseobx
+  annotations:
+    kubernetes.io/ingress.global-static-ip-name: sunriseobx-ip
+    networking.gke.io/managed-certificates: sunriseobx-cert
+    kubernetes.io/ingress.class: gce
+spec:
+  rules:
+    - host: sunriseobx.co
+      http:
+        paths:
+          - path: /auth/*
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: sunriseobx-api
+                port:
+                  number: 8080
+          - path: /api/*
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: sunriseobx-api
+                port:
+                  number: 8080
+          - path: /*
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: sunriseobx-web
+                port:
+                  number: 3000
+    - host: www.sunriseobx.co
+      http:
+        paths:
+          - path: /*
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: sunriseobx-web
+                port:
+                  number: 3000

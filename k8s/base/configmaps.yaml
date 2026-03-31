@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sunriseobx-config
+  namespace: sunriseobx
+data:
+  ALPACA_BASE_URL: "https://paper-api.alpaca.markets"
+  ALPACA_DATA_URL: "https://data.alpaca.markets"
+  ADMIN_EMAIL: "admin@sunriseobx.co"
+  NODE_ENV: "production"
+  DARECOUNTY_GEOSERVER: "https://gs.darecountync.gov/geoserver"
+  DARECOUNTY_MAPS: "https://maps.darecountync.gov"

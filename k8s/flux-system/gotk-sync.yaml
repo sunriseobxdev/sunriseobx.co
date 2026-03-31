@@ -1,0 +1,38 @@
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: sunriseobx
+  namespace: flux-system
+spec:
+  interval: 1m0s
+  ref:
+    branch: master
+  url: https://github.com/sunriseobxdev/sunriseobx.co
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: sunriseobx-base
+  namespace: flux-system
+spec:
+  interval: 10m0s
+  path: ./k8s/base
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: sunriseobx
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: sunriseobx-apps
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: sunriseobx-base
+  interval: 5m0s
+  path: ./k8s/apps
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: sunriseobx

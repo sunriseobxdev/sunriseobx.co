@@ -1,0 +1,120 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sunriseobx-api
+  namespace: sunriseobx
+  labels:
+    app: sunriseobx-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sunriseobx-api
+  template:
+    metadata:
+      labels:
+        app: sunriseobx-api
+    spec:
+      tolerations:
+        - key: cloud.google.com/gke-spot
+          operator: Equal
+          value: "true"
+          effect: NoSchedule
+      containers:
+        - name: api
+          image: us-central1-docker.pkg.dev/sunriseobx-proj/sunriseobx-images/api:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+              name: http
+          env:
+            - name: PORT
+              value: "8080"
+            - name: NODE_ENV
+              value: "production"
+            - name: APCA_API_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: sunriseobx-secrets
+                  key: APCA_API_KEY_ID
+            - name: APCA_API_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: sunriseobx-secrets
+                  key: APCA_API_SECRET_KEY
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: sunriseobx-secrets
+                  key: JWT_SECRET
+            - name: ADMIN_PASSWORD_HASH
+              valueFrom:
+                secretKeyRef:
+                  name: sunriseobx-secrets
+                  key: ADMIN_PASSWORD_HASH
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: sunriseobx-db-secrets
+                  key: DATABASE_URL
+            - name: REDIS_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: sunriseobx-db-secrets
+                  key: REDIS_HOST
+            - name: REDIS_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: sunriseobx-db-secrets
+                  key: REDIS_PORT
+            - name: SMTP_USER
+              valueFrom:
+                secretKeyRef:
+                  name: sunriseobx-smtp-secrets
+                  key: SMTP_USER
+                  optional: true
+            - name: SMTP_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: sunriseobx-smtp-secrets
+                  key: SMTP_PASS
+                  optional: true
+            - name: ADMIN_EMAIL
+              valueFrom:
+                configMapKeyRef:
+                  name: sunriseobx-config
+                  key: ADMIN_EMAIL
+            - name: ALPACA_BASE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: sunriseobx-config
+                  key: ALPACA_BASE_URL
+            - name: DARECOUNTY_GEOSERVER
+              valueFrom:
+                configMapKeyRef:
+                  name: sunriseobx-config
+                  key: DARECOUNTY_GEOSERVER
+            - name: DARECOUNTY_MAPS
+              valueFrom:
+                configMapKeyRef:
+                  name: sunriseobx-config
+                  key: DARECOUNTY_MAPS
+          resources:
+            requests:
+              cpu: 15m
+              memory: 64Mi
+            limits:
+              cpu: 250m
+              memory: 256Mi
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10

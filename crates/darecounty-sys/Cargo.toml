@@ -1,0 +1,10 @@
+[package]
+name = "darecounty-sys"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+darecounty-common = { path = "../darecounty-common" }
+reqwest = { version = "0.12", features = ["json"] }
+async-trait = { workspace = true }
+tokio = { workspace = true }

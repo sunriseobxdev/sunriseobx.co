@@ -1,0 +1,26 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - 'us-central1-docker.pkg.dev/$PROJECT_ID/sunriseobx-images/api:${_TAG}'
+      - '-f'
+      - 'services/api/Dockerfile'
+      - 'services/api'
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'us-central1-docker.pkg.dev/$PROJECT_ID/sunriseobx-images/api:${_TAG}'
+  - name: 'gcr.io/cloud-builders/gke-deploy'
+    args:
+      - 'run'
+      - '--command=kubectl rollout restart deployment sunriseobx-api -n sunriseobx'
+      - '--cluster=sunriseobx'
+      - '--location=us-central1-a'
+images:
+  - 'us-central1-docker.pkg.dev/$PROJECT_ID/sunriseobx-images/api:${_TAG}'
+substitutions:
+  _TAG: latest
+timeout: 600s
+options:
+  machineType: 'E2_HIGHCPU_8'

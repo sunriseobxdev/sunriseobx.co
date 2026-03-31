@@ -1,0 +1,18 @@
+[workspace]
+members = [
+    "crates/darecounty-common",
+    "crates/darecounty-sys",
+    "crates/darecounty-cli",
+    "crates/darecounty-web-sys",
+]
+resolver = "2"
+
+[workspace.dependencies]
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+thiserror = "2"
+async-trait = "0.1"
+tokio = { version = "1", features = ["full"] }
+url = "2"
+log = "0.4"
+chrono = { version = "0.4", features = ["serde"] }

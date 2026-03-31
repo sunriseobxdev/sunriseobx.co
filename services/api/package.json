@@ -1,0 +1,39 @@
+{
+  "name": "sunriseobx-api",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "tsx watch src/index.ts"
+  },
+  "dependencies": {
+    "@alpaca/ts-sdk": "file:../../ts-sdk",
+    "@google-cloud/storage": "^7.19.0",
+    "bcryptjs": "^3.0.2",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "helmet": "^8.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "nodemailer": "^8.0.4",
+    "otpauth": "^9.5.0",
+    "pdfkit": "^0.18.0",
+    "pg": "^8.13.1",
+    "qrcode": "^1.5.4",
+    "redis": "^4.7.0"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.2",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/node": "^22.15.17",
+    "@types/nodemailer": "^7.0.11",
+    "@types/pdfkit": "^0.17.5",
+    "@types/pg": "^8.11.10",
+    "@types/qrcode": "^1.5.6",
+    "tsx": "^4.19.4",
+    "typescript": "^5.8.3"
+  }
+}

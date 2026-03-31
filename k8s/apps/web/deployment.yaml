@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sunriseobx-web
+  namespace: sunriseobx
+  labels:
+    app: sunriseobx-web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sunriseobx-web
+  template:
+    metadata:
+      labels:
+        app: sunriseobx-web
+    spec:
+      tolerations:
+        - key: cloud.google.com/gke-spot
+          operator: Equal
+          value: "true"
+          effect: NoSchedule
+      containers:
+        - name: web
+          image: us-central1-docker.pkg.dev/sunriseobx-proj/sunriseobx-images/web:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+              name: http
+          env:
+            - name: NODE_ENV
+              value: "production"
+            - name: NEXT_PUBLIC_API_URL
+              value: ""
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: sunriseobx-secrets
+                  key: JWT_SECRET
+          resources:
+            requests:
+              cpu: 10m
+              memory: 64Mi
+            limits:
+              cpu: 300m
+              memory: 256Mi
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 15
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 10
