@@ -125,8 +125,7 @@ export default function AuditPage() {
 
   const loadEntries = useCallback(async (offset: number, append: boolean) => {
     try {
-      const res = await apiFetch(`/api/iam/audit?limit=${LIMIT}&offset=${offset}`);
-      const data = await res.json();
+      const data = await apiFetch(`/api/iam/audit?limit=${LIMIT}&offset=${offset}`);
       const items: AuditEntry[] = Array.isArray(data) ? data : (data?.items || []);
       if (append) {
         setEntries((prev) => [...prev, ...items]);

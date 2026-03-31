@@ -33,8 +33,8 @@ export default function CampaignsPage() {
 
   async function loadCampaigns() {
     try {
-      const res = await apiFetch("/api/campaigns");
-      setCampaigns(await res.json());
+      const data = await apiFetch("/api/campaigns");
+      setCampaigns(data || []);
     } catch (err) {
       console.error(err);
     }
@@ -61,10 +61,9 @@ export default function CampaignsPage() {
   async function handlePopulate(id: string) {
     setLoading(true);
     try {
-      const res = await apiFetch(`/api/campaigns/${id}/populate`, {
+      const data = await apiFetch(`/api/campaigns/${id}/populate`, {
         method: "POST",
       });
-      const data = await res.json();
       alert(`Populated ${data.populated} recipients from ${data.total_parcels} parcels`);
       loadCampaigns();
     } catch (err) {

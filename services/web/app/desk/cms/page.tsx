@@ -32,12 +32,12 @@ export default function CmsPage() {
 
   async function loadContent() {
     try {
-      const [postsRes, projectsRes] = await Promise.all([
+      const [postsData, projectsData] = await Promise.all([
         apiFetch("/api/cms/admin/posts"),
         apiFetch("/api/cms/admin/projects"),
       ]);
-      setPosts(await postsRes.json());
-      setProjects(await projectsRes.json());
+      setPosts(postsData || []);
+      setProjects(projectsData || []);
     } catch (err) {
       console.error(err);
     }

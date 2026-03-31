@@ -55,8 +55,7 @@ export default function ParcelsPage() {
           break;
       }
 
-      const res = await apiFetch(url);
-      const data = await res.json();
+      const data = await apiFetch(url);
 
       if (searchType === "search") {
         // searchData.php returns flat array

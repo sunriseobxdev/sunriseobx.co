@@ -1,36 +1,26 @@
-export async function apiFetch(
-  path: string,
-  opts?: RequestInit
-): Promise<Response> {
-  const headers: Record<string, string> = {
-    "Content-Type": "application/json",
-  };
+const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
 
-  // Extract token from cookie (client-side)
-  if (typeof document !== "undefined") {
-    const match = document.cookie.match(/sunriseobx_token=([^;]+)/);
-    if (match) {
-      headers["Authorization"] = `Bearer ${match[1]}`;
-    }
-  }
+function getToken(): string | null {
+  if (typeof document === 'undefined') return null;
+  const match = document.cookie.match(/sunriseobx_token=([^;]+)/);
+  return match ? match[1] : null;
+}
 
-  const res = await fetch(path, {
+export async function apiFetch(path: string, opts?: RequestInit) {
+  const token = getToken();
+  const res = await fetch(`${API_URL}${path}`, {
     ...opts,
     headers: {
-      ...headers,
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...opts?.headers,
     },
   });
-
-  if (res.status === 401 && typeof window !== "undefined") {
-    window.location.href = "/login";
-    throw new Error("Unauthorized");
+  if (res.status === 401 && typeof window !== 'undefined') {
+    window.location.href = '/login';
+    throw new Error('Unauthorized');
   }
-
-  if (!res.ok) {
-    const body = await res.json().catch(() => ({ error: res.statusText }));
-    throw new Error(body.error || res.statusText);
-  }
-
-  return res;
+  if (!res.ok) throw new Error(await res.text());
+  if (res.status === 204) return null;
+  return res.json();
 }
