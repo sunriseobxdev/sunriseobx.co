@@ -16,13 +16,19 @@ parcelsRouter.use(authMiddleware);
 
 // Autocomplete search
 parcelsRouter.get("/search", async (req, res) => {
-  const term = (req.query.term as string) || "";
-  if (!term) {
-    res.json([]);
-    return;
+  try {
+    const term = (req.query.term as string) || "";
+    if (!term) {
+      res.json([]);
+      return;
+    }
+    const results = await searchParcels(term);
+    res.json(results);
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Unknown error";
+    console.error("Parcel search error:", message);
+    res.status(500).json({ error: message });
   }
-  const results = await searchParcels(term);
-  res.json(results);
 });
 
 // Owner autocomplete

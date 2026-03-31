@@ -1,8 +1,41 @@
+import https from "https";
+import dns from "dns";
+
+// Fix GKE kube-dns ndots:5 issue — prefer IPv4 and use resolve4 directly
+dns.setDefaultResultOrder("ipv4first");
+
 const GEOSERVER_BASE =
   process.env.DARECOUNTY_GEOSERVER || "https://gs.darecountync.gov/geoserver";
 const MAPS_BASE =
   process.env.DARECOUNTY_MAPS || "https://maps.darecountync.gov";
 const WFS_PATH = "/Production/wfs";
+
+// Use Node.js https module with DNS lookup override for reliability in GKE
+function httpGet(url: string): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const parsed = new URL(url);
+    const options = {
+      hostname: parsed.hostname,
+      path: parsed.pathname + parsed.search,
+      port: 443,
+      timeout: 15000,
+      headers: { "Host": parsed.hostname },
+      lookup: dns.lookup,
+    };
+    const req = https.get(options, (res) => {
+      let data = "";
+      res.on("data", (chunk: string) => (data += chunk));
+      res.on("end", () => resolve(data));
+    });
+    req.on("error", reject);
+    req.on("timeout", () => { req.destroy(); reject(new Error("timeout")); });
+  });
+}
+
+async function fetchJson(url: string): Promise<unknown> {
+  const text = await httpGet(url);
+  return JSON.parse(text);
+}
 
 const PARCEL_PROPERTIES = [
   "parcel", "pin14", "owner1", "owner2",
@@ -15,26 +48,22 @@ const PARCEL_PROPERTIES = [
 
 export async function searchParcels(term: string): Promise<unknown[]> {
   const url = `${MAPS_BASE}/searchData.php?term=${encodeURIComponent(term)}`;
-  const resp = await fetch(url);
-  return resp.json() as Promise<unknown[]>;
+  return fetchJson(url) as Promise<unknown[]>;
 }
 
 export async function searchOwners(term: string): Promise<unknown[]> {
   const url = `${MAPS_BASE}/mailSearch3.php?term=${encodeURIComponent(term)}`;
-  const resp = await fetch(url);
-  return resp.json() as Promise<unknown[]>;
+  return fetchJson(url) as Promise<unknown[]>;
 }
 
 export async function searchStreets(term: string): Promise<unknown[]> {
   const url = `${MAPS_BASE}/mailSearch.php?term=${encodeURIComponent(term)}`;
-  const resp = await fetch(url);
-  return resp.json() as Promise<unknown[]>;
+  return fetchJson(url) as Promise<unknown[]>;
 }
 
 export async function searchSubdivisions(term: string): Promise<unknown[]> {
   const url = `${MAPS_BASE}/mailSearch2.php?term=${encodeURIComponent(term)}`;
-  const resp = await fetch(url);
-  return resp.json() as Promise<unknown[]>;
+  return fetchJson(url) as Promise<unknown[]>;
 }
 
 interface WfsResponse {
@@ -61,8 +90,7 @@ async function wfsQuery(
     params.set("CQL_FILTER", cqlFilter);
   }
 
-  const resp = await fetch(`${GEOSERVER_BASE}${WFS_PATH}?${params}`);
-  return resp.json() as Promise<WfsResponse>;
+  return fetchJson(`${GEOSERVER_BASE}${WFS_PATH}?${params}`) as Promise<WfsResponse>;
 }
 
 export async function queryParcels(
