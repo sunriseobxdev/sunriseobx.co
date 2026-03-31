@@ -251,6 +251,47 @@ CREATE INDEX IF NOT EXISTS idx_campaign_recipients_campaign ON campaign_recipien
 CREATE INDEX IF NOT EXISTS idx_campaign_recipients_status ON campaign_recipients(status);
 `;
 
+const PARCELS_TABLE_SQL = `
+CREATE TABLE IF NOT EXISTS parcels (
+  id SERIAL PRIMARY KEY,
+  parcel VARCHAR(20) UNIQUE NOT NULL,
+  pin VARCHAR(20),
+  owner1 VARCHAR(255),
+  owner2 VARCHAR(255),
+  mailaddr1 VARCHAR(255),
+  mailaddr2 VARCHAR(255),
+  mailcity VARCHAR(100),
+  mailstate VARCHAR(10),
+  mailzip VARCHAR(20),
+  stnum VARCHAR(20),
+  stdir VARCHAR(10),
+  stname VARCHAR(100),
+  stsuffix VARCHAR(20),
+  stapt VARCHAR(20),
+  zipname VARCHAR(100),
+  zip VARCHAR(10),
+  subdivision VARCHAR(255),
+  lotblksec VARCHAR(255),
+  landval NUMERIC(12,2) DEFAULT 0,
+  bldgval NUMERIC(12,2) DEFAULT 0,
+  totval NUMERIC(12,2) DEFAULT 0,
+  calcacre NUMERIC(10,4),
+  puse VARCHAR(100),
+  buildtype VARCHAR(100),
+  yearbt VARCHAR(10),
+  taxdistname VARCHAR(100),
+  zoning VARCHAR(20),
+  ownership VARCHAR(10),
+  synced_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_parcels_zipname ON parcels(zipname);
+CREATE INDEX IF NOT EXISTS idx_parcels_totval ON parcels(totval);
+CREATE INDEX IF NOT EXISTS idx_parcels_mailstate ON parcels(mailstate);
+CREATE INDEX IF NOT EXISTS idx_parcels_owner1 ON parcels(owner1);
+CREATE INDEX IF NOT EXISTS idx_parcels_subdivision ON parcels(subdivision);
+`;
+
 export async function runMigrations(): Promise<void> {
   if (!process.env.DATABASE_URL) {
     console.log(
@@ -268,6 +309,7 @@ export async function runMigrations(): Promise<void> {
   await pool.query(API_KEYS_MIGRATION_SQL);
   await pool.query(CMS_MIGRATION_SQL);
   await pool.query(CAMPAIGNS_MIGRATION_SQL);
+  await pool.query(PARCELS_TABLE_SQL);
   console.log("Schema migration complete.");
 
   // Seed superadmin if not exists
