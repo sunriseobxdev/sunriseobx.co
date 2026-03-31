@@ -1,4 +1,6 @@
 import Link from "next/link";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
 const services = [
   {
@@ -36,26 +38,7 @@ const services = [
 export default function HomePage() {
   return (
     <main>
-      {/* Header */}
-      <header className="fixed top-0 w-full z-50 bg-navy-900/95 backdrop-blur-sm border-b border-navy-700">
-        <nav className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-          <Link href="/" className="text-2xl font-bold text-white">
-            <span className="text-sunrise-500">Sunrise</span> Construction
-          </Link>
-          <div className="hidden md:flex items-center gap-8">
-            <Link href="/services" className="text-navy-200 hover:text-white transition">Services</Link>
-            <Link href="/projects" className="text-navy-200 hover:text-white transition">Projects</Link>
-            <Link href="/about" className="text-navy-200 hover:text-white transition">About</Link>
-            <Link href="/contact" className="text-navy-200 hover:text-white transition">Contact</Link>
-            <Link
-              href="/contact"
-              className="bg-sunrise-600 hover:bg-sunrise-700 text-white px-5 py-2 rounded-lg font-semibold transition"
-            >
-              Get a Quote
-            </Link>
-          </div>
-        </nav>
-      </header>
+      <Header />
 
       {/* Hero */}
       <section className="relative min-h-screen flex items-center bg-navy-900">
@@ -136,47 +119,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-navy-900 py-16">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid md:grid-cols-3 gap-12">
-            <div>
-              <h3 className="text-xl font-bold text-white mb-4">
-                <span className="text-sunrise-500">Sunrise</span> Construction
-              </h3>
-              <p className="text-navy-300">
-                Premier Outer Banks construction company. Building
-                hurricane-resistant homes and coastal renovations with
-                unmatched craftsmanship.
-              </p>
-            </div>
-            <div>
-              <h4 className="text-sm font-semibold text-navy-300 uppercase tracking-wider mb-4">
-                Services
-              </h4>
-              <ul className="space-y-2 text-navy-400">
-                <li>Roof Replacements</li>
-                <li>New Siding</li>
-                <li>Window Replacement</li>
-                <li>Exterior Construction</li>
-                <li>FORTIFIED Roofing</li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="text-sm font-semibold text-navy-300 uppercase tracking-wider mb-4">
-                Contact
-              </h4>
-              <ul className="space-y-2 text-navy-400">
-                <li>Outer Banks, North Carolina</li>
-                <li>info@sunriseobx.co</li>
-              </ul>
-            </div>
-          </div>
-          <div className="mt-12 pt-8 border-t border-navy-700 text-center text-navy-500 text-sm">
-            &copy; {new Date().getFullYear()} Sunrise Construction. All rights reserved.
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </main>
   );
 }
