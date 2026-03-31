@@ -30,7 +30,7 @@ const actionColors: Record<string, string> = {
 };
 
 function ActionBadge({ action }: { action: string }) {
-  const color = actionColors[action] || '${colors.body}';
+  const color = actionColors[action] || colors.body;
   return (
     <span style={{
       display: 'inline-block',
@@ -143,7 +143,7 @@ export default function AuditPage() {
         fontFamily: 'inherit',
         fontSize: 'clamp(0.9rem, 2vw, 1.1rem)',
         letterSpacing: '0.2em',
-        color: '${colors.accent}',
+        color: colors.accent,
         textTransform: 'uppercase',
         marginBottom: '1.5rem',
       }}>
@@ -154,11 +154,11 @@ export default function AuditPage() {
         <div style={cardTitleStyle}>Activity</div>
 
         {loading ? (
-          <div style={{ color: '${colors.body}', fontFamily: 'inherit', fontSize: '0.85rem' }}>
+          <div style={{ color: colors.body, fontFamily: 'inherit', fontSize: '0.85rem' }}>
             Loading...
           </div>
         ) : entries.length === 0 ? (
-          <div style={{ color: '${colors.body}', fontFamily: 'inherit', fontSize: '0.85rem' }}>
+          <div style={{ color: colors.body, fontFamily: 'inherit', fontSize: '0.85rem' }}>
             No audit entries
           </div>
         ) : (
@@ -182,7 +182,7 @@ export default function AuditPage() {
                         <td style={tdStyle} title={absoluteTime(entry.timestamp || entry.createdAt || '')}>
                           {relativeTime(entry.timestamp || entry.createdAt || '')}
                         </td>
-                        <td style={{ ...tdStyle, color: '${colors.heading}' }}>
+                        <td style={{ ...tdStyle, color: colors.heading }}>
                           {entry.user_email || entry.userEmail || ''}
                         </td>
                         <td style={tdStyle}>
@@ -199,7 +199,7 @@ export default function AuditPage() {
                                 style={{
                                   background: 'none',
                                   border: 'none',
-                                  color: '${colors.borderLight}',
+                                  color: colors.borderLight,
                                   cursor: 'pointer',
                                   fontFamily: 'inherit',
                                   fontSize: '0.7rem',
@@ -213,11 +213,11 @@ export default function AuditPage() {
                                 <pre style={{
                                   marginTop: '0.4rem',
                                   padding: '0.5rem',
-                                  background: '#0d0d0d',
-                                  border: '1px solid #222',
+                                  background: colors.surface,
+                                  border: `1px solid ${colors.borderLight}`,
                                   borderRadius: '3px',
                                   fontSize: '0.65rem',
-                                  color: '${colors.body}',
+                                  color: colors.body,
                                   whiteSpace: 'pre-wrap',
                                   wordBreak: 'break-all',
                                   maxHeight: '200px',
@@ -252,7 +252,7 @@ export default function AuditPage() {
                     background: 'transparent',
                     border: `1px solid ${colors.borderLight}`,
                     borderRadius: '3px',
-                    color: '${colors.body}',
+                    color: colors.body,
                     fontFamily: 'inherit',
                     fontSize: '0.75rem',
                     letterSpacing: '0.08em',

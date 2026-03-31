@@ -33,7 +33,7 @@ function ChartInner() {
       theme: 'dark',
       style: '1',
       locale: 'en',
-      backgroundColor: '#0d0d0d',
+      backgroundColor: colors.surface,
       gridColor: 'rgba(201, 168, 76, 0.04)',
       hide_top_toolbar: false,
       hide_legend: false,
@@ -48,7 +48,7 @@ function ChartInner() {
       ],
       overrides: {
         'paneProperties.backgroundType': 'solid',
-        'paneProperties.background': '#0d0d0d',
+        'paneProperties.background': colors.surface,
         'paneProperties.vertGridProperties.color': 'rgba(201, 168, 76, 0.04)',
         'paneProperties.horzGridProperties.color': 'rgba(201, 168, 76, 0.04)',
         'scalesProperties.textColor': '#5a5040',
@@ -115,7 +115,7 @@ function ChartInner() {
           fontFamily: 'inherit',
           fontSize: '0.7rem',
           letterSpacing: '0.2em',
-          color: '${colors.borderLight}',
+          color: colors.borderLight,
           textTransform: 'uppercase',
         }}>
           {symbol.toUpperCase()}
@@ -128,7 +128,7 @@ function ChartInner() {
         border: `1px solid ${colors.borderLight}`,
         borderRadius: '4px',
         overflow: 'hidden',
-        background: '#0d0d0d',
+        background: colors.surface,
       }}>
         <div
           ref={widgetRef}
@@ -141,7 +141,7 @@ function ChartInner() {
       <div style={{
         fontFamily: 'inherit',
         fontSize: '0.6rem',
-        color: '${colors.body}',
+        color: colors.body,
         textAlign: 'right',
         opacity: 0.5,
         flexShrink: 0,

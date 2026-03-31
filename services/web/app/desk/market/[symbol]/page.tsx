@@ -55,7 +55,7 @@ const statLabel: React.CSSProperties = {
   fontFamily: 'inherit',
   fontSize: '0.7rem',
   letterSpacing: '0.1em',
-  color: '${colors.body}',
+  color: colors.body,
   textTransform: 'uppercase',
   marginBottom: '0.25rem',
 };
@@ -64,7 +64,7 @@ const statValue: React.CSSProperties = {
   fontFamily: 'inherit',
   fontSize: 'clamp(0.95rem, 2.5vw, 1.2rem)',
   fontWeight: 500,
-  color: '${colors.heading}',
+  color: colors.heading,
 };
 
 function formatPrice(val: number): string {
@@ -165,7 +165,7 @@ export default function TickerDetailPage() {
 
   if (loading) {
     return (
-      <div style={{ color: '${colors.body}', fontFamily: 'inherit', padding: '2rem', fontSize: '0.85rem' }}>
+      <div style={{ color: colors.body, fontFamily: 'inherit', padding: '2rem', fontSize: '0.85rem' }}>
         Loading {symbol}...
       </div>
     );
@@ -181,7 +181,7 @@ export default function TickerDetailPage() {
 
   if (!data) {
     return (
-      <div style={{ color: '${colors.body}', fontFamily: 'inherit', padding: '2rem' }}>
+      <div style={{ color: colors.body, fontFamily: 'inherit', padding: '2rem' }}>
         No data found for {symbol}
       </div>
     );
@@ -203,13 +203,13 @@ export default function TickerDetailPage() {
           style={{
             fontFamily: 'inherit',
             fontSize: '0.75rem',
-            color: '${colors.body}',
+            color: colors.body,
             textDecoration: 'none',
             letterSpacing: '0.05em',
             transition: 'color 0.2s ease',
           }}
-          onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = '${colors.accent}'; }}
-          onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = '${colors.body}'; }}
+          onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = colors.accent; }}
+          onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = colors.body; }}
         >
           &larr; Back to Market
         </Link>
@@ -223,7 +223,7 @@ export default function TickerDetailPage() {
               fontFamily: 'inherit',
               fontSize: 'clamp(1.5rem, 4vw, 2.2rem)',
               fontWeight: 700,
-              color: '${colors.accent}',
+              color: colors.accent,
               letterSpacing: '0.05em',
             }}>
               {data.symbol}
@@ -232,7 +232,7 @@ export default function TickerDetailPage() {
               <div style={{
                 fontFamily: 'inherit',
                 fontSize: 'clamp(0.85rem, 2vw, 1rem)',
-                color: '${colors.heading}',
+                color: colors.heading,
                 marginTop: '0.2rem',
               }}>
                 {data.name}
@@ -244,7 +244,7 @@ export default function TickerDetailPage() {
                   fontFamily: 'inherit',
                   fontSize: '0.65rem',
                   letterSpacing: '0.05em',
-                  color: '${colors.heading}',
+                  color: colors.heading,
                   background: getSectorColor(data.sector),
                   padding: '0.2rem 0.5rem',
                   borderRadius: '10px',
@@ -257,7 +257,7 @@ export default function TickerDetailPage() {
                   fontFamily: 'inherit',
                   fontSize: '0.65rem',
                   letterSpacing: '0.05em',
-                  color: '${colors.heading}',
+                  color: colors.heading,
                   background: 'rgba(201, 168, 76, 0.1)',
                   padding: '0.2rem 0.5rem',
                   borderRadius: '10px',
@@ -270,7 +270,7 @@ export default function TickerDetailPage() {
                   fontFamily: 'inherit',
                   fontSize: '0.65rem',
                   letterSpacing: '0.05em',
-                  color: '${colors.body}',
+                  color: colors.body,
                   background: 'rgba(255, 255, 255, 0.05)',
                   padding: '0.2rem 0.5rem',
                   borderRadius: '10px',
@@ -287,7 +287,7 @@ export default function TickerDetailPage() {
               fontFamily: 'inherit',
               fontSize: 'clamp(1.5rem, 4vw, 2rem)',
               fontWeight: 700,
-              color: '${colors.heading}',
+              color: colors.heading,
             }}>
               {currentPrice > 0 ? formatPrice(currentPrice) : '--'}
             </div>
@@ -305,7 +305,7 @@ export default function TickerDetailPage() {
               <div style={{
                 fontFamily: 'inherit',
                 fontSize: '0.75rem',
-                color: '${colors.body}',
+                color: colors.body,
                 marginTop: '0.3rem',
               }}>
                 Vol: {formatVolume(volume)}
@@ -320,7 +320,7 @@ export default function TickerDetailPage() {
         <div style={{
           fontFamily: 'inherit',
           fontSize: '0.8rem',
-          color: '${colors.body}',
+          color: colors.body,
           padding: '0.6rem 0.8rem',
           background: 'rgba(201, 168, 76, 0.08)',
           border: '1px solid rgba(201, 168, 76, 0.15)',
@@ -338,7 +338,7 @@ export default function TickerDetailPage() {
             fontFamily: 'inherit',
             fontSize: '0.85rem',
             lineHeight: '1.6',
-            color: '${colors.heading}',
+            color: colors.heading,
           }}>
             {data.description}
           </div>
@@ -354,7 +354,7 @@ export default function TickerDetailPage() {
               <span key={tag} style={{
                 fontFamily: 'inherit',
                 fontSize: '0.7rem',
-                color: '${colors.heading}',
+                color: colors.heading,
                 background: 'rgba(201, 168, 76, 0.12)',
                 padding: '0.2rem 0.55rem',
                 borderRadius: '10px',
@@ -375,7 +375,7 @@ export default function TickerDetailPage() {
             display: 'inline-flex',
             alignItems: 'center',
             padding: '0.7rem 1.5rem',
-            background: '${colors.accent}',
+            background: colors.accent,
             color: '#0a0a0a',
             border: 'none',
             borderRadius: '3px',
@@ -389,7 +389,7 @@ export default function TickerDetailPage() {
             transition: 'background 0.3s ease',
           }}
           onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = '#b8973f'; }}
-          onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = '${colors.accent}'; }}
+          onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = colors.accent; }}
         >
           Trade
         </Link>
@@ -400,7 +400,7 @@ export default function TickerDetailPage() {
             alignItems: 'center',
             padding: '0.7rem 1.5rem',
             background: 'transparent',
-            color: '${colors.accent}',
+            color: colors.accent,
             border: `1px solid ${colors.borderLight}`,
             borderRadius: '3px',
             fontFamily: 'inherit',
@@ -501,15 +501,15 @@ export default function TickerDetailPage() {
                 fontSize: '0.75rem',
                 letterSpacing: '0.15em',
                 textTransform: 'uppercase',
-                color: activeTab === tab ? '${colors.accent}' : '${colors.body}',
+                color: activeTab === tab ? colors.accent : colors.body,
                 cursor: 'pointer',
                 transition: 'color 0.2s ease, border-color 0.2s ease',
               }}
               onMouseEnter={(e) => {
-                if (activeTab !== tab) (e.currentTarget as HTMLElement).style.color = '${colors.heading}';
+                if (activeTab !== tab) (e.currentTarget as HTMLElement).style.color = colors.heading;
               }}
               onMouseLeave={(e) => {
-                if (activeTab !== tab) (e.currentTarget as HTMLElement).style.color = '${colors.body}';
+                if (activeTab !== tab) (e.currentTarget as HTMLElement).style.color = colors.body;
               }}
             >
               {tab === 'news' ? 'News' : tab === 'fundamentals' ? 'Fundamentals' : 'Insiders'}

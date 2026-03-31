@@ -52,17 +52,17 @@ export default function DeskLayout({ children }: { children: React.ReactNode }) 
     <div className="min-h-screen bg-navy-900 flex">
       {/* Sidebar */}
       <aside
-        className={`fixed inset-y-0 left-0 z-40 w-64 bg-navy-800 border-r border-navy-700 transform transition-transform md:relative md:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-40 w-64 bg-navy-800 border-r border-navy-700 transform transition-transform md:relative md:translate-x-0 flex flex-col ${
           mobileOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        <div className="h-16 flex items-center px-6 border-b border-navy-700">
+        <div className="h-16 flex-shrink-0 flex items-center px-6 border-b border-navy-700">
           <Link href="/" className="text-lg font-bold text-white">
             <span className="text-sunrise-500">Sunrise</span> Desk
           </Link>
         </div>
 
-        <nav className="p-4 space-y-1">
+        <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
           {filteredNav.map((item) => {
             const active =
               item.href === "/desk"
@@ -73,23 +73,23 @@ export default function DeskLayout({ children }: { children: React.ReactNode }) 
                 key={item.href}
                 href={item.href}
                 onClick={() => setMobileOpen(false)}
-                className={`flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm transition ${
+                className={`flex items-center gap-3 px-4 py-2 rounded-lg text-sm transition ${
                   active
                     ? "bg-sunrise-600/20 text-sunrise-400"
                     : "text-navy-300 hover:bg-navy-700 hover:text-white"
                 }`}
               >
-                <span>{item.icon}</span>
+                <span className="text-base">{item.icon}</span>
                 {item.label}
               </Link>
             );
           })}
         </nav>
 
-        <div className="absolute bottom-0 w-full p-4 border-t border-navy-700">
+        <div className="flex-shrink-0 p-4 border-t border-navy-700">
           {user && (
-            <div className="mb-3 px-4">
-              <p className="text-sm text-white truncate">
+            <div className="mb-2 px-2">
+              <p className="text-sm text-white truncate font-medium">
                 {user.displayName || user.email}
               </p>
               <p className="text-xs text-navy-400 capitalize">{user.role}</p>

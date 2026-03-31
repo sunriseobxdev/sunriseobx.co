@@ -23,7 +23,7 @@ function statusColor(status: string): string {
     case 'canceled': case 'expired': return '#888';
     case 'rejected': return '#e05555';
     case 'new': case 'accepted': return '#2196f3';
-    default: return '${colors.body}';
+    default: return colors.body;
   }
 }
 
@@ -58,9 +58,18 @@ export default function HistoryPage() {
   }, []);
 
   if (error) {
+    const isApiKey = error.toLowerCase().includes('401') || error.toLowerCase().includes('unauthorized') || error.toLowerCase().includes('alpaca');
     return (
-      <div style={{ color: '#e05555', fontFamily: 'inherit', padding: '2rem' }}>
-        {error}
+      <div style={{ ...cardStyle, maxWidth: '600px', textAlign: 'center', margin: '2rem auto' }}>
+        <div style={{ fontSize: '2rem', marginBottom: '0.75rem' }}>{isApiKey ? '🔑' : '⚠️'}</div>
+        <h2 style={{ color: colors.heading, fontSize: '1.25rem', fontWeight: 700, marginBottom: '0.5rem' }}>
+          {isApiKey ? 'Alpaca API Not Configured' : 'Unable to Load Orders'}
+        </h2>
+        <p style={{ color: colors.body, fontSize: '0.875rem', lineHeight: 1.6 }}>
+          {isApiKey
+            ? 'Configure your Alpaca API keys in the deployment secrets to view order history.'
+            : error}
+        </p>
       </div>
     );
   }
@@ -70,11 +79,11 @@ export default function HistoryPage() {
       <div style={cardTitleStyle}>Order History</div>
 
       {loading ? (
-        <div style={{ color: '${colors.body}', fontFamily: 'inherit', fontSize: '0.85rem' }}>
+        <div style={{ color: colors.body, fontFamily: 'inherit', fontSize: '0.85rem' }}>
           Loading...
         </div>
       ) : orders.length === 0 ? (
-        <div style={{ color: '${colors.body}', fontFamily: 'inherit', fontSize: '0.85rem' }}>
+        <div style={{ color: colors.body, fontFamily: 'inherit', fontSize: '0.85rem' }}>
           No order history
         </div>
       ) : (
@@ -88,7 +97,7 @@ export default function HistoryPage() {
                     padding: '0.6rem 0.75rem',
                     fontSize: '0.65rem',
                     letterSpacing: '0.1em',
-                    color: '${colors.accent}',
+                    color: colors.accent,
                     textTransform: 'uppercase',
                     borderBottom: `1px solid ${colors.borderLight}`,
                     whiteSpace: 'nowrap',
@@ -104,8 +113,8 @@ export default function HistoryPage() {
                   <td style={{
                     padding: '0.6rem 0.75rem',
                     fontSize: '0.8rem',
-                    color: '${colors.body}',
-                    borderBottom: '1px solid #1a1a1a',
+                    color: colors.body,
+                    borderBottom: `1px solid ${colors.borderLight}`,
                     whiteSpace: 'nowrap',
                   }}>
                     {new Date(order.submitted_at).toLocaleDateString('en-US', {
@@ -120,8 +129,8 @@ export default function HistoryPage() {
                     padding: '0.6rem 0.75rem',
                     fontSize: '0.85rem',
                     fontWeight: 600,
-                    color: '${colors.heading}',
-                    borderBottom: '1px solid #1a1a1a',
+                    color: colors.heading,
+                    borderBottom: `1px solid ${colors.borderLight}`,
                   }}>
                     {order.symbol}
                   </td>
@@ -130,7 +139,7 @@ export default function HistoryPage() {
                     fontSize: '0.8rem',
                     fontWeight: 600,
                     color: order.side === 'buy' ? '#4caf50' : '#e05555',
-                    borderBottom: '1px solid #1a1a1a',
+                    borderBottom: `1px solid ${colors.borderLight}`,
                     textTransform: 'uppercase',
                   }}>
                     {order.side}
@@ -138,8 +147,8 @@ export default function HistoryPage() {
                   <td style={{
                     padding: '0.6rem 0.75rem',
                     fontSize: '0.8rem',
-                    color: '${colors.body}',
-                    borderBottom: '1px solid #1a1a1a',
+                    color: colors.body,
+                    borderBottom: `1px solid ${colors.borderLight}`,
                     textTransform: 'capitalize',
                   }}>
                     {order.type.replace('_', ' ')}
@@ -147,24 +156,24 @@ export default function HistoryPage() {
                   <td style={{
                     padding: '0.6rem 0.75rem',
                     fontSize: '0.85rem',
-                    color: '${colors.heading}',
-                    borderBottom: '1px solid #1a1a1a',
+                    color: colors.heading,
+                    borderBottom: `1px solid ${colors.borderLight}`,
                   }}>
                     {order.qty}
                   </td>
                   <td style={{
                     padding: '0.6rem 0.75rem',
                     fontSize: '0.85rem',
-                    color: '${colors.heading}',
-                    borderBottom: '1px solid #1a1a1a',
+                    color: colors.heading,
+                    borderBottom: `1px solid ${colors.borderLight}`,
                   }}>
                     {order.filled_qty}
                   </td>
                   <td style={{
                     padding: '0.6rem 0.75rem',
                     fontSize: '0.85rem',
-                    color: '${colors.heading}',
-                    borderBottom: '1px solid #1a1a1a',
+                    color: colors.heading,
+                    borderBottom: `1px solid ${colors.borderLight}`,
                   }}>
                     {order.filled_avg_price
                       ? `$${parseFloat(order.filled_avg_price).toFixed(2)}`
@@ -172,7 +181,7 @@ export default function HistoryPage() {
                   </td>
                   <td style={{
                     padding: '0.6rem 0.75rem',
-                    borderBottom: '1px solid #1a1a1a',
+                    borderBottom: `1px solid ${colors.borderLight}`,
                   }}>
                     <span style={{
                       display: 'inline-block',

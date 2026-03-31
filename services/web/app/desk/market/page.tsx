@@ -146,9 +146,18 @@ function MarketInner() {
   }
 
   if (error) {
+    const isApiKey = error.toLowerCase().includes('401') || error.toLowerCase().includes('unauthorized') || error.toLowerCase().includes('alpaca');
     return (
-      <div style={{ color: '#e05555', fontFamily: 'inherit', padding: '2rem' }}>
-        {error}
+      <div style={{ ...cardStyle, maxWidth: '600px', textAlign: 'center', margin: '2rem auto' }}>
+        <div style={{ fontSize: '2rem', marginBottom: '0.75rem' }}>{isApiKey ? '🔑' : '⚠️'}</div>
+        <h2 style={{ color: colors.heading, fontSize: '1.25rem', fontWeight: 700, marginBottom: '0.5rem' }}>
+          {isApiKey ? 'Alpaca API Not Configured' : 'Market Data Unavailable'}
+        </h2>
+        <p style={{ color: colors.body, fontSize: '0.875rem', lineHeight: 1.6 }}>
+          {isApiKey
+            ? 'To use the market data features, configure your Alpaca API keys in the deployment secrets. The trading desk uses Alpaca paper trading for live market data.'
+            : error}
+        </p>
       </div>
     );
   }
@@ -159,7 +168,7 @@ function MarketInner() {
       <div style={cardStyle}>
         <div style={cardTitleStyle}>Market Indices</div>
         {loading ? (
-          <div style={{ color: '${colors.body}', fontFamily: 'inherit', fontSize: '0.85rem' }}>
+          <div style={{ color: colors.body, fontFamily: 'inherit', fontSize: '0.85rem' }}>
             Loading...
           </div>
         ) : (
@@ -175,21 +184,21 @@ function MarketInner() {
                 style={{ textDecoration: 'none' }}
               >
                 <div style={{
-                  background: '#0d0d0d',
-                  border: '1px solid #222',
+                  background: colors.surface,
+                  border: `1px solid ${colors.borderLight}`,
                   borderRadius: '4px',
                   padding: '0.75rem',
                   cursor: 'pointer',
                   transition: 'border-color 0.2s ease',
                 }}
-                  onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.borderColor = '${colors.borderLight}'; }}
+                  onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.borderColor = colors.borderLight; }}
                   onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.borderColor = '#222'; }}
                 >
                   <div style={{
                     fontFamily: 'inherit',
                     fontSize: '0.7rem',
                     letterSpacing: '0.1em',
-                    color: '${colors.body}',
+                    color: colors.body,
                     marginBottom: '0.3rem',
                   }}>
                     {idx.symbol}
@@ -198,7 +207,7 @@ function MarketInner() {
                     fontFamily: 'inherit',
                     fontSize: 'clamp(0.95rem, 2.5vw, 1.15rem)',
                     fontWeight: 600,
-                    color: '${colors.heading}',
+                    color: colors.heading,
                     marginBottom: '0.2rem',
                   }}>
                     {formatPrice(idx.price)}
@@ -227,11 +236,11 @@ function MarketInner() {
         <div style={cardStyle}>
           <div style={cardTitleStyle}>Top Gainers</div>
           {loading ? (
-            <div style={{ color: '${colors.body}', fontFamily: 'inherit', fontSize: '0.85rem' }}>
+            <div style={{ color: colors.body, fontFamily: 'inherit', fontSize: '0.85rem' }}>
               Loading...
             </div>
           ) : gainers.length === 0 ? (
-            <div style={{ color: '${colors.body}', fontFamily: 'inherit', fontSize: '0.85rem' }}>
+            <div style={{ color: colors.body, fontFamily: 'inherit', fontSize: '0.85rem' }}>
               No data available
             </div>
           ) : (
@@ -259,7 +268,7 @@ function MarketInner() {
                         fontFamily: 'inherit',
                         fontSize: '0.85rem',
                         fontWeight: 600,
-                        color: '${colors.heading}',
+                        color: colors.heading,
                         flexShrink: 0,
                         width: '55px',
                       }}>
@@ -268,7 +277,7 @@ function MarketInner() {
                       <span style={{
                         fontFamily: 'inherit',
                         fontSize: '0.75rem',
-                        color: '${colors.body}',
+                        color: colors.body,
                         overflow: 'hidden',
                         textOverflow: 'ellipsis',
                         whiteSpace: 'nowrap',
@@ -280,7 +289,7 @@ function MarketInner() {
                       <span style={{
                         fontFamily: 'inherit',
                         fontSize: '0.85rem',
-                        color: '${colors.heading}',
+                        color: colors.heading,
                       }}>
                         {formatPrice(m.price)}
                       </span>
@@ -306,11 +315,11 @@ function MarketInner() {
         <div style={cardStyle}>
           <div style={cardTitleStyle}>Top Losers</div>
           {loading ? (
-            <div style={{ color: '${colors.body}', fontFamily: 'inherit', fontSize: '0.85rem' }}>
+            <div style={{ color: colors.body, fontFamily: 'inherit', fontSize: '0.85rem' }}>
               Loading...
             </div>
           ) : losers.length === 0 ? (
-            <div style={{ color: '${colors.body}', fontFamily: 'inherit', fontSize: '0.85rem' }}>
+            <div style={{ color: colors.body, fontFamily: 'inherit', fontSize: '0.85rem' }}>
               No data available
             </div>
           ) : (
@@ -338,7 +347,7 @@ function MarketInner() {
                         fontFamily: 'inherit',
                         fontSize: '0.85rem',
                         fontWeight: 600,
-                        color: '${colors.heading}',
+                        color: colors.heading,
                         flexShrink: 0,
                         width: '55px',
                       }}>
@@ -347,7 +356,7 @@ function MarketInner() {
                       <span style={{
                         fontFamily: 'inherit',
                         fontSize: '0.75rem',
-                        color: '${colors.body}',
+                        color: colors.body,
                         overflow: 'hidden',
                         textOverflow: 'ellipsis',
                         whiteSpace: 'nowrap',
@@ -359,7 +368,7 @@ function MarketInner() {
                       <span style={{
                         fontFamily: 'inherit',
                         fontSize: '0.85rem',
-                        color: '${colors.heading}',
+                        color: colors.heading,
                       }}>
                         {formatPrice(m.price)}
                       </span>
@@ -386,11 +395,11 @@ function MarketInner() {
       <div style={cardStyle}>
         <div style={cardTitleStyle}>Sectors</div>
         {loading ? (
-          <div style={{ color: '${colors.body}', fontFamily: 'inherit', fontSize: '0.85rem' }}>
+          <div style={{ color: colors.body, fontFamily: 'inherit', fontSize: '0.85rem' }}>
             Loading...
           </div>
         ) : sectors.length === 0 ? (
-          <div style={{ color: '${colors.body}', fontFamily: 'inherit', fontSize: '0.85rem' }}>
+          <div style={{ color: colors.body, fontFamily: 'inherit', fontSize: '0.85rem' }}>
             No sectors available
           </div>
         ) : (
@@ -407,21 +416,21 @@ function MarketInner() {
                   handleSectorFilterChange(newSector);
                 }}
                 style={{
-                  background: sectorFilter === s.name ? getSectorColor(s.name) : '#0d0d0d',
-                  border: `1px solid ${sectorFilter === s.name ? '${colors.borderLight}' : '#222'}`,
+                  background: sectorFilter === s.name ? getSectorColor(s.name) : colors.surface,
+                  border: `1px solid ${sectorFilter === s.name ? colors.borderLight : '#222'}`,
                   borderRadius: '4px',
                   padding: '0.6rem 0.75rem',
                   cursor: 'pointer',
                   textAlign: 'left',
                   transition: 'all 0.2s ease',
                 }}
-                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.borderColor = '${colors.borderLight}'; }}
+                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.borderColor = colors.borderLight; }}
                 onMouseLeave={(e) => { if (sectorFilter !== s.name) (e.currentTarget as HTMLElement).style.borderColor = '#222'; }}
               >
                 <div style={{
                   fontFamily: 'inherit',
                   fontSize: '0.8rem',
-                  color: '${colors.heading}',
+                  color: colors.heading,
                   marginBottom: '0.2rem',
                 }}>
                   {s.name}
@@ -429,7 +438,7 @@ function MarketInner() {
                 <div style={{
                   fontFamily: 'inherit',
                   fontSize: '0.65rem',
-                  color: '${colors.body}',
+                  color: colors.body,
                 }}>
                   {s.count} ticker{s.count !== 1 ? 's' : ''}
                 </div>
@@ -460,7 +469,7 @@ function MarketInner() {
               onChange={(e) => handleSearchChange(e.target.value)}
               placeholder="Search by symbol or name..."
               style={inputStyle}
-              onFocus={(e) => { e.target.style.borderColor = '${colors.accent}'; }}
+              onFocus={(e) => { e.target.style.borderColor = colors.accent; }}
               onBlur={(e) => { e.target.style.borderColor = '#333'; }}
             />
           </div>
@@ -480,11 +489,11 @@ function MarketInner() {
 
         {/* Ticker Grid */}
         {tickersLoading ? (
-          <div style={{ color: '${colors.body}', fontFamily: 'inherit', fontSize: '0.85rem' }}>
+          <div style={{ color: colors.body, fontFamily: 'inherit', fontSize: '0.85rem' }}>
             Loading tickers...
           </div>
         ) : tickers.length === 0 ? (
-          <div style={{ color: '${colors.body}', fontFamily: 'inherit', fontSize: '0.85rem' }}>
+          <div style={{ color: colors.body, fontFamily: 'inherit', fontSize: '0.85rem' }}>
             No tickers found
           </div>
         ) : (
@@ -500,22 +509,22 @@ function MarketInner() {
                 style={{ textDecoration: 'none' }}
               >
                 <div style={{
-                  background: '#0d0d0d',
-                  border: '1px solid #222',
+                  background: colors.surface,
+                  border: `1px solid ${colors.borderLight}`,
                   borderRadius: '4px',
                   padding: '0.75rem',
                   cursor: 'pointer',
                   transition: 'border-color 0.2s ease',
                   height: '100%',
                 }}
-                  onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.borderColor = '${colors.borderLight}'; }}
+                  onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.borderColor = colors.borderLight; }}
                   onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.borderColor = '#222'; }}
                 >
                   <div style={{
                     fontFamily: 'inherit',
                     fontSize: '1.1rem',
                     fontWeight: 700,
-                    color: '${colors.accent}',
+                    color: colors.accent,
                     marginBottom: '0.3rem',
                   }}>
                     {t.symbol}
@@ -523,7 +532,7 @@ function MarketInner() {
                   <div style={{
                     fontFamily: 'inherit',
                     fontSize: '0.75rem',
-                    color: '${colors.body}',
+                    color: colors.body,
                     marginBottom: '0.5rem',
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
@@ -537,7 +546,7 @@ function MarketInner() {
                         fontFamily: 'inherit',
                         fontSize: '0.6rem',
                         letterSpacing: '0.05em',
-                        color: '${colors.heading}',
+                        color: colors.heading,
                         background: getSectorColor(t.sector),
                         padding: '0.15rem 0.4rem',
                         borderRadius: '10px',
@@ -551,7 +560,7 @@ function MarketInner() {
                         fontFamily: 'inherit',
                         fontSize: '0.6rem',
                         letterSpacing: '0.05em',
-                        color: '${colors.body}',
+                        color: colors.body,
                         background: 'rgba(255, 255, 255, 0.05)',
                         padding: '0.15rem 0.4rem',
                         borderRadius: '10px',
