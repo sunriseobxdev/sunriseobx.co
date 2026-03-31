@@ -13,9 +13,11 @@ function getClientIp(req: import("express").Request): string {
 }
 
 contactRouter.post("/contact", async (req, res) => {
-  const { name, email, message } = req.body as {
+  const { name, email, phone, subject, message } = req.body as {
     name?: string;
     email?: string;
+    phone?: string;
+    subject?: string;
     message?: string;
   };
 
@@ -63,17 +65,27 @@ contactRouter.post("/contact", async (req, res) => {
       },
     });
 
+    const subjectLine = subject
+      ? `Sunrise OBX Lead: ${subject} — ${name}`
+      : `Sunrise OBX Lead: ${name}`;
+
     await transporter.sendMail({
-      from: `"Sprimage Contact" <${smtpUser}>`,
+      from: `"Sunrise Construction" <${smtpUser}>`,
       to: smtpUser,
       replyTo: `"${name}" <${email}>`,
-      subject: `Contact Form: ${name}`,
-      text: `Name: ${name}\nEmail: ${email}\n\n${message}`,
-      html: `<h3>New Contact Form Submission</h3>
-<p><strong>Name:</strong> ${escapeHtml(name)}</p>
-<p><strong>Email:</strong> ${escapeHtml(email)}</p>
-<hr>
-<p>${escapeHtml(message).replace(/\n/g, "<br>")}</p>`,
+      subject: subjectLine,
+      text: `New lead from sunriseobx.co\n\nName: ${name}\nEmail: ${email}\nPhone: ${phone || "Not provided"}\nService: ${subject || "Not specified"}\n\n${message}`,
+      html: `<div style="font-family:sans-serif;max-width:600px">
+<h2 style="color:#ea580c">New Lead from sunriseobx.co</h2>
+<table style="border-collapse:collapse;width:100%">
+<tr><td style="padding:8px;font-weight:bold;color:#334e68">Name</td><td style="padding:8px">${escapeHtml(name)}</td></tr>
+<tr style="background:#f0f4f8"><td style="padding:8px;font-weight:bold;color:#334e68">Email</td><td style="padding:8px"><a href="mailto:${escapeHtml(email)}">${escapeHtml(email)}</a></td></tr>
+<tr><td style="padding:8px;font-weight:bold;color:#334e68">Phone</td><td style="padding:8px">${phone ? `<a href="tel:${escapeHtml(phone)}">${escapeHtml(phone)}</a>` : "Not provided"}</td></tr>
+<tr style="background:#f0f4f8"><td style="padding:8px;font-weight:bold;color:#334e68">Service</td><td style="padding:8px">${escapeHtml(subject || "Not specified")}</td></tr>
+</table>
+<hr style="border:none;border-top:1px solid #ddd;margin:16px 0">
+<p style="color:#334e68;line-height:1.6">${escapeHtml(message).replace(/\n/g, "<br>")}</p>
+</div>`,
     });
 
     recentSubmissions.set(ip, Date.now());
