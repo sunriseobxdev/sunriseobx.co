@@ -4,7 +4,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Blog | Sunrise Construction - Outer Banks",
+  title: "Blog & Resources",
   description:
     "Construction tips, product guides, and news from Sunrise Construction on the Outer Banks.",
 };

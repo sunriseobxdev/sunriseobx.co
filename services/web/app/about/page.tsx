@@ -5,7 +5,7 @@ import Image from "next/image";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "About Us | Sunrise Construction - Outer Banks",
+  title: "About Us",
   description:
     "Learn about Sunrise Construction — the Outer Banks' premier construction company. Founded with a mission to redefine excellence in coastal construction.",
 };

@@ -4,7 +4,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Services | Sunrise Construction - Outer Banks",
+  title: "Our Services",
   description:
     "Roofing, siding, windows, exterior construction, and FORTIFIED roofing services for the Outer Banks. Certified CertainTeed ShingleMaster and Wincore Windows dealer.",
 };
