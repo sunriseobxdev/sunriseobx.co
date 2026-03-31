@@ -22,11 +22,21 @@ parcelsRouter.post("/sync", async (req, res) => {
     const { parcels } = await wfsQueryParcels(null, 60000);
     console.log(`Fetched ${parcels.length} parcels from GeoServer`);
 
+    // Deduplicate by parcel number (GeoServer can return duplicates)
+    const seen = new Set<string>();
+    const dedupedParcels = parcels.filter((p) => {
+      const key = String(p.parcel || "").trim();
+      if (!key || seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+    console.log(`Deduped to ${dedupedParcels.length} unique parcels`);
+
     // Upsert in batches
     let upserted = 0;
     const batchSize = 500;
-    for (let i = 0; i < parcels.length; i += batchSize) {
-      const batch = parcels.slice(i, i + batchSize);
+    for (let i = 0; i < dedupedParcels.length; i += batchSize) {
+      const batch = dedupedParcels.slice(i, i + batchSize);
       const values: unknown[] = [];
       const placeholders: string[] = [];
 
