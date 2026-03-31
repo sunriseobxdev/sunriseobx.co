@@ -13,142 +13,297 @@ const services = [
   {
     id: "roofing",
     title: "Roof Replacements",
-    image: "/img/GuysOnARoof-min.jpg",
+    subtitle: "CertainTeed ShingleMaster Certified",
+    image: "/img/roofReplacements.jpeg",
     description:
-      "When it's time to replace your roof, our consultants will meet with you to inspect your current roof and discuss replacement options. We specialize in the installation, service, and maintenance of Shingle and TPO roof systems.",
+      "When it's time to replace your roof, our consultants meet with you to inspect your current system and discuss the best replacement options for your coastal home. We specialize in shingle and TPO roof systems built to withstand Outer Banks weather.",
     features: [
       "Certified CertainTeed ShingleMaster Installers",
-      "Enhanced warranty coverage backed by CertainTeed",
-      "Low-E ThermaSheet insulated roofing underlayment",
-      "Shingle and TPO roof systems",
+      "Sure Start Plus enhanced warranty coverage",
+      "Low-E ThermaSheet insulated underlayment",
+      "Shingle and TPO systems",
       "Complete tear-off and replacement",
-      "Storm damage repair and insurance claims",
+      "Insurance claim assistance",
     ],
     highlight:
-      "We are Certified CertainTeed\u00ae Shingle Masters! Homeowners benefit from enhanced warranty coverage \u2014 Sure Start Plus extended warranty.",
+      "As Certified CertainTeed\u00ae ShingleMasters, we deliver roofing with enhanced warranty coverage that gives you — and your insurer — total confidence.",
+    bgColor: "bg-navy-900",
+    textColor: "text-white",
   },
   {
     id: "siding",
-    title: "New Siding Makeover",
-    image: "/img/about-one.jpeg",
+    title: "Premium Siding",
+    subtitle: "Low-E HouseWrap Technology",
+    image: "/img/newSidingMakeover.jpeg",
     description:
-      "Craftsmanship is at the heart of everything we do. Our team brings years of experience to every siding installation and trim project, ensuring seamless integration and exceptional attention to detail.",
+      "Our team of skilled artisans brings years of experience to every siding installation. Whether you prefer classic styles or modern designs, we approach each project with a commitment to craftsmanship that transforms your vision into reality.",
     features: [
       "Classic and modern siding designs",
-      "Low-E HouseWrap for maximum energy savings",
-      "Blocks 97% of radiant heat",
+      "Low-E HouseWrap — blocks 97% radiant heat",
+      "Adds R-Value to your wall system",
+      "Meets IECC Code without 2x6 framing",
       "Built-in overlap for full coverage",
-      "Helps meet IECC Code requirements",
       "Professional trim and accent work",
     ],
     highlight:
-      "Low-E HouseWrap adds R-Value to your wall system, increases energy savings, and provides a thermal break \u2014 used by top builders nationwide.",
+      "Low-E HouseWrap provides a thermal break between the elements and your home — used by top builders and remodelers nationwide.",
+    bgColor: "bg-white",
+    textColor: "text-navy-900",
   },
   {
     id: "windows",
-    title: "Window Replacement",
-    image: "/img/about-two.jpeg",
+    title: "Wincore Windows",
+    subtitle: "Hurricane-Resistant & Energy Efficient",
+    image: "/img/windowReplacements.jpg",
     description:
-      "New windows improve comfort by regulating temperature and reducing drafts, enhance appearance, and increase value. We install high-quality Wincore\u00ae Windows with beautiful aesthetics and optimal functionality.",
+      "New windows regulate temperature, reduce drafts, enhance your home's appearance, and increase property value. Our expert installation of Wincore\u00ae Windows delivers both beauty and performance with industry-leading warranties.",
     features: [
-      "Authorized Wincore Windows dealer",
+      "Authorized Wincore\u00ae dealer",
       "Hurricane-resistant glass options",
       "Energy-efficient Low-E coatings",
-      "Salt air corrosion protection",
-      "Industry-leading warranties",
-      "Professional measurement and installation",
+      "Coastal salt air corrosion protection",
+      "Industry-leading transferable warranty",
+      "Professional measurement & installation",
     ],
     highlight:
-      "Through your purchase of Wincore\u00ae products, a portion supports Tough Enough To Wear Pink\u2122 \u2014 supporting breast cancer research.",
+      "With every Wincore\u00ae purchase, a portion supports Tough Enough To Wear Pink\u2122 — advancing breast cancer research.",
+    bgColor: "bg-navy-50",
+    textColor: "text-navy-900",
   },
   {
     id: "exterior",
     title: "Exterior Construction",
+    subtitle: "Built for the Outer Banks",
     image: "/img/Beach-houses-1500.jpg",
     description:
-      "Complete exterior renovation and new construction built to withstand Outer Banks weather. From coastal underpinning to hurricane-resistant porches, we build structures that last.",
+      "Complete exterior renovation and new construction engineered to withstand the Outer Banks' unique challenges — salt air, high winds, flooding, and UV exposure. We build structures that protect your family and investment.",
     features: [
-      "Coastal underpinning and structural work",
+      "Coastal underpinning & structural work",
       "Hurricane-resistant porch construction",
-      "Beachfront and oceanfront builds",
-      "Deck construction and renovation",
-      "Structural improvements and additions",
+      "Beachfront & oceanfront builds",
+      "Deck construction & renovation",
+      "Structural improvements & additions",
       "Storm-ready coastal design",
     ],
     highlight:
-      "Specialized in Outer Banks coastal construction \u2014 our builds are engineered for salt air, high winds, and storm surge.",
+      "Our exterior builds are specifically engineered for the OBX — we understand the unique demands of coastal construction like no one else.",
+    bgColor: "bg-navy-900",
+    textColor: "text-white",
   },
   {
     id: "fortified",
     title: "FORTIFIED Roofing",
-    image: "/img/ShingleMaster.PNG",
+    subtitle: "IBHS Certified — Up to 50% Insurance Savings",
+    image: "/img/solarDefense.jpg",
     description:
-      "IBHS FORTIFIED-certified roofing systems provide maximum protection against hurricanes, severe storms, and high winds. Earn insurance premium discounts while protecting your home.",
+      "IBHS FORTIFIED roofing systems provide maximum protection against hurricanes and severe storms. Independently verified by trained evaluators, FORTIFIED homes sustain significantly less damage — and many insurers reward that with substantial premium reductions.",
     features: [
       "IBHS FORTIFIED certification",
       "Up to 50% insurance premium discounts",
       "Impact-resistant roofing materials",
       "Sealed roof deck technology",
-      "Wind-rated ridge vents and edge metal",
-      "Third-party verification and inspection",
+      "Wind-rated ridge vents & edge metal",
+      "Third-party verification & inspection",
     ],
     highlight:
-      "FORTIFIED homes sustain significantly less damage in hurricanes \u2014 and many insurers offer substantial premium discounts.",
+      "FORTIFIED is not just a building standard — it's proof your home is built to a higher level. Many NC and VA insurers offer significant premium discounts.",
+    bgColor: "bg-white",
+    textColor: "text-navy-900",
   },
 ];
 
 export default function ServicesPage() {
   return (
-    <main className="min-h-screen bg-white">
+    <main className="overflow-hidden">
       <Header />
 
-      <section className="pt-28 pb-16 bg-navy-900">
-        <div className="max-w-7xl mx-auto px-6">
-          <h1 className="text-4xl md:text-5xl font-bold text-white">Our Services</h1>
-          <p className="mt-4 text-lg text-navy-300 max-w-2xl">
-            From roofing to complete exterior renovation, we deliver craftsmanship built for coastal living on the Outer Banks.
+      {/* Hero */}
+      <section className="relative pt-28 pb-20 lg:pb-28 bg-navy-900">
+        <div className="absolute inset-0 opacity-20">
+          <img src="/img/GuysOnARoof-min.jpg" alt="" className="w-full h-full object-cover" />
+        </div>
+        <div className="relative max-w-7xl mx-auto px-6">
+          <p className="text-sunrise-400 font-semibold text-sm tracking-widest uppercase mb-4">
+            Our Services
+          </p>
+          <h1 className="text-5xl md:text-6xl font-extrabold text-white leading-tight">
+            Expert Craftsmanship for
+            <br />
+            <span className="text-sunrise-400">Every Exterior Surface</span>
+          </h1>
+          <p className="mt-6 text-xl text-navy-300 max-w-2xl">
+            From roofing to windows to complete exterior renovation — certified,
+            insured, and built for the Outer Banks.
           </p>
         </div>
       </section>
 
-      <section className="py-20">
-        <div className="max-w-7xl mx-auto px-6 space-y-24">
-          {services.map((service, i) => (
+      {/* Services */}
+      {services.map((service, i) => (
+        <section
+          key={service.id}
+          id={service.id}
+          className={`${service.bgColor} py-20 lg:py-28`}
+        >
+          <div className="max-w-7xl mx-auto px-6">
             <div
-              key={service.id}
-              id={service.id}
-              className={`flex flex-col ${i % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse"} gap-12 items-center`}
+              className={`flex flex-col ${
+                i % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse"
+              } gap-12 lg:gap-20 items-center`}
             >
+              {/* Image */}
               <div className="lg:w-1/2">
-                <img src={service.image} alt={service.title} className="rounded-2xl shadow-lg w-full h-80 object-cover" />
-              </div>
-              <div className="lg:w-1/2">
-                <h2 className="text-3xl font-bold text-navy-900">{service.title}</h2>
-                <p className="mt-4 text-navy-600 leading-relaxed">{service.description}</p>
-                <div className="mt-6 bg-sunrise-50 border border-sunrise-200 rounded-xl p-4">
-                  <p className="text-sm text-sunrise-800">{service.highlight}</p>
+                <div className="relative overflow-hidden rounded-2xl shadow-2xl">
+                  <img
+                    src={service.image}
+                    alt={service.title}
+                    className="w-full h-[400px] lg:h-[500px] object-cover"
+                  />
+                  <div className="absolute top-4 left-4">
+                    <span className="px-4 py-2 bg-sunrise-600 text-white text-xs font-bold rounded-full uppercase tracking-wider">
+                      {service.subtitle}
+                    </span>
+                  </div>
                 </div>
-                <ul className="mt-6 grid sm:grid-cols-2 gap-3">
+              </div>
+
+              {/* Content */}
+              <div className="lg:w-1/2">
+                <h2
+                  className={`text-3xl lg:text-4xl font-extrabold ${
+                    service.textColor === "text-white"
+                      ? "text-white"
+                      : "text-navy-900"
+                  }`}
+                >
+                  {service.title}
+                </h2>
+                <p
+                  className={`mt-5 text-lg leading-relaxed ${
+                    service.textColor === "text-white"
+                      ? "text-navy-300"
+                      : "text-navy-600"
+                  }`}
+                >
+                  {service.description}
+                </p>
+
+                {/* Highlight box */}
+                <div
+                  className={`mt-6 p-5 rounded-xl border ${
+                    service.textColor === "text-white"
+                      ? "bg-sunrise-600/10 border-sunrise-500/20"
+                      : "bg-sunrise-50 border-sunrise-200"
+                  }`}
+                >
+                  <p
+                    className={`text-sm leading-relaxed ${
+                      service.textColor === "text-white"
+                        ? "text-sunrise-200"
+                        : "text-sunrise-800"
+                    }`}
+                  >
+                    {service.highlight}
+                  </p>
+                </div>
+
+                {/* Features grid */}
+                <ul className="mt-8 grid sm:grid-cols-2 gap-3">
                   {service.features.map((f) => (
-                    <li key={f} className="flex items-start gap-2 text-sm text-navy-600">
-                      <span className="text-sunrise-500 mt-0.5">&#10003;</span>
-                      {f}
+                    <li key={f} className="flex items-start gap-2.5">
+                      <svg
+                        className="w-5 h-5 text-sunrise-500 flex-shrink-0 mt-0.5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={2.5}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M5 13l4 4L19 7"
+                        />
+                      </svg>
+                      <span
+                        className={`text-sm ${
+                          service.textColor === "text-white"
+                            ? "text-navy-200"
+                            : "text-navy-600"
+                        }`}
+                      >
+                        {f}
+                      </span>
                     </li>
                   ))}
                 </ul>
               </div>
             </div>
-          ))}
+          </div>
+        </section>
+      ))}
+
+      {/* Process section */}
+      <section className="py-24 lg:py-32 bg-navy-50">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <p className="text-sunrise-600 font-semibold text-sm tracking-widest uppercase mb-3">
+              How It Works
+            </p>
+            <h2 className="text-4xl font-extrabold text-navy-900">
+              Our Simple 4-Step Process
+            </h2>
+          </div>
+          <div className="grid md:grid-cols-4 gap-8">
+            {[
+              { step: "01", title: "Free Consultation", desc: "We visit your property, assess your needs, and discuss options that fit your budget and goals." },
+              { step: "02", title: "Detailed Estimate", desc: "You receive a transparent, itemized estimate with no hidden costs. We can work directly with your insurer." },
+              { step: "03", title: "Expert Installation", desc: "Our certified crew completes your project with precision, keeping you informed at every stage." },
+              { step: "04", title: "Final Walkthrough", desc: "We inspect every detail together. Your satisfaction is guaranteed, backed by industry-leading warranties." },
+            ].map((item) => (
+              <div key={item.step} className="text-center">
+                <div className="w-16 h-16 mx-auto rounded-2xl bg-sunrise-600 text-white flex items-center justify-center text-2xl font-extrabold mb-5">
+                  {item.step}
+                </div>
+                <h3 className="text-lg font-bold text-navy-900">{item.title}</h3>
+                <p className="mt-2 text-sm text-navy-500 leading-relaxed">
+                  {item.desc}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
-      <section className="py-20 bg-sunrise-600">
-        <div className="max-w-4xl mx-auto px-6 text-center">
-          <h2 className="text-3xl font-bold text-white">Ready to Get Started?</h2>
-          <p className="mt-4 text-sunrise-100">Contact us today for a free consultation and estimate on your project.</p>
-          <Link href="/contact" className="inline-block mt-8 bg-white text-sunrise-700 px-10 py-4 rounded-lg text-lg font-bold hover:bg-sunrise-50 transition shadow-lg">
-            Request a Free Quote
-          </Link>
+      {/* CTA */}
+      <section className="relative py-24 lg:py-32">
+        <div className="absolute inset-0">
+          <img src="/img/f-3.jpg" alt="" className="w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-navy-900/80" />
+        </div>
+        <div className="relative max-w-4xl mx-auto px-6 text-center">
+          <h2 className="text-4xl lg:text-5xl font-extrabold text-white leading-tight">
+            Let&apos;s Talk About
+            <br />
+            <span className="text-sunrise-400">Your Project</span>
+          </h2>
+          <p className="mt-6 text-lg text-navy-200 max-w-2xl mx-auto">
+            Free estimates, expert advice, and honest pricing. Call us today or
+            fill out our contact form — we respond within 24 hours.
+          </p>
+          <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
+            <Link
+              href="/contact"
+              className="bg-sunrise-600 hover:bg-sunrise-500 text-white px-10 py-4 rounded-xl text-lg font-bold transition-all shadow-lg shadow-sunrise-600/25"
+            >
+              Request Free Estimate
+            </Link>
+            <a
+              href="tel:+12526197966"
+              className="backdrop-blur-sm bg-white/10 hover:bg-white/20 text-white px-10 py-4 rounded-xl text-lg font-semibold transition-all border border-white/20"
+            >
+              Call (252) 619-7966
+            </a>
+          </div>
         </div>
       </section>
 
