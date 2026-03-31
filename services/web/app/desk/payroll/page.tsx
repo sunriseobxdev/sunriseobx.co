@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { apiFetch } from '@/lib/api';
 import { useAuthStore } from '@/lib/store';
+import { cardStyle, cardTitleStyle, inputStyle, labelStyle, buttonPrimary, buttonSecondary, colors, thStyle, tdStyle, tableStyle } from '@/lib/desk-styles';
 
 interface Employee {
   id: string;
@@ -27,91 +28,6 @@ interface Paystub {
   total_deductions: string;
   pdf_path: string;
 }
-
-const cardStyle: React.CSSProperties = {
-  background: '#111',
-  border: '1px solid var(--color-gold-dark)',
-  borderRadius: '4px',
-  padding: 'clamp(1rem, 3vw, 1.5rem)',
-  marginBottom: '1.5rem',
-};
-
-const cardTitleStyle: React.CSSProperties = {
-  fontFamily: 'var(--font-serif)',
-  fontSize: '0.75rem',
-  letterSpacing: '0.2em',
-  color: 'var(--color-gold)',
-  marginBottom: '1.2rem',
-  textTransform: 'uppercase',
-};
-
-const inputStyle: React.CSSProperties = {
-  width: '100%',
-  padding: '0.55rem 0.75rem',
-  background: '#1a1a1a',
-  border: '1px solid #333',
-  borderRadius: '3px',
-  color: 'var(--color-text)',
-  fontFamily: 'var(--font-sans)',
-  fontSize: '0.85rem',
-  outline: 'none',
-};
-
-const labelStyle: React.CSSProperties = {
-  display: 'block',
-  fontFamily: 'var(--font-sans)',
-  fontSize: '0.65rem',
-  letterSpacing: '0.1em',
-  color: 'var(--color-gold)',
-  textTransform: 'uppercase',
-  marginBottom: '0.35rem',
-};
-
-const primaryBtnStyle: React.CSSProperties = {
-  padding: '0.55rem 1.2rem',
-  background: 'var(--color-gold)',
-  border: 'none',
-  borderRadius: '3px',
-  color: '#0a0a0a',
-  fontFamily: 'var(--font-sans)',
-  fontSize: '0.75rem',
-  fontWeight: 600,
-  letterSpacing: '0.08em',
-  textTransform: 'uppercase',
-  cursor: 'pointer',
-};
-
-const secondaryBtnStyle: React.CSSProperties = {
-  padding: '0.4rem 0.8rem',
-  background: 'transparent',
-  border: '1px solid #333',
-  borderRadius: '3px',
-  color: 'var(--color-text-muted)',
-  fontFamily: 'var(--font-sans)',
-  fontSize: '0.7rem',
-  letterSpacing: '0.06em',
-  textTransform: 'uppercase',
-  cursor: 'pointer',
-};
-
-const thStyle: React.CSSProperties = {
-  padding: '0.5rem 0.75rem',
-  fontFamily: 'var(--font-sans)',
-  fontSize: '0.65rem',
-  letterSpacing: '0.08em',
-  textTransform: 'uppercase',
-  color: 'var(--color-gold-dark)',
-  borderBottom: '1px solid #1a1a1a',
-  textAlign: 'left',
-};
-
-const tdStyle: React.CSSProperties = {
-  padding: '0.5rem 0.75rem',
-  fontFamily: 'var(--font-sans)',
-  fontSize: '0.8rem',
-  color: 'var(--color-text)',
-  borderBottom: '1px solid #1a1a1a',
-};
 
 function usd(n: string | number): string {
   return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(Number(n));
@@ -217,26 +133,26 @@ export default function PayrollPage() {
     <div style={{ maxWidth: '900px', animation: 'fadeSlideUp 0.3s ease' }}>
       {flash && (
         <div style={{
-          padding: '0.6rem 1rem', marginBottom: '1rem', borderRadius: '3px',
-          fontFamily: 'var(--font-sans)', fontSize: '0.8rem',
-          color: flash.type === 'success' ? '#4caf50' : '#e05555',
-          background: flash.type === 'success' ? 'rgba(76,175,80,0.1)' : 'rgba(224,85,85,0.1)',
-          border: `1px solid ${flash.type === 'success' ? 'rgba(76,175,80,0.3)' : 'rgba(224,85,85,0.3)'}`,
+          padding: '0.6rem 1rem', marginBottom: '1rem', borderRadius: '8px',
+          fontSize: '0.8rem',
+          color: flash.type === 'success' ? colors.success : colors.danger,
+          background: flash.type === 'success' ? colors.successBg : colors.dangerBg,
+          border: `1px solid ${flash.type === 'success' ? 'rgba(16,185,129,0.3)' : 'rgba(239,68,68,0.3)'}`,
         }}>
           {flash.msg}
         </div>
       )}
 
       {view === 'list' && (
-        <div style={cardStyle}>
+        <div style={{ ...cardStyle, marginBottom: '1.5rem' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.2rem' }}>
             <h2 style={{ ...cardTitleStyle, marginBottom: 0 }}>Employees</h2>
             {canManage && (
-              <button onClick={() => setView('create')} style={primaryBtnStyle}>Add Employee</button>
+              <button onClick={() => setView('create')} style={buttonPrimary}>Add Employee</button>
             )}
           </div>
           <div style={{ overflowX: 'auto' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+            <table style={tableStyle}>
               <thead>
                 <tr>
                   <th style={thStyle}>ID</th>
@@ -256,12 +172,12 @@ export default function PayrollPage() {
                     <td style={tdStyle}>{usd(emp.annual_salary)}</td>
                     <td style={tdStyle}>{new Date(emp.start_date).toLocaleDateString()}</td>
                     <td style={tdStyle}>
-                      <button onClick={() => selectEmployee(emp)} style={secondaryBtnStyle}>View</button>
+                      <button onClick={() => selectEmployee(emp)} style={buttonSecondary}>View</button>
                     </td>
                   </tr>
                 ))}
                 {employees.length === 0 && (
-                  <tr><td colSpan={6} style={{ ...tdStyle, textAlign: 'center', color: 'var(--color-text-muted)' }}>No employees</td></tr>
+                  <tr><td colSpan={6} style={{ ...tdStyle, textAlign: 'center', color: colors.muted }}>No employees</td></tr>
                 )}
               </tbody>
             </table>
@@ -270,10 +186,10 @@ export default function PayrollPage() {
       )}
 
       {view === 'create' && (
-        <div style={cardStyle}>
+        <div style={{ ...cardStyle, marginBottom: '1.5rem' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.2rem' }}>
             <h2 style={{ ...cardTitleStyle, marginBottom: 0 }}>Add Employee</h2>
-            <button onClick={() => setView('list')} style={secondaryBtnStyle}>Back</button>
+            <button onClick={() => setView('list')} style={buttonSecondary}>Back</button>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.8rem' }}>
             <div><label style={labelStyle}>Employee ID *</label><input style={inputStyle} value={form.employeeId} onChange={F('employeeId')} /></div>
@@ -299,7 +215,7 @@ export default function PayrollPage() {
             <div><label style={labelStyle}>Bank Account (Last 4)</label><input style={inputStyle} maxLength={4} value={form.bankAccountLastFour} onChange={F('bankAccountLastFour')} /></div>
           </div>
           <div style={{ marginTop: '1.2rem' }}>
-            <button onClick={handleCreateEmployee} disabled={loading} style={{ ...primaryBtnStyle, opacity: loading ? 0.6 : 1 }}>
+            <button onClick={handleCreateEmployee} disabled={loading} style={{ ...buttonPrimary, opacity: loading ? 0.6 : 1 }}>
               {loading ? 'Creating...' : 'Create Employee'}
             </button>
           </div>
@@ -308,34 +224,34 @@ export default function PayrollPage() {
 
       {view === 'detail' && selectedEmployee && (
         <>
-          <div style={cardStyle}>
+          <div style={{ ...cardStyle, marginBottom: '1.5rem' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.2rem' }}>
               <h2 style={{ ...cardTitleStyle, marginBottom: 0 }}>{selectedEmployee.full_name}</h2>
-              <button onClick={() => setView('list')} style={secondaryBtnStyle}>Back</button>
+              <button onClick={() => setView('list')} style={buttonSecondary}>Back</button>
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '0.8rem', fontFamily: 'var(--font-sans)', fontSize: '0.8rem' }}>
-              <div><span style={{ color: 'var(--color-text-muted)', fontSize: '0.65rem', textTransform: 'uppercase' }}>Employee ID</span><div style={{ color: 'var(--color-text)' }}>{selectedEmployee.employee_id}</div></div>
-              <div><span style={{ color: 'var(--color-text-muted)', fontSize: '0.65rem', textTransform: 'uppercase' }}>Salary</span><div style={{ color: 'var(--color-text)' }}>{usd(selectedEmployee.annual_salary)}</div></div>
-              <div><span style={{ color: 'var(--color-text-muted)', fontSize: '0.65rem', textTransform: 'uppercase' }}>Start Date</span><div style={{ color: 'var(--color-text)' }}>{new Date(selectedEmployee.start_date).toLocaleDateString()}</div></div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '0.8rem', fontSize: '0.8rem' }}>
+              <div><span style={{ color: colors.muted, fontSize: '0.65rem', textTransform: 'uppercase' }}>Employee ID</span><div style={{ color: colors.heading }}>{selectedEmployee.employee_id}</div></div>
+              <div><span style={{ color: colors.muted, fontSize: '0.65rem', textTransform: 'uppercase' }}>Salary</span><div style={{ color: colors.heading }}>{usd(selectedEmployee.annual_salary)}</div></div>
+              <div><span style={{ color: colors.muted, fontSize: '0.65rem', textTransform: 'uppercase' }}>Start Date</span><div style={{ color: colors.heading }}>{new Date(selectedEmployee.start_date).toLocaleDateString()}</div></div>
             </div>
           </div>
 
-          <div style={cardStyle}>
+          <div style={{ ...cardStyle, marginBottom: '1.5rem' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.2rem' }}>
               <h2 style={{ ...cardTitleStyle, marginBottom: 0 }}>Paystubs</h2>
               {canManage && (
                 <div style={{ display: 'flex', gap: '0.5rem' }}>
-                  <button onClick={() => generatePaystubs(new Date().getFullYear())} disabled={loading} style={{ ...primaryBtnStyle, opacity: loading ? 0.6 : 1 }}>
+                  <button onClick={() => generatePaystubs(new Date().getFullYear())} disabled={loading} style={{ ...buttonPrimary, opacity: loading ? 0.6 : 1 }}>
                     {loading ? 'Generating...' : `Generate ${new Date().getFullYear()}`}
                   </button>
-                  <button onClick={() => generatePaystubs(new Date().getFullYear() - 1)} disabled={loading} style={secondaryBtnStyle}>
+                  <button onClick={() => generatePaystubs(new Date().getFullYear() - 1)} disabled={loading} style={buttonSecondary}>
                     {new Date().getFullYear() - 1}
                   </button>
                 </div>
               )}
             </div>
             <div style={{ overflowX: 'auto' }}>
-              <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+              <table style={tableStyle}>
                 <thead>
                   <tr>
                     <th style={thStyle}>#</th>
@@ -354,15 +270,15 @@ export default function PayrollPage() {
                       <td style={tdStyle}>{new Date(s.pay_date).toLocaleDateString()}</td>
                       <td style={tdStyle}>{new Date(s.period_start).toLocaleDateString()} - {new Date(s.period_end).toLocaleDateString()}</td>
                       <td style={tdStyle}>{usd(s.gross_pay)}</td>
-                      <td style={{ ...tdStyle, color: '#e05555' }}>{usd(s.total_deductions)}</td>
-                      <td style={{ ...tdStyle, color: '#4caf50' }}>{usd(s.net_pay)}</td>
+                      <td style={{ ...tdStyle, color: colors.danger }}>{usd(s.total_deductions)}</td>
+                      <td style={{ ...tdStyle, color: colors.success }}>{usd(s.net_pay)}</td>
                       <td style={tdStyle}>
-                        <button onClick={() => viewPdf(s.id)} style={secondaryBtnStyle}>View</button>
+                        <button onClick={() => viewPdf(s.id)} style={buttonSecondary}>View</button>
                       </td>
                     </tr>
                   ))}
                   {paystubs.length === 0 && (
-                    <tr><td colSpan={7} style={{ ...tdStyle, textAlign: 'center', color: 'var(--color-text-muted)' }}>No paystubs generated yet</td></tr>
+                    <tr><td colSpan={7} style={{ ...tdStyle, textAlign: 'center', color: colors.muted }}>No paystubs generated yet</td></tr>
                   )}
                 </tbody>
               </table>

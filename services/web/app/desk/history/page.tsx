@@ -1,4 +1,5 @@
 'use client';
+import { cardStyle, cardTitleStyle, inputStyle, labelStyle, buttonPrimary, buttonSecondary, badgeStyle, colors, tableStyle, thStyle, tdStyle, pageTitle, sectionGap } from '@/lib/desk-styles';
 
 import { useEffect, useState } from 'react';
 import { apiFetch } from '@/lib/api';
@@ -22,7 +23,7 @@ function statusColor(status: string): string {
     case 'canceled': case 'expired': return '#888';
     case 'rejected': return '#e05555';
     case 'new': case 'accepted': return '#2196f3';
-    default: return 'var(--color-text-muted)';
+    default: return '${colors.body}';
   }
 }
 
@@ -36,22 +37,6 @@ function statusBackground(status: string): string {
     default: return 'rgba(90, 80, 64, 0.1)';
   }
 }
-
-const cardStyle: React.CSSProperties = {
-  background: '#111',
-  border: '1px solid var(--color-gold-dark)',
-  borderRadius: '4px',
-  padding: 'clamp(1rem, 3vw, 1.5rem)',
-};
-
-const cardTitleStyle: React.CSSProperties = {
-  fontFamily: 'var(--font-serif)',
-  fontSize: '0.75rem',
-  letterSpacing: '0.2em',
-  color: 'var(--color-gold)',
-  marginBottom: '1.2rem',
-  textTransform: 'uppercase',
-};
 
 export default function HistoryPage() {
   const [orders, setOrders] = useState<Order[]>([]);
@@ -74,7 +59,7 @@ export default function HistoryPage() {
 
   if (error) {
     return (
-      <div style={{ color: '#e05555', fontFamily: 'var(--font-sans)', padding: '2rem' }}>
+      <div style={{ color: '#e05555', fontFamily: 'inherit', padding: '2rem' }}>
         {error}
       </div>
     );
@@ -85,16 +70,16 @@ export default function HistoryPage() {
       <div style={cardTitleStyle}>Order History</div>
 
       {loading ? (
-        <div style={{ color: 'var(--color-text-muted)', fontFamily: 'var(--font-sans)', fontSize: '0.85rem' }}>
+        <div style={{ color: '${colors.body}', fontFamily: 'inherit', fontSize: '0.85rem' }}>
           Loading...
         </div>
       ) : orders.length === 0 ? (
-        <div style={{ color: 'var(--color-text-muted)', fontFamily: 'var(--font-sans)', fontSize: '0.85rem' }}>
+        <div style={{ color: '${colors.body}', fontFamily: 'inherit', fontSize: '0.85rem' }}>
           No order history
         </div>
       ) : (
         <div style={{ overflowX: 'auto' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', fontFamily: 'var(--font-sans)' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', fontFamily: 'inherit' }}>
             <thead>
               <tr>
                 {['Date', 'Symbol', 'Side', 'Type', 'Qty', 'Filled', 'Avg Price', 'Status'].map((h) => (
@@ -103,9 +88,9 @@ export default function HistoryPage() {
                     padding: '0.6rem 0.75rem',
                     fontSize: '0.65rem',
                     letterSpacing: '0.1em',
-                    color: 'var(--color-gold)',
+                    color: '${colors.accent}',
                     textTransform: 'uppercase',
-                    borderBottom: '1px solid #222',
+                    borderBottom: `1px solid ${colors.borderLight}`,
                     whiteSpace: 'nowrap',
                   }}>
                     {h}
@@ -119,7 +104,7 @@ export default function HistoryPage() {
                   <td style={{
                     padding: '0.6rem 0.75rem',
                     fontSize: '0.8rem',
-                    color: 'var(--color-text-muted)',
+                    color: '${colors.body}',
                     borderBottom: '1px solid #1a1a1a',
                     whiteSpace: 'nowrap',
                   }}>
@@ -135,7 +120,7 @@ export default function HistoryPage() {
                     padding: '0.6rem 0.75rem',
                     fontSize: '0.85rem',
                     fontWeight: 600,
-                    color: 'var(--color-text)',
+                    color: '${colors.heading}',
                     borderBottom: '1px solid #1a1a1a',
                   }}>
                     {order.symbol}
@@ -153,7 +138,7 @@ export default function HistoryPage() {
                   <td style={{
                     padding: '0.6rem 0.75rem',
                     fontSize: '0.8rem',
-                    color: 'var(--color-text-muted)',
+                    color: '${colors.body}',
                     borderBottom: '1px solid #1a1a1a',
                     textTransform: 'capitalize',
                   }}>
@@ -162,7 +147,7 @@ export default function HistoryPage() {
                   <td style={{
                     padding: '0.6rem 0.75rem',
                     fontSize: '0.85rem',
-                    color: 'var(--color-text)',
+                    color: '${colors.heading}',
                     borderBottom: '1px solid #1a1a1a',
                   }}>
                     {order.qty}
@@ -170,7 +155,7 @@ export default function HistoryPage() {
                   <td style={{
                     padding: '0.6rem 0.75rem',
                     fontSize: '0.85rem',
-                    color: 'var(--color-text)',
+                    color: '${colors.heading}',
                     borderBottom: '1px solid #1a1a1a',
                   }}>
                     {order.filled_qty}
@@ -178,7 +163,7 @@ export default function HistoryPage() {
                   <td style={{
                     padding: '0.6rem 0.75rem',
                     fontSize: '0.85rem',
-                    color: 'var(--color-text)',
+                    color: '${colors.heading}',
                     borderBottom: '1px solid #1a1a1a',
                   }}>
                     {order.filled_avg_price

@@ -13,6 +13,7 @@ const navItems = [
   { href: "/desk/trade", label: "Trade", icon: "📈", privilege: "trade" },
   { href: "/desk/market", label: "Market", icon: "🏪" },
   { href: "/desk/chart", label: "Chart", icon: "📉" },
+  { href: "/desk/history", label: "History", icon: "📋" },
   { href: "/desk/invoices", label: "Invoices", icon: "🧾", privilege: "view_invoices" },
   { href: "/desk/payroll", label: "Payroll", icon: "💰", privilege: "view_payroll" },
   { href: "/desk/admin", label: "Admin", icon: "⚙️", role: "admin" },

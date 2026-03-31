@@ -1,4 +1,5 @@
 'use client';
+import { cardStyle, cardTitleStyle, inputStyle, labelStyle, buttonPrimary, buttonSecondary, badgeStyle, colors, tableStyle, thStyle, tdStyle, pageTitle, sectionGap } from '@/lib/desk-styles';
 
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
@@ -48,36 +49,22 @@ interface TickerDetail {
   } | null;
 }
 
-const cardStyle: React.CSSProperties = {
-  background: '#111',
-  border: '1px solid var(--color-gold-dark)',
-  borderRadius: '4px',
-  padding: 'clamp(1rem, 3vw, 1.5rem)',
-};
-
-const cardTitleStyle: React.CSSProperties = {
-  fontFamily: 'var(--font-serif)',
-  fontSize: '0.75rem',
-  letterSpacing: '0.2em',
-  color: 'var(--color-gold)',
-  marginBottom: '1.2rem',
-  textTransform: 'uppercase',
-};
+// Using cardStyle/cardTitleStyle from @/lib/desk-styles
 
 const statLabel: React.CSSProperties = {
-  fontFamily: 'var(--font-sans)',
+  fontFamily: 'inherit',
   fontSize: '0.7rem',
   letterSpacing: '0.1em',
-  color: 'var(--color-text-muted)',
+  color: '${colors.body}',
   textTransform: 'uppercase',
   marginBottom: '0.25rem',
 };
 
 const statValue: React.CSSProperties = {
-  fontFamily: 'var(--font-sans)',
+  fontFamily: 'inherit',
   fontSize: 'clamp(0.95rem, 2.5vw, 1.2rem)',
   fontWeight: 500,
-  color: 'var(--color-text)',
+  color: '${colors.heading}',
 };
 
 function formatPrice(val: number): string {
@@ -178,7 +165,7 @@ export default function TickerDetailPage() {
 
   if (loading) {
     return (
-      <div style={{ color: 'var(--color-text-muted)', fontFamily: 'var(--font-sans)', padding: '2rem', fontSize: '0.85rem' }}>
+      <div style={{ color: '${colors.body}', fontFamily: 'inherit', padding: '2rem', fontSize: '0.85rem' }}>
         Loading {symbol}...
       </div>
     );
@@ -186,7 +173,7 @@ export default function TickerDetailPage() {
 
   if (error) {
     return (
-      <div style={{ color: '#e05555', fontFamily: 'var(--font-sans)', padding: '2rem' }}>
+      <div style={{ color: '#e05555', fontFamily: 'inherit', padding: '2rem' }}>
         {error}
       </div>
     );
@@ -194,7 +181,7 @@ export default function TickerDetailPage() {
 
   if (!data) {
     return (
-      <div style={{ color: 'var(--color-text-muted)', fontFamily: 'var(--font-sans)', padding: '2rem' }}>
+      <div style={{ color: '${colors.body}', fontFamily: 'inherit', padding: '2rem' }}>
         No data found for {symbol}
       </div>
     );
@@ -214,15 +201,15 @@ export default function TickerDetailPage() {
         <Link
           href="/desk/market"
           style={{
-            fontFamily: 'var(--font-sans)',
+            fontFamily: 'inherit',
             fontSize: '0.75rem',
-            color: 'var(--color-text-muted)',
+            color: '${colors.body}',
             textDecoration: 'none',
             letterSpacing: '0.05em',
             transition: 'color 0.2s ease',
           }}
-          onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = 'var(--color-gold)'; }}
-          onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = 'var(--color-text-muted)'; }}
+          onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = '${colors.accent}'; }}
+          onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = '${colors.body}'; }}
         >
           &larr; Back to Market
         </Link>
@@ -233,19 +220,19 @@ export default function TickerDetailPage() {
         <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'flex-start', gap: '1rem', justifyContent: 'space-between' }}>
           <div>
             <div style={{
-              fontFamily: 'var(--font-serif)',
+              fontFamily: 'inherit',
               fontSize: 'clamp(1.5rem, 4vw, 2.2rem)',
               fontWeight: 700,
-              color: 'var(--color-gold)',
+              color: '${colors.accent}',
               letterSpacing: '0.05em',
             }}>
               {data.symbol}
             </div>
             {data.name && (
               <div style={{
-                fontFamily: 'var(--font-sans)',
+                fontFamily: 'inherit',
                 fontSize: 'clamp(0.85rem, 2vw, 1rem)',
-                color: 'var(--color-text)',
+                color: '${colors.heading}',
                 marginTop: '0.2rem',
               }}>
                 {data.name}
@@ -254,10 +241,10 @@ export default function TickerDetailPage() {
             <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap', marginTop: '0.6rem' }}>
               {data.sector && (
                 <span style={{
-                  fontFamily: 'var(--font-sans)',
+                  fontFamily: 'inherit',
                   fontSize: '0.65rem',
                   letterSpacing: '0.05em',
-                  color: 'var(--color-text)',
+                  color: '${colors.heading}',
                   background: getSectorColor(data.sector),
                   padding: '0.2rem 0.5rem',
                   borderRadius: '10px',
@@ -267,10 +254,10 @@ export default function TickerDetailPage() {
               )}
               {data.industry && (
                 <span style={{
-                  fontFamily: 'var(--font-sans)',
+                  fontFamily: 'inherit',
                   fontSize: '0.65rem',
                   letterSpacing: '0.05em',
-                  color: 'var(--color-text)',
+                  color: '${colors.heading}',
                   background: 'rgba(201, 168, 76, 0.1)',
                   padding: '0.2rem 0.5rem',
                   borderRadius: '10px',
@@ -280,10 +267,10 @@ export default function TickerDetailPage() {
               )}
               {data.marketCap && (
                 <span style={{
-                  fontFamily: 'var(--font-sans)',
+                  fontFamily: 'inherit',
                   fontSize: '0.65rem',
                   letterSpacing: '0.05em',
-                  color: 'var(--color-text-muted)',
+                  color: '${colors.body}',
                   background: 'rgba(255, 255, 255, 0.05)',
                   padding: '0.2rem 0.5rem',
                   borderRadius: '10px',
@@ -297,16 +284,16 @@ export default function TickerDetailPage() {
           {/* Price */}
           <div style={{ textAlign: 'right' }}>
             <div style={{
-              fontFamily: 'var(--font-sans)',
+              fontFamily: 'inherit',
               fontSize: 'clamp(1.5rem, 4vw, 2rem)',
               fontWeight: 700,
-              color: 'var(--color-text)',
+              color: '${colors.heading}',
             }}>
               {currentPrice > 0 ? formatPrice(currentPrice) : '--'}
             </div>
             {snap && (
               <div style={{
-                fontFamily: 'var(--font-sans)',
+                fontFamily: 'inherit',
                 fontSize: '0.9rem',
                 color: changeColor(dailyChangePercent),
                 marginTop: '0.2rem',
@@ -316,9 +303,9 @@ export default function TickerDetailPage() {
             )}
             {volume > 0 && (
               <div style={{
-                fontFamily: 'var(--font-sans)',
+                fontFamily: 'inherit',
                 fontSize: '0.75rem',
-                color: 'var(--color-text-muted)',
+                color: '${colors.body}',
                 marginTop: '0.3rem',
               }}>
                 Vol: {formatVolume(volume)}
@@ -331,9 +318,9 @@ export default function TickerDetailPage() {
       {/* No company info warning */}
       {!hasCompanyInfo && (
         <div style={{
-          fontFamily: 'var(--font-sans)',
+          fontFamily: 'inherit',
           fontSize: '0.8rem',
-          color: 'var(--color-text-muted)',
+          color: '${colors.body}',
           padding: '0.6rem 0.8rem',
           background: 'rgba(201, 168, 76, 0.08)',
           border: '1px solid rgba(201, 168, 76, 0.15)',
@@ -348,10 +335,10 @@ export default function TickerDetailPage() {
         <div style={cardStyle}>
           <div style={cardTitleStyle}>About</div>
           <div style={{
-            fontFamily: 'var(--font-sans)',
+            fontFamily: 'inherit',
             fontSize: '0.85rem',
             lineHeight: '1.6',
-            color: 'var(--color-text)',
+            color: '${colors.heading}',
           }}>
             {data.description}
           </div>
@@ -365,9 +352,9 @@ export default function TickerDetailPage() {
           <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
             {data.tags.map((tag) => (
               <span key={tag} style={{
-                fontFamily: 'var(--font-sans)',
+                fontFamily: 'inherit',
                 fontSize: '0.7rem',
-                color: 'var(--color-text)',
+                color: '${colors.heading}',
                 background: 'rgba(201, 168, 76, 0.12)',
                 padding: '0.2rem 0.55rem',
                 borderRadius: '10px',
@@ -388,11 +375,11 @@ export default function TickerDetailPage() {
             display: 'inline-flex',
             alignItems: 'center',
             padding: '0.7rem 1.5rem',
-            background: 'var(--color-gold)',
+            background: '${colors.accent}',
             color: '#0a0a0a',
             border: 'none',
             borderRadius: '3px',
-            fontFamily: 'var(--font-sans)',
+            fontFamily: 'inherit',
             fontWeight: 600,
             fontSize: '0.8rem',
             letterSpacing: '0.1em',
@@ -402,7 +389,7 @@ export default function TickerDetailPage() {
             transition: 'background 0.3s ease',
           }}
           onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = '#b8973f'; }}
-          onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = 'var(--color-gold)'; }}
+          onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = '${colors.accent}'; }}
         >
           Trade
         </Link>
@@ -413,10 +400,10 @@ export default function TickerDetailPage() {
             alignItems: 'center',
             padding: '0.7rem 1.5rem',
             background: 'transparent',
-            color: 'var(--color-gold)',
-            border: '1px solid var(--color-gold-dark)',
+            color: '${colors.accent}',
+            border: `1px solid ${colors.borderLight}`,
             borderRadius: '3px',
-            fontFamily: 'var(--font-sans)',
+            fontFamily: 'inherit',
             fontWeight: 600,
             fontSize: '0.8rem',
             letterSpacing: '0.1em',
@@ -498,7 +485,7 @@ export default function TickerDetailPage() {
         <div style={{
           display: 'flex',
           gap: '0',
-          borderBottom: '1px solid #222',
+          borderBottom: `1px solid ${colors.borderLight}`,
           marginBottom: '1rem',
         }}>
           {(['news', 'fundamentals', 'insiders'] as const).map((tab) => (
@@ -508,21 +495,21 @@ export default function TickerDetailPage() {
               style={{
                 background: 'transparent',
                 border: 'none',
-                borderBottom: activeTab === tab ? '2px solid var(--color-gold)' : '2px solid transparent',
+                borderBottom: activeTab === tab ? '2px solid ${colors.accent}' : '2px solid transparent',
                 padding: '0.7rem 1.2rem',
-                fontFamily: 'var(--font-serif)',
+                fontFamily: 'inherit',
                 fontSize: '0.75rem',
                 letterSpacing: '0.15em',
                 textTransform: 'uppercase',
-                color: activeTab === tab ? 'var(--color-gold)' : 'var(--color-text-muted)',
+                color: activeTab === tab ? '${colors.accent}' : '${colors.body}',
                 cursor: 'pointer',
                 transition: 'color 0.2s ease, border-color 0.2s ease',
               }}
               onMouseEnter={(e) => {
-                if (activeTab !== tab) (e.currentTarget as HTMLElement).style.color = 'var(--color-text)';
+                if (activeTab !== tab) (e.currentTarget as HTMLElement).style.color = '${colors.heading}';
               }}
               onMouseLeave={(e) => {
-                if (activeTab !== tab) (e.currentTarget as HTMLElement).style.color = 'var(--color-text-muted)';
+                if (activeTab !== tab) (e.currentTarget as HTMLElement).style.color = '${colors.body}';
               }}
             >
               {tab === 'news' ? 'News' : tab === 'fundamentals' ? 'Fundamentals' : 'Insiders'}

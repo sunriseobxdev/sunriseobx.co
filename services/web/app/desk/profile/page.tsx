@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { apiFetch } from '@/lib/api';
 import { useAuthStore } from '@/lib/store';
+import { cardStyle, cardTitleStyle, inputStyle, labelStyle, buttonPrimary, buttonSecondary, badgeStyle, colors, thStyle, tdStyle, tableStyle } from '@/lib/desk-styles';
 
 type TotpStep = 'idle' | 'setup' | 'verify' | 'recovery' | 'disable';
 
@@ -12,104 +13,19 @@ interface TotpSetupData {
   uri: string;
 }
 
-const roleBadgeColors: Record<string, string> = {
-  superadmin: '#c9a84c',
-  admin: '#2196f3',
-  manager: '#9c27b0',
-  trader: '#4caf50',
-  viewer: '#666',
-};
-
-const cardStyle: React.CSSProperties = {
-  background: '#111',
-  border: '1px solid var(--color-gold-dark)',
-  borderRadius: '4px',
-  padding: 'clamp(1rem, 3vw, 1.5rem)',
-  marginBottom: '1.5rem',
-};
-
-const cardTitleStyle: React.CSSProperties = {
-  fontFamily: 'var(--font-serif)',
-  fontSize: '0.75rem',
-  letterSpacing: '0.2em',
-  color: 'var(--color-gold)',
-  marginBottom: '1.2rem',
-  textTransform: 'uppercase',
-};
-
-const inputStyle: React.CSSProperties = {
-  width: '100%',
-  padding: '0.55rem 0.75rem',
-  background: '#1a1a1a',
-  border: '1px solid #333',
-  borderRadius: '3px',
-  color: 'var(--color-text)',
-  fontFamily: 'var(--font-sans)',
-  fontSize: '0.85rem',
-  outline: 'none',
-};
-
-const labelStyle: React.CSSProperties = {
-  display: 'block',
-  fontFamily: 'var(--font-sans)',
-  fontSize: '0.65rem',
-  letterSpacing: '0.1em',
-  color: 'var(--color-gold)',
-  textTransform: 'uppercase',
-  marginBottom: '0.35rem',
-};
-
-const primaryBtnStyle: React.CSSProperties = {
-  padding: '0.55rem 1.2rem',
-  background: 'var(--color-gold)',
-  border: 'none',
-  borderRadius: '3px',
-  color: '#0a0a0a',
-  fontFamily: 'var(--font-sans)',
-  fontSize: '0.75rem',
-  fontWeight: 600,
-  letterSpacing: '0.08em',
-  textTransform: 'uppercase',
-  cursor: 'pointer',
-};
-
-const secondaryBtnStyle: React.CSSProperties = {
-  padding: '0.4rem 0.8rem',
-  background: 'transparent',
-  border: '1px solid #333',
-  borderRadius: '3px',
-  color: 'var(--color-text-muted)',
-  fontFamily: 'var(--font-sans)',
-  fontSize: '0.7rem',
-  letterSpacing: '0.06em',
-  textTransform: 'uppercase',
-  cursor: 'pointer',
+const roleBadgeVariant: Record<string, 'accent' | 'info' | 'warning' | 'success' | 'muted'> = {
+  superadmin: 'accent',
+  admin: 'info',
+  manager: 'warning',
+  trader: 'success',
+  viewer: 'muted',
 };
 
 const dangerBtnStyle: React.CSSProperties = {
-  ...secondaryBtnStyle,
-  border: '1px solid #e05555',
-  color: '#e05555',
+  ...buttonSecondary,
+  border: `1px solid ${colors.danger}`,
+  color: colors.danger,
 };
-
-function Badge({ label, color, bg }: { label: string; color: string; bg: string }) {
-  return (
-    <span style={{
-      display: 'inline-block',
-      padding: '0.15rem 0.45rem',
-      borderRadius: '9999px',
-      fontSize: '0.6rem',
-      fontWeight: 600,
-      letterSpacing: '0.06em',
-      textTransform: 'uppercase',
-      color,
-      background: bg,
-      lineHeight: '1.4',
-    }}>
-      {label}
-    </span>
-  );
-}
 
 export default function ProfilePage() {
   const user = useAuthStore((s) => s.user);
@@ -253,7 +169,7 @@ export default function ProfilePage() {
 
   if (!user || !profile) {
     return (
-      <div style={{ padding: '2rem', color: 'var(--color-text-muted)', fontFamily: 'var(--font-sans)', fontSize: '0.85rem' }}>
+      <div style={{ padding: '2rem', color: colors.muted, fontSize: '0.85rem' }}>
         Loading...
       </div>
     );
@@ -265,38 +181,37 @@ export default function ProfilePage() {
         <div style={{
           padding: '0.6rem 1rem',
           marginBottom: '1rem',
-          borderRadius: '3px',
-          fontFamily: 'var(--font-sans)',
+          borderRadius: '8px',
           fontSize: '0.8rem',
-          color: flash.type === 'success' ? '#4caf50' : '#e05555',
-          background: flash.type === 'success' ? 'rgba(76,175,80,0.1)' : 'rgba(224,85,85,0.1)',
-          border: `1px solid ${flash.type === 'success' ? 'rgba(76,175,80,0.3)' : 'rgba(224,85,85,0.3)'}`,
+          color: flash.type === 'success' ? colors.success : colors.danger,
+          background: flash.type === 'success' ? colors.successBg : colors.dangerBg,
+          border: `1px solid ${flash.type === 'success' ? 'rgba(16,185,129,0.3)' : 'rgba(239,68,68,0.3)'}`,
         }}>
           {flash.msg}
         </div>
       )}
 
       {/* User Info Card */}
-      <div style={cardStyle}>
+      <div style={{ ...cardStyle, marginBottom: '1.5rem' }}>
         <h2 style={cardTitleStyle}>Profile</h2>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', fontFamily: 'var(--font-sans)', fontSize: '0.8rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', fontSize: '0.8rem' }}>
           <div>
-            <span style={{ color: 'var(--color-text-muted)', fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Email</span>
-            <div style={{ color: 'var(--color-text)', marginTop: '0.25rem' }}>{profile.email as string}</div>
+            <span style={{ color: colors.muted, fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Email</span>
+            <div style={{ color: colors.heading, marginTop: '0.25rem' }}>{profile.email as string}</div>
           </div>
           <div>
-            <span style={{ color: 'var(--color-text-muted)', fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Display Name</span>
-            <div style={{ color: 'var(--color-text)', marginTop: '0.25rem' }}>{(profile.displayName as string) || '\u2014'}</div>
+            <span style={{ color: colors.muted, fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Display Name</span>
+            <div style={{ color: colors.heading, marginTop: '0.25rem' }}>{(profile.displayName as string) || '\u2014'}</div>
           </div>
           <div>
-            <span style={{ color: 'var(--color-text-muted)', fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Role</span>
+            <span style={{ color: colors.muted, fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Role</span>
             <div style={{ marginTop: '0.25rem' }}>
-              <Badge label={user.role} color="#fff" bg={roleBadgeColors[user.role] || '#444'} />
+              <span style={badgeStyle(roleBadgeVariant[user.role] || 'muted')}>{user.role}</span>
             </div>
           </div>
           <div>
-            <span style={{ color: 'var(--color-text-muted)', fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Member Since</span>
-            <div style={{ color: 'var(--color-text)', marginTop: '0.25rem' }}>
+            <span style={{ color: colors.muted, fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Member Since</span>
+            <div style={{ color: colors.heading, marginTop: '0.25rem' }}>
               {profile.createdAt ? new Date(profile.createdAt as string).toLocaleDateString() : '\u2014'}
             </div>
           </div>
@@ -304,19 +219,19 @@ export default function ProfilePage() {
       </div>
 
       {/* Permissions Card */}
-      <div style={cardStyle}>
+      <div style={{ ...cardStyle, marginBottom: '1.5rem' }}>
         <h2 style={cardTitleStyle}>Permissions</h2>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}>
           {user.privileges.length > 0 ? user.privileges.map((priv) => (
-            <Badge key={priv} label={priv.replace(/_/g, ' ')} color="var(--color-text)" bg="rgba(201,168,76,0.12)" />
+            <span key={priv} style={badgeStyle('accent')}>{priv.replace(/_/g, ' ')}</span>
           )) : (
-            <span style={{ fontFamily: 'var(--font-sans)', fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>No privileges assigned</span>
+            <span style={{ fontSize: '0.8rem', color: colors.muted }}>No privileges assigned</span>
           )}
         </div>
       </div>
 
       {/* Password Change Card */}
-      <div style={cardStyle}>
+      <div style={{ ...cardStyle, marginBottom: '1.5rem' }}>
         <h2 style={cardTitleStyle}>Change Password</h2>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.8rem', maxWidth: '360px' }}>
           <div>
@@ -350,7 +265,7 @@ export default function ProfilePage() {
             <button
               onClick={handlePasswordChange}
               disabled={loading || !currentPassword || !newPassword}
-              style={{ ...primaryBtnStyle, opacity: loading ? 0.6 : 1 }}
+              style={{ ...buttonPrimary, opacity: loading ? 0.6 : 1 }}
             >
               {loading ? 'Updating...' : 'Update Password'}
             </button>
@@ -359,20 +274,20 @@ export default function ProfilePage() {
       </div>
 
       {/* Security / 2FA Card */}
-      <div style={cardStyle}>
+      <div style={{ ...cardStyle, marginBottom: '1.5rem' }}>
         <h2 style={cardTitleStyle}>Two-Factor Authentication</h2>
 
         {totpStep === 'idle' && (
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
-              <span style={{ fontFamily: 'var(--font-sans)', fontSize: '0.8rem', color: 'var(--color-text)' }}>Status:</span>
+              <span style={{ fontSize: '0.8rem', color: colors.heading }}>Status:</span>
               {totpEnabled ? (
-                <Badge label="Enabled" color="#4caf50" bg="rgba(76,175,80,0.12)" />
+                <span style={badgeStyle('success')}>Enabled</span>
               ) : (
-                <Badge label="Not Enabled" color="var(--color-text-muted)" bg="rgba(90,80,64,0.2)" />
+                <span style={badgeStyle('muted')}>Not Enabled</span>
               )}
             </div>
-            <p style={{ fontFamily: 'var(--font-sans)', fontSize: '0.75rem', color: 'var(--color-text-muted)', marginBottom: '1rem', lineHeight: 1.5 }}>
+            <p style={{ fontSize: '0.75rem', color: colors.muted, marginBottom: '1rem', lineHeight: 1.5 }}>
               {totpEnabled
                 ? 'Your account is protected with an authenticator app. You will need a code from your app each time you sign in.'
                 : 'Add an extra layer of security by requiring a code from an authenticator app when signing in.'}
@@ -382,7 +297,7 @@ export default function ProfilePage() {
                 Disable 2FA
               </button>
             ) : (
-              <button onClick={handleTotpSetup} disabled={loading} style={primaryBtnStyle}>
+              <button onClick={handleTotpSetup} disabled={loading} style={buttonPrimary}>
                 {loading ? 'Setting up...' : 'Enable 2FA'}
               </button>
             )}
@@ -391,7 +306,7 @@ export default function ProfilePage() {
 
         {totpStep === 'setup' && setupData && (
           <div>
-            <p style={{ fontFamily: 'var(--font-sans)', fontSize: '0.75rem', color: 'var(--color-text)', marginBottom: '1rem', lineHeight: 1.5 }}>
+            <p style={{ fontSize: '0.75rem', color: colors.heading, marginBottom: '1rem', lineHeight: 1.5 }}>
               Scan this QR code with your authenticator app (Google Authenticator, Authy, 1Password, etc.):
             </p>
             <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1rem' }}>
@@ -404,7 +319,7 @@ export default function ProfilePage() {
             <div style={{ textAlign: 'center', marginBottom: '1.2rem' }}>
               <button
                 onClick={() => setShowManualSecret(!showManualSecret)}
-                style={{ ...secondaryBtnStyle, fontSize: '0.65rem' }}
+                style={{ ...buttonSecondary, fontSize: '0.65rem' }}
               >
                 {showManualSecret ? 'Hide manual code' : "Can't scan this?"}
               </button>
@@ -412,20 +327,20 @@ export default function ProfilePage() {
                 <div style={{
                   marginTop: '0.75rem',
                   padding: '0.75rem',
-                  background: '#1a1a1a',
-                  border: '1px solid #333',
-                  borderRadius: '3px',
+                  background: colors.surfaceLight,
+                  border: `1px solid ${colors.borderLight}`,
+                  borderRadius: '8px',
                   fontFamily: 'monospace',
                   fontSize: '0.85rem',
                   letterSpacing: '0.15em',
-                  color: 'var(--color-gold)',
+                  color: colors.accent,
                   wordBreak: 'break-all',
                 }}>
                   {setupData.secret}
                 </div>
               )}
             </div>
-            <p style={{ fontFamily: 'var(--font-sans)', fontSize: '0.75rem', color: 'var(--color-text)', marginBottom: '0.6rem' }}>
+            <p style={{ fontSize: '0.75rem', color: colors.heading, marginBottom: '0.6rem' }}>
               Enter the 6-digit code from your authenticator app:
             </p>
             <div style={{ display: 'flex', gap: '0.6rem', alignItems: 'center' }}>
@@ -442,11 +357,11 @@ export default function ProfilePage() {
               <button
                 onClick={handleTotpVerify}
                 disabled={loading || totpCode.length !== 6}
-                style={{ ...primaryBtnStyle, opacity: loading || totpCode.length !== 6 ? 0.6 : 1 }}
+                style={{ ...buttonPrimary, opacity: loading || totpCode.length !== 6 ? 0.6 : 1 }}
               >
                 {loading ? 'Verifying...' : 'Verify'}
               </button>
-              <button onClick={() => { setTotpStep('idle'); setTotpCode(''); }} style={secondaryBtnStyle}>
+              <button onClick={() => { setTotpStep('idle'); setTotpCode(''); }} style={buttonSecondary}>
                 Cancel
               </button>
             </div>
@@ -455,10 +370,10 @@ export default function ProfilePage() {
 
         {totpStep === 'recovery' && (
           <div>
-            <p style={{ fontFamily: 'var(--font-sans)', fontSize: '0.8rem', color: '#4caf50', marginBottom: '0.75rem', fontWeight: 600 }}>
+            <p style={{ fontSize: '0.8rem', color: colors.success, marginBottom: '0.75rem', fontWeight: 600 }}>
               Two-factor authentication enabled!
             </p>
-            <p style={{ fontFamily: 'var(--font-sans)', fontSize: '0.75rem', color: 'var(--color-text)', marginBottom: '1rem', lineHeight: 1.5 }}>
+            <p style={{ fontSize: '0.75rem', color: colors.heading, marginBottom: '1rem', lineHeight: 1.5 }}>
               Save these recovery codes in a safe place. Each code can only be used once to sign in if you lose access to your authenticator app.
             </p>
             <div style={{
@@ -466,16 +381,16 @@ export default function ProfilePage() {
               gridTemplateColumns: 'repeat(2, 1fr)',
               gap: '0.4rem',
               padding: '1rem',
-              background: '#1a1a1a',
-              border: '1px solid #333',
-              borderRadius: '3px',
+              background: colors.surfaceLight,
+              border: `1px solid ${colors.borderLight}`,
+              borderRadius: '8px',
               marginBottom: '1rem',
             }}>
               {recoveryCodes.map((code, i) => (
                 <div key={i} style={{
                   fontFamily: 'monospace',
                   fontSize: '0.85rem',
-                  color: 'var(--color-gold)',
+                  color: colors.accent,
                   letterSpacing: '0.1em',
                   padding: '0.2rem 0',
                 }}>
@@ -484,10 +399,10 @@ export default function ProfilePage() {
               ))}
             </div>
             <div style={{ display: 'flex', gap: '0.6rem' }}>
-              <button onClick={copyRecoveryCodes} style={secondaryBtnStyle}>
+              <button onClick={copyRecoveryCodes} style={buttonSecondary}>
                 Copy All
               </button>
-              <button onClick={() => { setTotpStep('idle'); setRecoveryCodes([]); }} style={primaryBtnStyle}>
+              <button onClick={() => { setTotpStep('idle'); setRecoveryCodes([]); }} style={buttonPrimary}>
                 Done
               </button>
             </div>
@@ -496,7 +411,7 @@ export default function ProfilePage() {
 
         {totpStep === 'disable' && (
           <div>
-            <p style={{ fontFamily: 'var(--font-sans)', fontSize: '0.75rem', color: '#e05555', marginBottom: '1rem', lineHeight: 1.5 }}>
+            <p style={{ fontSize: '0.75rem', color: colors.danger, marginBottom: '1rem', lineHeight: 1.5 }}>
               Enter a code from your authenticator app to confirm disabling two-factor authentication.
             </p>
             <div style={{ display: 'flex', gap: '0.6rem', alignItems: 'center' }}>
@@ -517,7 +432,7 @@ export default function ProfilePage() {
               >
                 {loading ? 'Disabling...' : 'Disable 2FA'}
               </button>
-              <button onClick={() => { setTotpStep('idle'); setTotpCode(''); }} style={secondaryBtnStyle}>
+              <button onClick={() => { setTotpStep('idle'); setTotpCode(''); }} style={buttonSecondary}>
                 Cancel
               </button>
             </div>
@@ -526,10 +441,10 @@ export default function ProfilePage() {
       </div>
 
       {/* API Keys Card */}
-      <div style={cardStyle}>
+      <div style={{ ...cardStyle, marginBottom: '1.5rem' }}>
         <h2 style={cardTitleStyle}>API Keys</h2>
-        <p style={{ fontFamily: 'var(--font-sans)', fontSize: '0.75rem', color: 'var(--color-text-muted)', marginBottom: '1rem', lineHeight: 1.5 }}>
-          Use API keys to authenticate with the Sunrise CLI or SDK. Pass the key via the <code style={{ color: 'var(--color-gold)', background: '#1a1a1a', padding: '0.1rem 0.3rem', borderRadius: '2px' }}>X-API-Key</code> header.
+        <p style={{ fontSize: '0.75rem', color: colors.muted, marginBottom: '1rem', lineHeight: 1.5 }}>
+          Use API keys to authenticate with the Sunrise CLI or SDK. Pass the key via the <code style={{ color: colors.accent, background: colors.surfaceLight, padding: '0.1rem 0.3rem', borderRadius: '4px' }}>X-API-Key</code> header.
         </p>
 
         {/* Create new key */}
@@ -562,7 +477,7 @@ export default function ProfilePage() {
               }
             }}
             disabled={loading || !newKeyName}
-            style={{ ...primaryBtnStyle, opacity: loading || !newKeyName ? 0.6 : 1, whiteSpace: 'nowrap' }}
+            style={{ ...buttonPrimary, opacity: loading || !newKeyName ? 0.6 : 1, whiteSpace: 'nowrap' }}
           >
             Generate Key
           </button>
@@ -572,18 +487,18 @@ export default function ProfilePage() {
         {newKeyResult && (
           <div style={{
             padding: '0.75rem 1rem',
-            background: '#1a1a1a',
-            border: '1px solid #4caf50',
-            borderRadius: '3px',
+            background: colors.surfaceLight,
+            border: `1px solid ${colors.success}`,
+            borderRadius: '8px',
             marginBottom: '1rem',
           }}>
-            <div style={{ fontFamily: 'var(--font-sans)', fontSize: '0.7rem', color: '#4caf50', marginBottom: '0.4rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+            <div style={{ fontSize: '0.7rem', color: colors.success, marginBottom: '0.4rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em' }}>
               Copy your API key now — it won&apos;t be shown again
             </div>
             <div style={{
               fontFamily: 'monospace',
               fontSize: '0.8rem',
-              color: 'var(--color-gold)',
+              color: colors.accent,
               wordBreak: 'break-all',
               marginBottom: '0.5rem',
             }}>
@@ -592,11 +507,11 @@ export default function ProfilePage() {
             <div style={{ display: 'flex', gap: '0.5rem' }}>
               <button
                 onClick={() => { navigator.clipboard.writeText(newKeyResult); showFlash('success', 'Copied to clipboard'); }}
-                style={secondaryBtnStyle}
+                style={buttonSecondary}
               >
                 Copy
               </button>
-              <button onClick={() => setNewKeyResult(null)} style={secondaryBtnStyle}>
+              <button onClick={() => setNewKeyResult(null)} style={buttonSecondary}>
                 Dismiss
               </button>
             </div>
@@ -605,22 +520,22 @@ export default function ProfilePage() {
 
         {/* Keys list */}
         {apiKeys.length > 0 ? (
-          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+          <table style={tableStyle}>
             <thead>
               <tr>
-                <th style={{ padding: '0.4rem 0.5rem', fontFamily: 'var(--font-sans)', fontSize: '0.6rem', letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--color-gold-dark)', borderBottom: '1px solid #1a1a1a', textAlign: 'left' }}>Name</th>
-                <th style={{ padding: '0.4rem 0.5rem', fontFamily: 'var(--font-sans)', fontSize: '0.6rem', letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--color-gold-dark)', borderBottom: '1px solid #1a1a1a', textAlign: 'left' }}>Key</th>
-                <th style={{ padding: '0.4rem 0.5rem', fontFamily: 'var(--font-sans)', fontSize: '0.6rem', letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--color-gold-dark)', borderBottom: '1px solid #1a1a1a', textAlign: 'left' }}>Last Used</th>
-                <th style={{ padding: '0.4rem 0.5rem', fontFamily: 'var(--font-sans)', fontSize: '0.6rem', letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--color-gold-dark)', borderBottom: '1px solid #1a1a1a', textAlign: 'left' }}>Actions</th>
+                <th style={thStyle}>Name</th>
+                <th style={thStyle}>Key</th>
+                <th style={thStyle}>Last Used</th>
+                <th style={thStyle}>Actions</th>
               </tr>
             </thead>
             <tbody>
               {apiKeys.map((k) => (
                 <tr key={k.id}>
-                  <td style={{ padding: '0.4rem 0.5rem', fontFamily: 'var(--font-sans)', fontSize: '0.8rem', color: 'var(--color-text)', borderBottom: '1px solid #1a1a1a' }}>{k.name}</td>
-                  <td style={{ padding: '0.4rem 0.5rem', fontFamily: 'monospace', fontSize: '0.75rem', color: 'var(--color-text-muted)', borderBottom: '1px solid #1a1a1a' }}>{k.key_prefix}...</td>
-                  <td style={{ padding: '0.4rem 0.5rem', fontFamily: 'var(--font-sans)', fontSize: '0.75rem', color: 'var(--color-text-muted)', borderBottom: '1px solid #1a1a1a' }}>{k.last_used ? new Date(k.last_used).toLocaleDateString() : 'Never'}</td>
-                  <td style={{ padding: '0.4rem 0.5rem', borderBottom: '1px solid #1a1a1a' }}>
+                  <td style={{ ...tdStyle, color: colors.heading }}>{k.name}</td>
+                  <td style={{ ...tdStyle, fontFamily: 'monospace', fontSize: '0.75rem' }}>{k.key_prefix}...</td>
+                  <td style={tdStyle}>{k.last_used ? new Date(k.last_used).toLocaleDateString() : 'Never'}</td>
+                  <td style={tdStyle}>
                     <button
                       onClick={async () => {
                         try {
@@ -639,7 +554,7 @@ export default function ProfilePage() {
             </tbody>
           </table>
         ) : (
-          <p style={{ fontFamily: 'var(--font-sans)', fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>No API keys</p>
+          <p style={{ fontSize: '0.8rem', color: colors.muted }}>No API keys</p>
         )}
       </div>
     </div>

@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
 import { apiFetch } from '@/lib/api';
 import { useAuthStore } from '@/lib/store';
+import { cardStyle, cardTitleStyle, inputStyle, labelStyle, buttonPrimary, buttonSecondary, badgeStyle, colors, thStyle, tdStyle, tableStyle } from '@/lib/desk-styles';
 
 interface IAMUser {
   id: string;
@@ -18,12 +19,12 @@ interface IAMUser {
 
 const ROLE_HIERARCHY = ['viewer', 'trader', 'manager', 'admin', 'superadmin'];
 
-const roleBadgeColors: Record<string, string> = {
-  superadmin: '#c9a84c',
-  admin: '#2196f3',
-  manager: '#9c27b0',
-  trader: '#4caf50',
-  viewer: '#666',
+const roleBadgeVariant: Record<string, 'accent' | 'info' | 'warning' | 'success' | 'muted'> = {
+  superadmin: 'accent',
+  admin: 'info',
+  manager: 'warning',
+  trader: 'success',
+  viewer: 'muted',
 };
 
 function roleRank(role: string): number {
@@ -32,20 +33,9 @@ function roleRank(role: string): number {
 }
 
 function RoleBadge({ role }: { role: string }) {
-  const bg = roleBadgeColors[role] || '#444';
+  const variant = roleBadgeVariant[role] || 'muted';
   return (
-    <span style={{
-      display: 'inline-block',
-      padding: '0.15rem 0.45rem',
-      borderRadius: '9999px',
-      fontSize: '0.6rem',
-      fontWeight: 600,
-      letterSpacing: '0.06em',
-      textTransform: 'uppercase',
-      color: '#fff',
-      background: bg,
-      lineHeight: '1.4',
-    }}>
+    <span style={badgeStyle(variant)}>
       {role}
     </span>
   );
@@ -53,107 +43,11 @@ function RoleBadge({ role }: { role: string }) {
 
 function StatusBadge({ disabled }: { disabled: boolean }) {
   return (
-    <span style={{
-      display: 'inline-block',
-      padding: '0.15rem 0.45rem',
-      borderRadius: '9999px',
-      fontSize: '0.6rem',
-      fontWeight: 600,
-      letterSpacing: '0.06em',
-      textTransform: 'uppercase',
-      color: disabled ? '#e05555' : '#4caf50',
-      background: disabled ? 'rgba(224,85,85,0.12)' : 'rgba(76,175,80,0.12)',
-      lineHeight: '1.4',
-    }}>
+    <span style={badgeStyle(disabled ? 'danger' : 'success')}>
       {disabled ? 'Disabled' : 'Active'}
     </span>
   );
 }
-
-const cardStyle: React.CSSProperties = {
-  background: '#111',
-  border: '1px solid var(--color-gold-dark)',
-  borderRadius: '4px',
-  padding: 'clamp(1rem, 3vw, 1.5rem)',
-  marginBottom: '1.5rem',
-};
-
-const cardTitleStyle: React.CSSProperties = {
-  fontFamily: 'var(--font-serif)',
-  fontSize: '0.75rem',
-  letterSpacing: '0.2em',
-  color: 'var(--color-gold)',
-  marginBottom: '1.2rem',
-  textTransform: 'uppercase',
-};
-
-const inputStyle: React.CSSProperties = {
-  width: '100%',
-  padding: '0.55rem 0.75rem',
-  background: '#1a1a1a',
-  border: '1px solid #333',
-  borderRadius: '3px',
-  color: 'var(--color-text)',
-  fontFamily: 'var(--font-sans)',
-  fontSize: '0.85rem',
-  outline: 'none',
-};
-
-const labelStyle: React.CSSProperties = {
-  display: 'block',
-  fontFamily: 'var(--font-sans)',
-  fontSize: '0.65rem',
-  letterSpacing: '0.1em',
-  color: 'var(--color-gold)',
-  textTransform: 'uppercase',
-  marginBottom: '0.35rem',
-};
-
-const primaryBtnStyle: React.CSSProperties = {
-  padding: '0.55rem 1.2rem',
-  background: 'var(--color-gold)',
-  border: 'none',
-  borderRadius: '3px',
-  color: '#0a0a0a',
-  fontFamily: 'var(--font-sans)',
-  fontSize: '0.75rem',
-  fontWeight: 600,
-  letterSpacing: '0.08em',
-  textTransform: 'uppercase',
-  cursor: 'pointer',
-};
-
-const secondaryBtnStyle: React.CSSProperties = {
-  padding: '0.4rem 0.8rem',
-  background: 'transparent',
-  border: '1px solid #333',
-  borderRadius: '3px',
-  color: 'var(--color-text-muted)',
-  fontFamily: 'var(--font-sans)',
-  fontSize: '0.65rem',
-  letterSpacing: '0.06em',
-  textTransform: 'uppercase',
-  cursor: 'pointer',
-};
-
-const thStyle: React.CSSProperties = {
-  textAlign: 'left',
-  padding: '0.6rem 0.75rem',
-  fontSize: '0.65rem',
-  letterSpacing: '0.1em',
-  color: 'var(--color-gold)',
-  textTransform: 'uppercase',
-  borderBottom: '1px solid #222',
-  whiteSpace: 'nowrap',
-};
-
-const tdStyle: React.CSSProperties = {
-  padding: '0.6rem 0.75rem',
-  fontSize: '0.8rem',
-  color: 'var(--color-text-muted)',
-  borderBottom: '1px solid #1a1a1a',
-  whiteSpace: 'nowrap',
-};
 
 export default function AdminPage() {
   const currentUser = useAuthStore((s) => s.user);
@@ -314,7 +208,7 @@ export default function AdminPage() {
 
   if (error) {
     return (
-      <div style={{ color: '#e05555', fontFamily: 'var(--font-sans)', padding: '2rem' }}>
+      <div style={{ color: colors.danger, padding: '2rem' }}>
         {error}
       </div>
     );
@@ -324,16 +218,16 @@ export default function AdminPage() {
     <div>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '0.75rem' }}>
         <h1 style={{
-          fontFamily: 'var(--font-serif)',
           fontSize: 'clamp(0.9rem, 2vw, 1.1rem)',
-          letterSpacing: '0.2em',
-          color: 'var(--color-gold)',
+          fontWeight: 800,
+          letterSpacing: '0.08em',
+          color: colors.heading,
           textTransform: 'uppercase',
         }}>
           User Management
         </h1>
         <Link href="/desk/admin/audit" style={{
-          ...secondaryBtnStyle,
+          ...buttonSecondary,
           textDecoration: 'none',
           display: 'inline-block',
         }}>
@@ -346,23 +240,22 @@ export default function AdminPage() {
         <div style={{
           padding: '0.6rem 1rem',
           marginBottom: '1rem',
-          borderRadius: '3px',
+          borderRadius: '8px',
           fontSize: '0.8rem',
-          fontFamily: 'var(--font-sans)',
-          color: message.type === 'success' ? '#4caf50' : '#e05555',
-          background: message.type === 'success' ? 'rgba(76,175,80,0.1)' : 'rgba(224,85,85,0.1)',
-          border: `1px solid ${message.type === 'success' ? 'rgba(76,175,80,0.3)' : 'rgba(224,85,85,0.3)'}`,
+          color: message.type === 'success' ? colors.success : colors.danger,
+          background: message.type === 'success' ? colors.successBg : colors.dangerBg,
+          border: `1px solid ${message.type === 'success' ? 'rgba(16,185,129,0.3)' : 'rgba(239,68,68,0.3)'}`,
         }}>
           {message.text}
         </div>
       )}
 
       {/* Create User Section */}
-      <div style={cardStyle}>
+      <div style={{ ...cardStyle, marginBottom: '1.5rem' }}>
         <button
           onClick={() => setShowCreate(!showCreate)}
           style={{
-            ...secondaryBtnStyle,
+            ...buttonSecondary,
             display: 'flex',
             alignItems: 'center',
             gap: '0.5rem',
@@ -426,7 +319,7 @@ export default function AdminPage() {
               </div>
             </div>
             <button type="submit" disabled={creating} style={{
-              ...primaryBtnStyle,
+              ...buttonPrimary,
               opacity: creating ? 0.6 : 1,
             }}>
               {creating ? 'Creating...' : 'Create User'}
@@ -437,7 +330,7 @@ export default function AdminPage() {
 
       {/* Password Change Inline */}
       {passwordId && (
-        <div style={cardStyle}>
+        <div style={{ ...cardStyle, marginBottom: '1.5rem' }}>
           <div style={cardTitleStyle}>Change Password</div>
           <form onSubmit={handleChangePassword} style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-end', flexWrap: 'wrap' }}>
             <div style={{ flex: '1 1 200px' }}>
@@ -452,12 +345,12 @@ export default function AdminPage() {
               />
             </div>
             <button type="submit" disabled={changingPassword} style={{
-              ...primaryBtnStyle,
+              ...buttonPrimary,
               opacity: changingPassword ? 0.6 : 1,
             }}>
               {changingPassword ? 'Changing...' : 'Confirm'}
             </button>
-            <button type="button" onClick={() => { setPasswordId(null); setNewPassword(''); }} style={secondaryBtnStyle}>
+            <button type="button" onClick={() => { setPasswordId(null); setNewPassword(''); }} style={buttonSecondary}>
               Cancel
             </button>
           </form>
@@ -465,20 +358,20 @@ export default function AdminPage() {
       )}
 
       {/* Users Table */}
-      <div style={cardStyle}>
+      <div style={{ ...cardStyle, marginBottom: '1.5rem' }}>
         <div style={cardTitleStyle}>Users</div>
 
         {loading ? (
-          <div style={{ color: 'var(--color-text-muted)', fontFamily: 'var(--font-sans)', fontSize: '0.85rem' }}>
+          <div style={{ color: colors.muted, fontSize: '0.85rem' }}>
             Loading...
           </div>
         ) : users.length === 0 ? (
-          <div style={{ color: 'var(--color-text-muted)', fontFamily: 'var(--font-sans)', fontSize: '0.85rem' }}>
+          <div style={{ color: colors.muted, fontSize: '0.85rem' }}>
             No users found
           </div>
         ) : (
           <div style={{ overflowX: 'auto' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontFamily: 'var(--font-sans)' }}>
+            <table style={tableStyle}>
               <thead>
                 <tr>
                   {['Email', 'Display Name', 'Role', 'Status', 'Created', 'Actions'].map((h) => (
@@ -491,7 +384,7 @@ export default function AdminPage() {
                   editingId === u.id ? (
                     <tr key={u.id}>
                       <td style={tdStyle}>
-                        <span style={{ color: 'var(--color-text)' }}>{u.email}</span>
+                        <span style={{ color: colors.heading }}>{u.email}</span>
                       </td>
                       <td style={tdStyle}>
                         <input
@@ -520,9 +413,9 @@ export default function AdminPage() {
                         <button
                           onClick={() => setEditDisabled(!editDisabled)}
                           style={{
-                            ...secondaryBtnStyle,
-                            color: editDisabled ? '#e05555' : '#4caf50',
-                            borderColor: editDisabled ? 'rgba(224,85,85,0.3)' : 'rgba(76,175,80,0.3)',
+                            ...buttonSecondary,
+                            color: editDisabled ? colors.danger : colors.success,
+                            borderColor: editDisabled ? 'rgba(239,68,68,0.3)' : 'rgba(16,185,129,0.3)',
                           }}
                         >
                           {editDisabled ? 'Disabled' : 'Active'}
@@ -535,21 +428,21 @@ export default function AdminPage() {
                       </td>
                       <td style={{ ...tdStyle, display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
                         <button onClick={handleSaveEdit} disabled={saving} style={{
-                          ...primaryBtnStyle,
+                          ...buttonPrimary,
                           padding: '0.35rem 0.7rem',
                           fontSize: '0.6rem',
                           opacity: saving ? 0.6 : 1,
                         }}>
                           {saving ? 'Saving...' : 'Save'}
                         </button>
-                        <button onClick={cancelEdit} style={secondaryBtnStyle}>
+                        <button onClick={cancelEdit} style={buttonSecondary}>
                           Cancel
                         </button>
                       </td>
                     </tr>
                   ) : (
                     <tr key={u.id}>
-                      <td style={{ ...tdStyle, color: 'var(--color-text)', fontWeight: 500 }}>
+                      <td style={{ ...tdStyle, color: colors.heading, fontWeight: 500 }}>
                         {u.email}
                       </td>
                       <td style={tdStyle}>{u.display_name || u.displayName || ''}</td>
@@ -563,23 +456,23 @@ export default function AdminPage() {
                       <td style={{ ...tdStyle, display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
                         {currentUser && roleRank(currentUser.role) > roleRank(u.role) && (
                           <>
-                            <button onClick={() => startEdit(u)} style={secondaryBtnStyle}>
+                            <button onClick={() => startEdit(u)} style={buttonSecondary}>
                               Edit
                             </button>
                             <button onClick={() => handleToggleDisable(u)} style={{
-                              ...secondaryBtnStyle,
-                              color: u.disabled ? '#4caf50' : '#e05555',
-                              borderColor: u.disabled ? 'rgba(76,175,80,0.3)' : 'rgba(224,85,85,0.3)',
+                              ...buttonSecondary,
+                              color: u.disabled ? colors.success : colors.danger,
+                              borderColor: u.disabled ? 'rgba(16,185,129,0.3)' : 'rgba(239,68,68,0.3)',
                             }}>
                               {u.disabled ? 'Enable' : 'Disable'}
                             </button>
-                            <button onClick={() => { setPasswordId(u.id); setNewPassword(''); setEditingId(null); }} style={secondaryBtnStyle}>
+                            <button onClick={() => { setPasswordId(u.id); setNewPassword(''); setEditingId(null); }} style={buttonSecondary}>
                               Password
                             </button>
                             <button onClick={() => handleDelete(u)} style={{
-                              ...secondaryBtnStyle,
-                              color: '#e05555',
-                              borderColor: 'rgba(224,85,85,0.3)',
+                              ...buttonSecondary,
+                              color: colors.danger,
+                              borderColor: 'rgba(239,68,68,0.3)',
                             }}>
                               Delete
                             </button>

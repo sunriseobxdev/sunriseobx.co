@@ -1,4 +1,5 @@
 'use client';
+import { cardStyle, cardTitleStyle, inputStyle, labelStyle, buttonPrimary, buttonSecondary, badgeStyle, colors, tableStyle, thStyle, tdStyle, pageTitle, sectionGap } from '@/lib/desk-styles';
 
 import { useState, useEffect, useRef, useCallback, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
@@ -32,34 +33,7 @@ interface Ticker {
   marketCap: string;
 }
 
-const cardStyle: React.CSSProperties = {
-  background: '#111',
-  border: '1px solid var(--color-gold-dark)',
-  borderRadius: '4px',
-  padding: 'clamp(1rem, 3vw, 1.5rem)',
-};
-
-const cardTitleStyle: React.CSSProperties = {
-  fontFamily: 'var(--font-serif)',
-  fontSize: '0.75rem',
-  letterSpacing: '0.2em',
-  color: 'var(--color-gold)',
-  marginBottom: '1.2rem',
-  textTransform: 'uppercase',
-};
-
-const inputStyle: React.CSSProperties = {
-  width: '100%',
-  padding: '0.65rem 0.8rem',
-  background: '#1a1a1a',
-  border: '1px solid #333',
-  borderRadius: '3px',
-  color: 'var(--color-text)',
-  fontFamily: 'var(--font-sans)',
-  fontSize: '0.85rem',
-  outline: 'none',
-  transition: 'border-color 0.3s ease',
-};
+// Using cardStyle/cardTitleStyle/inputStyle from @/lib/desk-styles
 
 function formatPrice(val: number): string {
   return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(val);
@@ -173,7 +147,7 @@ function MarketInner() {
 
   if (error) {
     return (
-      <div style={{ color: '#e05555', fontFamily: 'var(--font-sans)', padding: '2rem' }}>
+      <div style={{ color: '#e05555', fontFamily: 'inherit', padding: '2rem' }}>
         {error}
       </div>
     );
@@ -185,7 +159,7 @@ function MarketInner() {
       <div style={cardStyle}>
         <div style={cardTitleStyle}>Market Indices</div>
         {loading ? (
-          <div style={{ color: 'var(--color-text-muted)', fontFamily: 'var(--font-sans)', fontSize: '0.85rem' }}>
+          <div style={{ color: '${colors.body}', fontFamily: 'inherit', fontSize: '0.85rem' }}>
             Loading...
           </div>
         ) : (
@@ -208,29 +182,29 @@ function MarketInner() {
                   cursor: 'pointer',
                   transition: 'border-color 0.2s ease',
                 }}
-                  onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--color-gold-dark)'; }}
+                  onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.borderColor = '${colors.borderLight}'; }}
                   onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.borderColor = '#222'; }}
                 >
                   <div style={{
-                    fontFamily: 'var(--font-sans)',
+                    fontFamily: 'inherit',
                     fontSize: '0.7rem',
                     letterSpacing: '0.1em',
-                    color: 'var(--color-text-muted)',
+                    color: '${colors.body}',
                     marginBottom: '0.3rem',
                   }}>
                     {idx.symbol}
                   </div>
                   <div style={{
-                    fontFamily: 'var(--font-sans)',
+                    fontFamily: 'inherit',
                     fontSize: 'clamp(0.95rem, 2.5vw, 1.15rem)',
                     fontWeight: 600,
-                    color: 'var(--color-text)',
+                    color: '${colors.heading}',
                     marginBottom: '0.2rem',
                   }}>
                     {formatPrice(idx.price)}
                   </div>
                   <div style={{
-                    fontFamily: 'var(--font-sans)',
+                    fontFamily: 'inherit',
                     fontSize: '0.75rem',
                     color: changeColor(idx.changePercent),
                   }}>
@@ -253,11 +227,11 @@ function MarketInner() {
         <div style={cardStyle}>
           <div style={cardTitleStyle}>Top Gainers</div>
           {loading ? (
-            <div style={{ color: 'var(--color-text-muted)', fontFamily: 'var(--font-sans)', fontSize: '0.85rem' }}>
+            <div style={{ color: '${colors.body}', fontFamily: 'inherit', fontSize: '0.85rem' }}>
               Loading...
             </div>
           ) : gainers.length === 0 ? (
-            <div style={{ color: 'var(--color-text-muted)', fontFamily: 'var(--font-sans)', fontSize: '0.85rem' }}>
+            <div style={{ color: '${colors.body}', fontFamily: 'inherit', fontSize: '0.85rem' }}>
               No data available
             </div>
           ) : (
@@ -282,19 +256,19 @@ function MarketInner() {
                   >
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', minWidth: 0, flex: 1 }}>
                       <span style={{
-                        fontFamily: 'var(--font-sans)',
+                        fontFamily: 'inherit',
                         fontSize: '0.85rem',
                         fontWeight: 600,
-                        color: 'var(--color-text)',
+                        color: '${colors.heading}',
                         flexShrink: 0,
                         width: '55px',
                       }}>
                         {m.symbol}
                       </span>
                       <span style={{
-                        fontFamily: 'var(--font-sans)',
+                        fontFamily: 'inherit',
                         fontSize: '0.75rem',
-                        color: 'var(--color-text-muted)',
+                        color: '${colors.body}',
                         overflow: 'hidden',
                         textOverflow: 'ellipsis',
                         whiteSpace: 'nowrap',
@@ -304,14 +278,14 @@ function MarketInner() {
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexShrink: 0 }}>
                       <span style={{
-                        fontFamily: 'var(--font-sans)',
+                        fontFamily: 'inherit',
                         fontSize: '0.85rem',
-                        color: 'var(--color-text)',
+                        color: '${colors.heading}',
                       }}>
                         {formatPrice(m.price)}
                       </span>
                       <span style={{
-                        fontFamily: 'var(--font-sans)',
+                        fontFamily: 'inherit',
                         fontSize: '0.8rem',
                         fontWeight: 600,
                         color: '#4caf50',
@@ -332,11 +306,11 @@ function MarketInner() {
         <div style={cardStyle}>
           <div style={cardTitleStyle}>Top Losers</div>
           {loading ? (
-            <div style={{ color: 'var(--color-text-muted)', fontFamily: 'var(--font-sans)', fontSize: '0.85rem' }}>
+            <div style={{ color: '${colors.body}', fontFamily: 'inherit', fontSize: '0.85rem' }}>
               Loading...
             </div>
           ) : losers.length === 0 ? (
-            <div style={{ color: 'var(--color-text-muted)', fontFamily: 'var(--font-sans)', fontSize: '0.85rem' }}>
+            <div style={{ color: '${colors.body}', fontFamily: 'inherit', fontSize: '0.85rem' }}>
               No data available
             </div>
           ) : (
@@ -361,19 +335,19 @@ function MarketInner() {
                   >
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', minWidth: 0, flex: 1 }}>
                       <span style={{
-                        fontFamily: 'var(--font-sans)',
+                        fontFamily: 'inherit',
                         fontSize: '0.85rem',
                         fontWeight: 600,
-                        color: 'var(--color-text)',
+                        color: '${colors.heading}',
                         flexShrink: 0,
                         width: '55px',
                       }}>
                         {m.symbol}
                       </span>
                       <span style={{
-                        fontFamily: 'var(--font-sans)',
+                        fontFamily: 'inherit',
                         fontSize: '0.75rem',
-                        color: 'var(--color-text-muted)',
+                        color: '${colors.body}',
                         overflow: 'hidden',
                         textOverflow: 'ellipsis',
                         whiteSpace: 'nowrap',
@@ -383,14 +357,14 @@ function MarketInner() {
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexShrink: 0 }}>
                       <span style={{
-                        fontFamily: 'var(--font-sans)',
+                        fontFamily: 'inherit',
                         fontSize: '0.85rem',
-                        color: 'var(--color-text)',
+                        color: '${colors.heading}',
                       }}>
                         {formatPrice(m.price)}
                       </span>
                       <span style={{
-                        fontFamily: 'var(--font-sans)',
+                        fontFamily: 'inherit',
                         fontSize: '0.8rem',
                         fontWeight: 600,
                         color: '#e05555',
@@ -412,11 +386,11 @@ function MarketInner() {
       <div style={cardStyle}>
         <div style={cardTitleStyle}>Sectors</div>
         {loading ? (
-          <div style={{ color: 'var(--color-text-muted)', fontFamily: 'var(--font-sans)', fontSize: '0.85rem' }}>
+          <div style={{ color: '${colors.body}', fontFamily: 'inherit', fontSize: '0.85rem' }}>
             Loading...
           </div>
         ) : sectors.length === 0 ? (
-          <div style={{ color: 'var(--color-text-muted)', fontFamily: 'var(--font-sans)', fontSize: '0.85rem' }}>
+          <div style={{ color: '${colors.body}', fontFamily: 'inherit', fontSize: '0.85rem' }}>
             No sectors available
           </div>
         ) : (
@@ -434,28 +408,28 @@ function MarketInner() {
                 }}
                 style={{
                   background: sectorFilter === s.name ? getSectorColor(s.name) : '#0d0d0d',
-                  border: `1px solid ${sectorFilter === s.name ? 'var(--color-gold-dark)' : '#222'}`,
+                  border: `1px solid ${sectorFilter === s.name ? '${colors.borderLight}' : '#222'}`,
                   borderRadius: '4px',
                   padding: '0.6rem 0.75rem',
                   cursor: 'pointer',
                   textAlign: 'left',
                   transition: 'all 0.2s ease',
                 }}
-                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--color-gold-dark)'; }}
+                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.borderColor = '${colors.borderLight}'; }}
                 onMouseLeave={(e) => { if (sectorFilter !== s.name) (e.currentTarget as HTMLElement).style.borderColor = '#222'; }}
               >
                 <div style={{
-                  fontFamily: 'var(--font-sans)',
+                  fontFamily: 'inherit',
                   fontSize: '0.8rem',
-                  color: 'var(--color-text)',
+                  color: '${colors.heading}',
                   marginBottom: '0.2rem',
                 }}>
                   {s.name}
                 </div>
                 <div style={{
-                  fontFamily: 'var(--font-sans)',
+                  fontFamily: 'inherit',
                   fontSize: '0.65rem',
-                  color: 'var(--color-text-muted)',
+                  color: '${colors.body}',
                 }}>
                   {s.count} ticker{s.count !== 1 ? 's' : ''}
                 </div>
@@ -486,7 +460,7 @@ function MarketInner() {
               onChange={(e) => handleSearchChange(e.target.value)}
               placeholder="Search by symbol or name..."
               style={inputStyle}
-              onFocus={(e) => { e.target.style.borderColor = 'var(--color-gold)'; }}
+              onFocus={(e) => { e.target.style.borderColor = '${colors.accent}'; }}
               onBlur={(e) => { e.target.style.borderColor = '#333'; }}
             />
           </div>
@@ -506,11 +480,11 @@ function MarketInner() {
 
         {/* Ticker Grid */}
         {tickersLoading ? (
-          <div style={{ color: 'var(--color-text-muted)', fontFamily: 'var(--font-sans)', fontSize: '0.85rem' }}>
+          <div style={{ color: '${colors.body}', fontFamily: 'inherit', fontSize: '0.85rem' }}>
             Loading tickers...
           </div>
         ) : tickers.length === 0 ? (
-          <div style={{ color: 'var(--color-text-muted)', fontFamily: 'var(--font-sans)', fontSize: '0.85rem' }}>
+          <div style={{ color: '${colors.body}', fontFamily: 'inherit', fontSize: '0.85rem' }}>
             No tickers found
           </div>
         ) : (
@@ -534,22 +508,22 @@ function MarketInner() {
                   transition: 'border-color 0.2s ease',
                   height: '100%',
                 }}
-                  onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--color-gold-dark)'; }}
+                  onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.borderColor = '${colors.borderLight}'; }}
                   onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.borderColor = '#222'; }}
                 >
                   <div style={{
-                    fontFamily: 'var(--font-sans)',
+                    fontFamily: 'inherit',
                     fontSize: '1.1rem',
                     fontWeight: 700,
-                    color: 'var(--color-gold)',
+                    color: '${colors.accent}',
                     marginBottom: '0.3rem',
                   }}>
                     {t.symbol}
                   </div>
                   <div style={{
-                    fontFamily: 'var(--font-sans)',
+                    fontFamily: 'inherit',
                     fontSize: '0.75rem',
-                    color: 'var(--color-text-muted)',
+                    color: '${colors.body}',
                     marginBottom: '0.5rem',
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
@@ -560,10 +534,10 @@ function MarketInner() {
                   <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
                     {t.sector && (
                       <span style={{
-                        fontFamily: 'var(--font-sans)',
+                        fontFamily: 'inherit',
                         fontSize: '0.6rem',
                         letterSpacing: '0.05em',
-                        color: 'var(--color-text)',
+                        color: '${colors.heading}',
                         background: getSectorColor(t.sector),
                         padding: '0.15rem 0.4rem',
                         borderRadius: '10px',
@@ -574,10 +548,10 @@ function MarketInner() {
                     )}
                     {t.marketCap && (
                       <span style={{
-                        fontFamily: 'var(--font-sans)',
+                        fontFamily: 'inherit',
                         fontSize: '0.6rem',
                         letterSpacing: '0.05em',
-                        color: 'var(--color-text-muted)',
+                        color: '${colors.body}',
                         background: 'rgba(255, 255, 255, 0.05)',
                         padding: '0.15rem 0.4rem',
                         borderRadius: '10px',

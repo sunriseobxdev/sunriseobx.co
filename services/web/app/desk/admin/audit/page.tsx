@@ -1,4 +1,5 @@
 'use client';
+import { cardStyle, cardTitleStyle, inputStyle, labelStyle, buttonPrimary, buttonSecondary, badgeStyle, colors, tableStyle, thStyle, tdStyle, pageTitle, sectionGap } from '@/lib/desk-styles';
 
 import { useEffect, useState, useCallback } from 'react';
 import { apiFetch } from '@/lib/api';
@@ -29,7 +30,7 @@ const actionColors: Record<string, string> = {
 };
 
 function ActionBadge({ action }: { action: string }) {
-  const color = actionColors[action] || 'var(--color-text-muted)';
+  const color = actionColors[action] || '${colors.body}';
   return (
     <span style={{
       display: 'inline-block',
@@ -76,42 +77,6 @@ function absoluteTime(dateStr: string): string {
     second: '2-digit',
   });
 }
-
-const cardStyle: React.CSSProperties = {
-  background: '#111',
-  border: '1px solid var(--color-gold-dark)',
-  borderRadius: '4px',
-  padding: 'clamp(1rem, 3vw, 1.5rem)',
-};
-
-const cardTitleStyle: React.CSSProperties = {
-  fontFamily: 'var(--font-serif)',
-  fontSize: '0.75rem',
-  letterSpacing: '0.2em',
-  color: 'var(--color-gold)',
-  marginBottom: '1.2rem',
-  textTransform: 'uppercase',
-};
-
-const thStyle: React.CSSProperties = {
-  textAlign: 'left',
-  padding: '0.6rem 0.75rem',
-  fontSize: '0.65rem',
-  letterSpacing: '0.1em',
-  color: 'var(--color-gold)',
-  textTransform: 'uppercase',
-  borderBottom: '1px solid #222',
-  whiteSpace: 'nowrap',
-};
-
-const tdStyle: React.CSSProperties = {
-  padding: '0.6rem 0.75rem',
-  fontSize: '0.8rem',
-  color: 'var(--color-text-muted)',
-  borderBottom: '1px solid #1a1a1a',
-  whiteSpace: 'nowrap',
-  verticalAlign: 'top',
-};
 
 const LIMIT = 50;
 
@@ -166,7 +131,7 @@ export default function AuditPage() {
 
   if (error) {
     return (
-      <div style={{ color: '#e05555', fontFamily: 'var(--font-sans)', padding: '2rem' }}>
+      <div style={{ color: '#e05555', fontFamily: 'inherit', padding: '2rem' }}>
         {error}
       </div>
     );
@@ -175,10 +140,10 @@ export default function AuditPage() {
   return (
     <div>
       <h1 style={{
-        fontFamily: 'var(--font-serif)',
+        fontFamily: 'inherit',
         fontSize: 'clamp(0.9rem, 2vw, 1.1rem)',
         letterSpacing: '0.2em',
-        color: 'var(--color-gold)',
+        color: '${colors.accent}',
         textTransform: 'uppercase',
         marginBottom: '1.5rem',
       }}>
@@ -189,17 +154,17 @@ export default function AuditPage() {
         <div style={cardTitleStyle}>Activity</div>
 
         {loading ? (
-          <div style={{ color: 'var(--color-text-muted)', fontFamily: 'var(--font-sans)', fontSize: '0.85rem' }}>
+          <div style={{ color: '${colors.body}', fontFamily: 'inherit', fontSize: '0.85rem' }}>
             Loading...
           </div>
         ) : entries.length === 0 ? (
-          <div style={{ color: 'var(--color-text-muted)', fontFamily: 'var(--font-sans)', fontSize: '0.85rem' }}>
+          <div style={{ color: '${colors.body}', fontFamily: 'inherit', fontSize: '0.85rem' }}>
             No audit entries
           </div>
         ) : (
           <>
             <div style={{ overflowX: 'auto' }}>
-              <table style={{ width: '100%', borderCollapse: 'collapse', fontFamily: 'var(--font-sans)' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', fontFamily: 'inherit' }}>
                 <thead>
                   <tr>
                     {['Time', 'User', 'Action', 'Resource', 'Details', 'IP'].map((h) => (
@@ -217,7 +182,7 @@ export default function AuditPage() {
                         <td style={tdStyle} title={absoluteTime(entry.timestamp || entry.createdAt || '')}>
                           {relativeTime(entry.timestamp || entry.createdAt || '')}
                         </td>
-                        <td style={{ ...tdStyle, color: 'var(--color-text)' }}>
+                        <td style={{ ...tdStyle, color: '${colors.heading}' }}>
                           {entry.user_email || entry.userEmail || ''}
                         </td>
                         <td style={tdStyle}>
@@ -234,9 +199,9 @@ export default function AuditPage() {
                                 style={{
                                   background: 'none',
                                   border: 'none',
-                                  color: 'var(--color-gold-dark)',
+                                  color: '${colors.borderLight}',
                                   cursor: 'pointer',
-                                  fontFamily: 'var(--font-sans)',
+                                  fontFamily: 'inherit',
                                   fontSize: '0.7rem',
                                   padding: '0.15rem 0.3rem',
                                   letterSpacing: '0.05em',
@@ -252,7 +217,7 @@ export default function AuditPage() {
                                   border: '1px solid #222',
                                   borderRadius: '3px',
                                   fontSize: '0.65rem',
-                                  color: 'var(--color-text-muted)',
+                                  color: '${colors.body}',
                                   whiteSpace: 'pre-wrap',
                                   wordBreak: 'break-all',
                                   maxHeight: '200px',
@@ -285,10 +250,10 @@ export default function AuditPage() {
                   style={{
                     padding: '0.55rem 1.5rem',
                     background: 'transparent',
-                    border: '1px solid #333',
+                    border: `1px solid ${colors.borderLight}`,
                     borderRadius: '3px',
-                    color: 'var(--color-text-muted)',
-                    fontFamily: 'var(--font-sans)',
+                    color: '${colors.body}',
+                    fontFamily: 'inherit',
                     fontSize: '0.75rem',
                     letterSpacing: '0.08em',
                     textTransform: 'uppercase',

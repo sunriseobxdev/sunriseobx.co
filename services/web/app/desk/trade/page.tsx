@@ -4,6 +4,7 @@ import { useState, useEffect, FormEvent, Suspense, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { apiFetch } from '@/lib/api';
 import TickerSearch from '@/components/TickerSearch';
+import { cardStyle, cardTitleStyle, inputStyle, labelStyle, buttonPrimary, buttonSecondary, badgeStyle, colors, tableStyle, thStyle, tdStyle } from '@/lib/desk-styles';
 
 interface Order {
   id: string;
@@ -25,45 +26,6 @@ interface QuoteData {
 interface TradeData {
   p: number; s: number;
 }
-
-const cardStyle: React.CSSProperties = {
-  background: '#111',
-  border: '1px solid var(--color-gold-dark)',
-  borderRadius: '4px',
-  padding: 'clamp(1rem, 3vw, 1.5rem)',
-};
-
-const cardTitleStyle: React.CSSProperties = {
-  fontFamily: 'var(--font-serif)',
-  fontSize: '0.75rem',
-  letterSpacing: '0.2em',
-  color: 'var(--color-gold)',
-  marginBottom: '1.2rem',
-  textTransform: 'uppercase',
-};
-
-const inputStyle: React.CSSProperties = {
-  width: '100%',
-  padding: '0.65rem 0.8rem',
-  background: '#1a1a1a',
-  border: '1px solid #333',
-  borderRadius: '3px',
-  color: 'var(--color-text)',
-  fontFamily: 'var(--font-sans)',
-  fontSize: '0.85rem',
-  outline: 'none',
-  transition: 'border-color 0.3s ease',
-};
-
-const labelStyle: React.CSSProperties = {
-  display: 'block',
-  fontFamily: 'var(--font-sans)',
-  fontSize: '0.65rem',
-  letterSpacing: '0.1em',
-  color: 'var(--color-text-muted)',
-  marginBottom: '0.3rem',
-  textTransform: 'uppercase',
-};
 
 function formatPrice(n: number) {
   return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(n);
@@ -173,20 +135,20 @@ function TradeInner() {
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 0 }}>
                 <button type="button" onClick={() => setSide('buy')} style={{
                   padding: '0.75rem',
-                  background: side === 'buy' ? '#1b5e20' : '#1a1a1a',
-                  border: `2px solid ${side === 'buy' ? '#4caf50' : '#333'}`,
-                  borderRadius: '3px 0 0 3px',
-                  color: side === 'buy' ? '#4caf50' : 'var(--color-text-muted)',
-                  fontFamily: 'var(--font-sans)', fontSize: '0.85rem', fontWeight: 700,
+                  background: side === 'buy' ? colors.successBg : colors.surfaceLight,
+                  border: `2px solid ${side === 'buy' ? colors.success : colors.borderLight}`,
+                  borderRadius: '8px 0 0 8px',
+                  color: side === 'buy' ? colors.success : colors.muted,
+                  fontSize: '0.85rem', fontWeight: 700,
                   cursor: 'pointer', letterSpacing: '0.15em', transition: 'all 0.15s',
                 }}>BUY</button>
                 <button type="button" onClick={() => setSide('sell')} style={{
                   padding: '0.75rem',
-                  background: side === 'sell' ? '#4a1111' : '#1a1a1a',
-                  border: `2px solid ${side === 'sell' ? '#e05555' : '#333'}`,
-                  borderRadius: '0 3px 3px 0',
-                  color: side === 'sell' ? '#e05555' : 'var(--color-text-muted)',
-                  fontFamily: 'var(--font-sans)', fontSize: '0.85rem', fontWeight: 700,
+                  background: side === 'sell' ? colors.dangerBg : colors.surfaceLight,
+                  border: `2px solid ${side === 'sell' ? colors.danger : colors.borderLight}`,
+                  borderRadius: '0 8px 8px 0',
+                  color: side === 'sell' ? colors.danger : colors.muted,
+                  fontSize: '0.85rem', fontWeight: 700,
                   cursor: 'pointer', letterSpacing: '0.15em', transition: 'all 0.15s',
                 }}>SELL</button>
               </div>
@@ -244,9 +206,9 @@ function TradeInner() {
             {/* Submit */}
             <button type="submit" disabled={submitting} style={{
               width: '100%', padding: '0.85rem',
-              background: submitting ? '#8a6d2b' : side === 'buy' ? '#4caf50' : '#e05555',
-              color: '#fff', border: 'none', borderRadius: '3px',
-              fontFamily: 'var(--font-sans)', fontWeight: 700, fontSize: '0.9rem',
+              background: submitting ? colors.muted : side === 'buy' ? colors.success : colors.danger,
+              color: '#fff', border: 'none', borderRadius: '8px',
+              fontWeight: 700, fontSize: '0.9rem',
               letterSpacing: '0.12em', textTransform: 'uppercase',
               cursor: submitting ? 'not-allowed' : 'pointer', transition: 'opacity 0.2s',
               opacity: submitting ? 0.6 : 1,
@@ -254,8 +216,8 @@ function TradeInner() {
               {submitting ? 'Submitting...' : `${side.toUpperCase()} ${symbol.toUpperCase() || 'SYMBOL'}`}
             </button>
 
-            {error && <div style={{ color: '#e05555', fontFamily: 'var(--font-sans)', fontSize: '0.8rem', padding: '0.5rem 0.75rem', background: 'rgba(224,85,85,0.1)', borderRadius: '3px' }}>{error}</div>}
-            {success && <div style={{ color: '#4caf50', fontFamily: 'var(--font-sans)', fontSize: '0.8rem', padding: '0.5rem 0.75rem', background: 'rgba(76,175,80,0.1)', borderRadius: '3px' }}>{success}</div>}
+            {error && <div style={{ color: colors.danger, fontSize: '0.8rem', padding: '0.5rem 0.75rem', background: colors.dangerBg, borderRadius: '8px' }}>{error}</div>}
+            {success && <div style={{ color: colors.success, fontSize: '0.8rem', padding: '0.5rem 0.75rem', background: colors.successBg, borderRadius: '8px' }}>{success}</div>}
           </form>
         </div>
 
@@ -270,48 +232,48 @@ function TradeInner() {
                 <div style={{ marginBottom: '1.2rem' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '0.5rem' }}>
                     <div>
-                      <div style={{ fontFamily: 'var(--font-sans)', fontSize: '0.6rem', color: '#4caf50', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '0.2rem' }}>Bid</div>
-                      <div style={{ fontFamily: 'var(--font-sans)', fontSize: '1.4rem', fontWeight: 700, color: '#4caf50' }}>{formatPrice(quote.bp)}</div>
-                      <div style={{ fontFamily: 'var(--font-sans)', fontSize: '0.7rem', color: 'var(--color-text-muted)' }}>{quote.bs.toLocaleString()} shares</div>
+                      <div style={{ fontSize: '0.6rem', color: colors.success, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '0.2rem' }}>Bid</div>
+                      <div style={{ fontSize: '1.4rem', fontWeight: 700, color: colors.success }}>{formatPrice(quote.bp)}</div>
+                      <div style={{ fontSize: '0.7rem', color: colors.muted }}>{quote.bs.toLocaleString()} shares</div>
                     </div>
                     <div style={{ textAlign: 'center', padding: '0 0.5rem' }}>
-                      <div style={{ fontFamily: 'var(--font-sans)', fontSize: '0.6rem', color: 'var(--color-text-muted)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '0.2rem' }}>Spread</div>
-                      <div style={{ fontFamily: 'var(--font-sans)', fontSize: '1rem', fontWeight: 600, color: 'var(--color-gold)' }}>{formatPrice(spread)}</div>
-                      <div style={{ fontFamily: 'var(--font-sans)', fontSize: '0.65rem', color: 'var(--color-text-muted)' }}>{spreadPct.toFixed(3)}%</div>
+                      <div style={{ fontSize: '0.6rem', color: colors.muted, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '0.2rem' }}>Spread</div>
+                      <div style={{ fontSize: '1rem', fontWeight: 600, color: colors.accent }}>{formatPrice(spread)}</div>
+                      <div style={{ fontSize: '0.65rem', color: colors.muted }}>{spreadPct.toFixed(3)}%</div>
                     </div>
                     <div style={{ textAlign: 'right' }}>
-                      <div style={{ fontFamily: 'var(--font-sans)', fontSize: '0.6rem', color: '#e05555', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '0.2rem' }}>Ask</div>
-                      <div style={{ fontFamily: 'var(--font-sans)', fontSize: '1.4rem', fontWeight: 700, color: '#e05555' }}>{formatPrice(quote.ap)}</div>
-                      <div style={{ fontFamily: 'var(--font-sans)', fontSize: '0.7rem', color: 'var(--color-text-muted)' }}>{quote.as.toLocaleString()} shares</div>
+                      <div style={{ fontSize: '0.6rem', color: colors.danger, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '0.2rem' }}>Ask</div>
+                      <div style={{ fontSize: '1.4rem', fontWeight: 700, color: colors.danger }}>{formatPrice(quote.ap)}</div>
+                      <div style={{ fontSize: '0.7rem', color: colors.muted }}>{quote.as.toLocaleString()} shares</div>
                     </div>
                   </div>
 
                   {/* Spread bar */}
-                  <div style={{ position: 'relative', height: '6px', background: '#1a1a1a', borderRadius: '3px', overflow: 'hidden' }}>
-                    <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: '50%', background: 'rgba(76,175,80,0.4)', borderRadius: '3px 0 0 3px' }} />
-                    <div style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: '50%', background: 'rgba(224,85,85,0.4)', borderRadius: '0 3px 3px 0' }} />
+                  <div style={{ position: 'relative', height: '6px', background: colors.surfaceLight, borderRadius: '3px', overflow: 'hidden' }}>
+                    <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: '50%', background: colors.successBg, borderRadius: '3px 0 0 3px' }} />
+                    <div style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: '50%', background: colors.dangerBg, borderRadius: '0 3px 3px 0' }} />
                   </div>
                 </div>
 
                 {/* Last trade */}
                 {lastTrade && (
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.6rem 0', borderTop: '1px solid #1a1a1a' }}>
-                    <span style={{ fontFamily: 'var(--font-sans)', fontSize: '0.65rem', color: 'var(--color-text-muted)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>Last Trade</span>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.6rem 0', borderTop: `1px solid ${colors.borderLight}` }}>
+                    <span style={{ fontSize: '0.65rem', color: colors.muted, letterSpacing: '0.1em', textTransform: 'uppercase' }}>Last Trade</span>
                     <div style={{ textAlign: 'right' }}>
-                      <span style={{ fontFamily: 'var(--font-sans)', fontSize: '1rem', fontWeight: 600, color: 'var(--color-text)' }}>{formatPrice(lastTrade.p)}</span>
-                      <span style={{ fontFamily: 'var(--font-sans)', fontSize: '0.7rem', color: 'var(--color-text-muted)', marginLeft: '0.5rem' }}>{lastTrade.s} shs</span>
+                      <span style={{ fontSize: '1rem', fontWeight: 600, color: colors.heading }}>{formatPrice(lastTrade.p)}</span>
+                      <span style={{ fontSize: '0.7rem', color: colors.muted, marginLeft: '0.5rem' }}>{lastTrade.s} shs</span>
                     </div>
                   </div>
                 )}
 
                 {/* Mid price */}
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.6rem 0', borderTop: '1px solid #1a1a1a' }}>
-                  <span style={{ fontFamily: 'var(--font-sans)', fontSize: '0.65rem', color: 'var(--color-text-muted)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>Mid Price</span>
-                  <span style={{ fontFamily: 'var(--font-sans)', fontSize: '1rem', fontWeight: 600, color: 'var(--color-gold)' }}>{formatPrice(midPrice)}</span>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.6rem 0', borderTop: `1px solid ${colors.borderLight}` }}>
+                  <span style={{ fontSize: '0.65rem', color: colors.muted, letterSpacing: '0.1em', textTransform: 'uppercase' }}>Mid Price</span>
+                  <span style={{ fontSize: '1rem', fontWeight: 600, color: colors.accent }}>{formatPrice(midPrice)}</span>
                 </div>
               </div>
             ) : (
-              <div style={{ color: 'var(--color-text-muted)', fontFamily: 'var(--font-sans)', fontSize: '0.85rem' }}>
+              <div style={{ color: colors.muted, fontSize: '0.85rem' }}>
                 {symbol ? 'Loading quote...' : 'Enter a symbol to see live quote'}
               </div>
             )}
@@ -324,11 +286,11 @@ function TradeInner() {
               {['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'NVDA', 'TSLA', 'META', 'SPY', 'QQQ', 'AMD', 'COIN', 'PLTR'].map(s => (
                 <button key={s} onClick={() => setSymbol(s)} style={{
                   padding: '0.35rem 0.6rem',
-                  background: symbol === s ? 'rgba(201,168,76,0.15)' : '#1a1a1a',
-                  border: `1px solid ${symbol === s ? 'var(--color-gold)' : '#333'}`,
-                  borderRadius: '3px',
-                  color: symbol === s ? 'var(--color-gold)' : 'var(--color-text-muted)',
-                  fontFamily: 'var(--font-sans)', fontSize: '0.7rem', fontWeight: 600,
+                  background: symbol === s ? 'rgba(249,115,22,0.15)' : colors.surfaceLight,
+                  border: `1px solid ${symbol === s ? colors.accent : colors.borderLight}`,
+                  borderRadius: '8px',
+                  color: symbol === s ? colors.accent : colors.muted,
+                  fontSize: '0.7rem', fontWeight: 600,
                   cursor: 'pointer', letterSpacing: '0.05em', transition: 'all 0.15s',
                 }}>
                   {s}
@@ -343,37 +305,33 @@ function TradeInner() {
       <div style={cardStyle}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.2rem' }}>
           <div style={cardTitleStyle}>Open Orders</div>
-          <button onClick={loadOrders} style={{
-            background: 'transparent', border: '1px solid #333', borderRadius: '3px',
-            color: 'var(--color-text-muted)', fontFamily: 'var(--font-sans)', fontSize: '0.7rem',
-            padding: '0.3rem 0.6rem', cursor: 'pointer', letterSpacing: '0.08em',
-          }}>Refresh</button>
+          <button onClick={loadOrders} style={buttonSecondary}>Refresh</button>
         </div>
         {orders.length === 0 ? (
-          <div style={{ color: 'var(--color-text-muted)', fontFamily: 'var(--font-sans)', fontSize: '0.85rem' }}>No open orders</div>
+          <div style={{ color: colors.muted, fontSize: '0.85rem' }}>No open orders</div>
         ) : (
           <div style={{ overflowX: 'auto' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontFamily: 'var(--font-sans)' }}>
+            <table style={tableStyle}>
               <thead>
                 <tr>
                   {['Symbol', 'Side', 'Type', 'Qty', 'Filled', 'Status', ''].map(h => (
-                    <th key={h} style={{ textAlign: 'left', padding: '0.5rem 0.75rem', fontSize: '0.65rem', letterSpacing: '0.1em', color: 'var(--color-gold)', textTransform: 'uppercase', borderBottom: '1px solid #222', whiteSpace: 'nowrap' }}>{h}</th>
+                    <th key={h} style={thStyle}>{h}</th>
                   ))}
                 </tr>
               </thead>
               <tbody>
                 {orders.map(order => (
                   <tr key={order.id}>
-                    <td style={{ padding: '0.5rem 0.75rem', fontSize: '0.85rem', fontWeight: 600, color: 'var(--color-text)', borderBottom: '1px solid #1a1a1a' }}>{order.symbol}</td>
-                    <td style={{ padding: '0.5rem 0.75rem', fontSize: '0.8rem', fontWeight: 600, color: order.side === 'buy' ? '#4caf50' : '#e05555', borderBottom: '1px solid #1a1a1a', textTransform: 'uppercase' }}>{order.side}</td>
-                    <td style={{ padding: '0.5rem 0.75rem', fontSize: '0.8rem', color: 'var(--color-text-muted)', borderBottom: '1px solid #1a1a1a' }}>{order.type}</td>
-                    <td style={{ padding: '0.5rem 0.75rem', fontSize: '0.85rem', color: 'var(--color-text)', borderBottom: '1px solid #1a1a1a' }}>{order.qty}</td>
-                    <td style={{ padding: '0.5rem 0.75rem', fontSize: '0.85rem', color: 'var(--color-text)', borderBottom: '1px solid #1a1a1a' }}>{order.filled_qty}</td>
-                    <td style={{ padding: '0.5rem 0.75rem', fontSize: '0.8rem', color: 'var(--color-text-muted)', borderBottom: '1px solid #1a1a1a', textTransform: 'capitalize' }}>{order.status}</td>
-                    <td style={{ padding: '0.5rem 0.75rem', borderBottom: '1px solid #1a1a1a' }}>
+                    <td style={{ ...tdStyle, fontWeight: 600, color: colors.heading }}>{order.symbol}</td>
+                    <td style={{ ...tdStyle, fontWeight: 600, color: order.side === 'buy' ? colors.success : colors.danger, textTransform: 'uppercase' }}>{order.side}</td>
+                    <td style={tdStyle}>{order.type}</td>
+                    <td style={{ ...tdStyle, color: colors.heading }}>{order.qty}</td>
+                    <td style={{ ...tdStyle, color: colors.heading }}>{order.filled_qty}</td>
+                    <td style={{ ...tdStyle, textTransform: 'capitalize' }}>{order.status}</td>
+                    <td style={tdStyle}>
                       <button onClick={() => handleCancel(order.id)} style={{
-                        background: 'transparent', border: '1px solid #e05555', borderRadius: '3px',
-                        color: '#e05555', fontFamily: 'var(--font-sans)', fontSize: '0.65rem',
+                        background: 'transparent', border: `1px solid ${colors.danger}`, borderRadius: '6px',
+                        color: colors.danger, fontSize: '0.65rem',
                         padding: '0.25rem 0.5rem', cursor: 'pointer', letterSpacing: '0.05em', textTransform: 'uppercase',
                       }}>Cancel</button>
                     </td>

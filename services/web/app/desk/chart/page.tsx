@@ -1,4 +1,5 @@
 'use client';
+import { cardStyle, cardTitleStyle, inputStyle, labelStyle, buttonPrimary, buttonSecondary, badgeStyle, colors, tableStyle, thStyle, tdStyle, pageTitle, sectionGap } from '@/lib/desk-styles';
 
 import { useState, useEffect, useRef, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
@@ -111,10 +112,10 @@ function ChartInner() {
           <TickerSearch value={symbol} onChange={setSymbol} placeholder="Symbol" />
         </div>
         <span style={{
-          fontFamily: 'var(--font-serif)',
+          fontFamily: 'inherit',
           fontSize: '0.7rem',
           letterSpacing: '0.2em',
-          color: 'var(--color-gold-dark)',
+          color: '${colors.borderLight}',
           textTransform: 'uppercase',
         }}>
           {symbol.toUpperCase()}
@@ -124,7 +125,7 @@ function ChartInner() {
       {/* TradingView Widget — explicit pixel height for iframe to fill */}
       <div style={{
         height: `${widgetHeight}px`,
-        border: '1px solid var(--color-gold-dark)',
+        border: `1px solid ${colors.borderLight}`,
         borderRadius: '4px',
         overflow: 'hidden',
         background: '#0d0d0d',
@@ -138,9 +139,9 @@ function ChartInner() {
 
       {/* Attribution */}
       <div style={{
-        fontFamily: 'var(--font-sans)',
+        fontFamily: 'inherit',
         fontSize: '0.6rem',
-        color: 'var(--color-text-muted)',
+        color: '${colors.body}',
         textAlign: 'right',
         opacity: 0.5,
         flexShrink: 0,
