@@ -9,6 +9,95 @@ import {
 
 export const customerAuthRouter = Router();
 
+// Check if customer exists and what auth methods are available
+customerAuthRouter.post("/check", async (req, res) => {
+  const { email } = req.body;
+  if (!email) {
+    res.status(400).json({ error: "Email required" });
+    return;
+  }
+
+  if (!process.env.DATABASE_URL) {
+    res.json({ exists: false, has_password: false, totp_enabled: false });
+    return;
+  }
+
+  const pool = getPool();
+  const result = await pool.query(
+    `SELECT id, password_hash IS NOT NULL AS has_password, totp_enabled
+     FROM customers WHERE email = $1`,
+    [email.toLowerCase().trim()]
+  );
+
+  if (result.rows.length === 0) {
+    res.json({ exists: false, has_password: false, totp_enabled: false });
+    return;
+  }
+
+  const c = result.rows[0];
+  res.json({
+    exists: true,
+    has_password: c.has_password,
+    totp_enabled: c.totp_enabled || false,
+  });
+});
+
+// Send password reset OTP
+customerAuthRouter.post("/reset-password", async (req, res) => {
+  const { email, code, new_password } = req.body;
+  if (!email || !code || !new_password) {
+    res.status(400).json({ error: "Email, code, and new_password required" });
+    return;
+  }
+
+  const pool = getPool();
+  const codeHash = crypto.createHash("sha256").update(code).digest("hex");
+
+  const otpResult = await pool.query(
+    `SELECT id FROM customer_otp
+     WHERE email = $1 AND code_hash = $2 AND used = false AND expires_at > NOW()
+     ORDER BY created_at DESC LIMIT 1`,
+    [email.toLowerCase().trim(), codeHash]
+  );
+
+  if (otpResult.rows.length === 0) {
+    res.status(401).json({ error: "Invalid or expired code" });
+    return;
+  }
+
+  await pool.query(`UPDATE customer_otp SET used = true WHERE id = $1`, [otpResult.rows[0].id]);
+
+  const bcrypt = await import("bcryptjs");
+  const hash = await bcrypt.hash(new_password, 10);
+
+  await pool.query(
+    `UPDATE customers SET password_hash = $1, updated_at = NOW() WHERE email = $2`,
+    [hash, email.toLowerCase().trim()]
+  );
+
+  res.json({ success: true, message: "Password updated" });
+});
+
+// Set password (authenticated)
+customerAuthRouter.post("/set-password", customerAuthMiddleware, async (req, res) => {
+  const { password } = req.body;
+  if (!password || password.length < 8) {
+    res.status(400).json({ error: "Password must be at least 8 characters" });
+    return;
+  }
+
+  const pool = getPool();
+  const bcrypt = await import("bcryptjs");
+  const hash = await bcrypt.hash(password, 10);
+
+  await pool.query(
+    `UPDATE customers SET password_hash = $1, updated_at = NOW() WHERE id = $2`,
+    [hash, req.customer!.customerId]
+  );
+
+  res.json({ success: true });
+});
+
 // Send OTP to email (creates customer record if new)
 customerAuthRouter.post("/otp", async (req, res) => {
   const { email } = req.body;

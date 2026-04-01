@@ -23,7 +23,7 @@ function getSmtpTransport() {
 
 const FROM_RESEND = "Sunrise Construction <noreply@sunriseobx.co>";
 
-async function sendEmail(to: string, subject: string, html: string): Promise<void> {
+export async function sendEmail(to: string, subject: string, html: string): Promise<void> {
   // Try Resend first
   const r = getResend();
   if (r) {

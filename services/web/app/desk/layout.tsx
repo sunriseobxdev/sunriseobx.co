@@ -17,6 +17,7 @@ const navItems = [
   { href: "/desk/history", label: "History", icon: "📋" },
   { href: "/desk/invoices", label: "Invoices", icon: "🧾", privilege: "view_invoices" },
   { href: "/desk/payroll", label: "Payroll", icon: "💰", privilege: "view_payroll" },
+  { href: "/desk/support", label: "Support", icon: "🎫" },
   { href: "/desk/admin", label: "Admin", icon: "⚙️", role: "admin" },
   { href: "/desk/profile", label: "Profile", icon: "👤" },
 ];

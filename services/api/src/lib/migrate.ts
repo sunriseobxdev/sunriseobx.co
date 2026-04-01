@@ -561,6 +561,35 @@ CREATE INDEX IF NOT EXISTS idx_job_photos_job_id ON job_photos(job_id);
 CREATE INDEX IF NOT EXISTS idx_job_documents_job_id ON job_documents(job_id);
 CREATE INDEX IF NOT EXISTS idx_job_messages_job_id ON job_messages(job_id);
 CREATE INDEX IF NOT EXISTS idx_job_punch_list_job_id ON job_punch_list(job_id);
+
+CREATE TABLE IF NOT EXISTS support_tickets (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  ticket_number VARCHAR(50) UNIQUE NOT NULL,
+  customer_id UUID REFERENCES customers(id),
+  customer_email VARCHAR(255),
+  subject VARCHAR(500) NOT NULL,
+  category VARCHAR(50) DEFAULT 'general',
+  status VARCHAR(20) DEFAULT 'open',
+  priority VARCHAR(20) DEFAULT 'normal',
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW(),
+  closed_at TIMESTAMPTZ,
+  closed_by UUID REFERENCES users(id)
+);
+
+CREATE TABLE IF NOT EXISTS support_messages (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  ticket_id UUID NOT NULL REFERENCES support_tickets(id) ON DELETE CASCADE,
+  sender_type VARCHAR(10) NOT NULL DEFAULT 'customer',
+  sender_id UUID,
+  sender_name VARCHAR(200),
+  body TEXT NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_support_tickets_status ON support_tickets(status);
+CREATE INDEX IF NOT EXISTS idx_support_tickets_customer ON support_tickets(customer_id);
+CREATE INDEX IF NOT EXISTS idx_support_messages_ticket ON support_messages(ticket_id);
 `;
 
 export async function runMigrations(): Promise<void> {

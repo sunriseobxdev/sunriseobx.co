@@ -359,6 +359,30 @@ impl<T: HttpTransport> SunriseClient<T> {
         Ok(serde_json::from_str(&resp)?)
     }
 
+    // --- Support Tickets ---
+
+    pub async fn support_list_tickets(&self) -> Result<serde_json::Value, SunriseError> {
+        let resp = self.get("/api/support/tickets", vec![]).await?;
+        Ok(serde_json::from_str(&resp)?)
+    }
+
+    pub async fn support_get_ticket(&self, id: &str) -> Result<serde_json::Value, SunriseError> {
+        let resp = self.get(&format!("/api/support/tickets/{}", id), vec![]).await?;
+        Ok(serde_json::from_str(&resp)?)
+    }
+
+    pub async fn support_reply(&self, id: &str, body: &str) -> Result<serde_json::Value, SunriseError> {
+        let req = serde_json::json!({"body": body});
+        let resp = self.post(&format!("/api/support/tickets/{}/reply", id), Some(req.to_string())).await?;
+        Ok(serde_json::from_str(&resp)?)
+    }
+
+    pub async fn support_update_ticket(&self, id: &str, status: &str) -> Result<serde_json::Value, SunriseError> {
+        let req = serde_json::json!({"status": status});
+        let resp = self.put(&format!("/api/support/tickets/{}", id), Some(req.to_string())).await?;
+        Ok(serde_json::from_str(&resp)?)
+    }
+
     // --- Market Overview ---
 
     pub async fn market_tickers(&self, query: Vec<(String, String)>) -> Result<serde_json::Value, SunriseError> {

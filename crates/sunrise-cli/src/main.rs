@@ -72,11 +72,35 @@ enum Commands {
         #[command(subcommand)]
         cmd: KeysCmd,
     },
+    /// Support ticket management
+    Support {
+        #[command(subcommand)]
+        cmd: SupportCmd,
+    },
     /// Market data
     Market {
         #[command(subcommand)]
         cmd: MarketCmd,
     },
+}
+
+// --- Support subcommands ---
+#[derive(Subcommand)]
+enum SupportCmd {
+    /// List all support tickets
+    List,
+    /// Get ticket details with messages
+    Get { id: String },
+    /// Reply to a ticket
+    Reply {
+        id: String,
+        #[arg(long)]
+        body: String,
+    },
+    /// Close a ticket
+    Close { id: String },
+    /// Reopen a ticket
+    Reopen { id: String },
 }
 
 // --- Auth subcommands ---
@@ -789,6 +813,43 @@ async fn run(cli: &Cli, client: &SunriseClient<ReqwestTransport>) -> Result<(), 
             KeysCmd::Revoke { id } => {
                 client.keys_revoke(id).await?;
                 println!("API key revoked.");
+            }
+        },
+
+        Commands::Support { cmd } => match cmd {
+            SupportCmd::List => {
+                let tickets = client.support_list_tickets().await?;
+                if cli.json {
+                    print_json(&tickets);
+                } else {
+                    let empty = vec![];
+                    let arr = tickets.as_array().unwrap_or(&empty);
+                    println!("{:<36}  {:<10}  {:<12}  {:<10}  {}", "ID", "TICKET #", "STATUS", "PRIORITY", "SUBJECT");
+                    for t in arr {
+                        println!("{:<36}  {:<10}  {:<12}  {:<10}  {}",
+                            t["id"].as_str().unwrap_or("-"),
+                            t["ticket_number"].as_str().unwrap_or("-"),
+                            t["status"].as_str().unwrap_or("-"),
+                            t["priority"].as_str().unwrap_or("-"),
+                            t["subject"].as_str().unwrap_or("-"));
+                    }
+                }
+            }
+            SupportCmd::Get { id } => {
+                let ticket = client.support_get_ticket(id).await?;
+                print_json(&ticket);
+            }
+            SupportCmd::Reply { id, body } => {
+                client.support_reply(id, body).await?;
+                println!("Reply sent.");
+            }
+            SupportCmd::Close { id } => {
+                client.support_update_ticket(id, "closed").await?;
+                println!("Ticket closed.");
+            }
+            SupportCmd::Reopen { id } => {
+                client.support_update_ticket(id, "open").await?;
+                println!("Ticket reopened.");
             }
         },
 

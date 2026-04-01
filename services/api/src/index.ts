@@ -21,6 +21,7 @@ import { customerAuthRouter } from "./routes/customer-auth.js";
 import { paymentsRouter } from "./routes/payments.js";
 import { agreementsRouter } from "./routes/agreements.js";
 import { customerJobsRouter } from "./routes/customer-jobs.js";
+import { supportRouter } from "./routes/support.js";
 import { runMigrations } from "./lib/migrate.js";
 
 const app = express();
@@ -92,6 +93,9 @@ app.use("/api/campaigns", campaignsRouter);
 
 // Job management routes (auth + RBAC enforced inside router)
 app.use("/api/jobs", jobsRouter);
+
+// Support ticket routes (customer + admin)
+app.use("/", supportRouter);
 
 // Payment routes (Stripe)
 app.use("/api", paymentsRouter);
