@@ -150,6 +150,7 @@ const emptyForm = {
   estimated_end: "",
   permit_status: "na",
   notes: "",
+  scope_of_work: "",
 };
 
 export default function JobsPage() {
@@ -159,6 +160,8 @@ export default function JobsPage() {
   const [form, setForm] = useState({ ...emptyForm });
   const [saving, setSaving] = useState(false);
   const [milestoneTitle, setMilestoneTitle] = useState("");
+  const [onboardLink, setOnboardLink] = useState<string | null>(null);
+  const [linkCopied, setLinkCopied] = useState(false);
 
   useEffect(() => {
     loadJobs();
@@ -187,7 +190,7 @@ export default function JobsPage() {
   async function handleCreate() {
     setSaving(true);
     try {
-      await apiFetch("/api/jobs/", {
+      const job = await apiFetch("/api/jobs/", {
         method: "POST",
         body: JSON.stringify({
           ...form,
@@ -195,14 +198,60 @@ export default function JobsPage() {
           deposit_amount: form.deposit_amount ? parseFloat(form.deposit_amount) : null,
         }),
       });
-      setView("list");
-      setForm({ ...emptyForm });
+
+      // Auto-generate agreement if scope of work is provided
+      if (form.scope_of_work.trim() && job.id) {
+        try {
+          // Get default template
+          const templates = await apiFetch("/api/agreements/templates");
+          const templateId = templates?.[0]?.id || null;
+
+          const amt = form.contract_amount ? parseFloat(form.contract_amount) : 0;
+          const dep = form.deposit_amount ? parseFloat(form.deposit_amount) : 0;
+          const compensationHtml = `<p>7. For the services rendered, the Client will provide compensation to the Contractor for the flat fee of <strong>$${amt.toLocaleString("en-US", { minimumFractionDigits: 2 })}</strong>.</p>${dep > 0 ? `<p><strong>PAYMENT SCHEDULE:</strong></p><ul><li>Deposit: $${dep.toLocaleString("en-US", { minimumFractionDigits: 2 })} due upon signing</li><li>Balance: $${(amt - dep).toLocaleString("en-US", { minimumFractionDigits: 2 })} due upon completion</li></ul>` : ""}<p>8. The above Compensation includes all applicable sales tax, and duties as required by law.</p>`;
+
+          const agreement = await apiFetch(`/api/agreements/jobs/${job.id}/agreements`, {
+            method: "POST",
+            body: JSON.stringify({
+              template_id: templateId,
+              scope_of_work_html: form.scope_of_work,
+              compensation_html: compensationHtml,
+            }),
+          });
+
+          if (agreement?.id) {
+            const link = `${window.location.origin}/onboard/${agreement.id}`;
+            setOnboardLink(link);
+            // Also send to customer if email exists
+            if (form.customer_email) {
+              try {
+                await apiFetch(`/api/agreements/jobs/${job.id}/agreements/${agreement.id}/send`, { method: "POST" });
+              } catch { /* non-critical */ }
+            }
+          }
+        } catch (err) {
+          console.error("Agreement generation failed (job still created):", err);
+        }
+      }
+
+      if (!onboardLink) {
+        setView("list");
+        setForm({ ...emptyForm });
+      }
       loadJobs();
     } catch (err) {
       console.error(err);
       alert("Failed to create job");
     } finally {
       setSaving(false);
+    }
+  }
+
+  function copyLink() {
+    if (onboardLink) {
+      navigator.clipboard.writeText(onboardLink);
+      setLinkCopied(true);
+      setTimeout(() => setLinkCopied(false), 2000);
     }
   }
 
@@ -275,6 +324,27 @@ export default function JobsPage() {
             </div>
           </div>
         </div>
+
+        {/* Onboard Link */}
+        {(j.agreements || []).length > 0 && (
+          <div style={{ ...cardStyle, marginTop: "1.5rem", background: "rgba(249,115,22,0.05)", borderColor: "rgba(249,115,22,0.2)" }}>
+            <h3 style={{ color: colors.accent, fontSize: "0.85rem", fontWeight: 700, marginBottom: "0.5rem" }}>Customer Onboarding Link</h3>
+            {(j.agreements || []).map((agr: Agreement) => {
+              const link = `${typeof window !== "undefined" ? window.location.origin : ""}/onboard/${agr.id}`;
+              return (
+                <div key={agr.id} style={{ display: "flex", gap: "0.5rem", alignItems: "center", marginBottom: "0.5rem" }}>
+                  <input readOnly value={link} style={{ ...inputStyle, flex: 1, fontSize: "0.7rem" }} onClick={(e) => (e.target as HTMLInputElement).select()} />
+                  <button style={{ ...buttonPrimary, fontSize: "0.65rem", padding: "0.4rem 0.75rem", whiteSpace: "nowrap" }} onClick={() => { navigator.clipboard.writeText(link); }}>
+                    Copy
+                  </button>
+                  <span style={badgeStyle(agr.status === "signed" ? "success" : agr.status === "sent" ? "info" : "muted")}>
+                    {agr.status}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        )}
 
         {/* Milestones */}
         <div style={{ ...cardStyle, marginTop: "1.5rem" }}>
@@ -479,15 +549,59 @@ export default function JobsPage() {
               </select>
             </div>
             <div>
+              <label style={labelStyle}>Scope of Work (HTML — generates agreement automatically)</label>
+              <textarea
+                style={{ ...inputStyle, minHeight: "200px", resize: "vertical", fontFamily: "monospace", fontSize: "0.8rem" }}
+                value={form.scope_of_work}
+                onChange={F("scope_of_work")}
+                placeholder={`<h4>AZEK LAP SIDING SYSTEM</h4>\n<p>Contractor shall remove and dispose of existing siding...</p>\n<h4>1. Demolition & Preparation</h4>\n<p>...</p>`}
+              />
+              <p style={{ color: colors.muted, fontSize: "0.65rem", marginTop: "0.25rem" }}>
+                Leave blank to create job without an agreement. HTML from scope goes into the Independent Contractor Agreement.
+              </p>
+            </div>
+            <div>
               <label style={labelStyle}>Notes</label>
               <textarea style={{ ...inputStyle, minHeight: "80px", resize: "vertical" }} value={form.notes} onChange={F("notes")} placeholder="Internal notes..." />
             </div>
-            <div style={{ display: "flex", gap: "0.75rem", marginTop: "0.5rem" }}>
-              <button style={{ ...buttonPrimary, opacity: saving ? 0.6 : 1 }} onClick={handleCreate} disabled={saving}>
-                {saving ? "Creating..." : "Create Job"}
-              </button>
-              <button style={buttonSecondary} onClick={() => setView("list")}>Cancel</button>
-            </div>
+
+            {/* Onboard link after creation */}
+            {onboardLink && (
+              <div style={{ background: "rgba(16,185,129,0.1)", border: "1px solid rgba(16,185,129,0.3)", borderRadius: "8px", padding: "1rem" }}>
+                <p style={{ color: colors.success, fontWeight: 700, fontSize: "0.85rem", margin: "0 0 0.5rem" }}>Job created! Customer onboarding link:</p>
+                <div style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
+                  <input
+                    readOnly
+                    value={onboardLink}
+                    style={{ ...inputStyle, flex: 1, fontSize: "0.75rem", background: "rgba(16,185,129,0.05)" }}
+                    onClick={(e) => (e.target as HTMLInputElement).select()}
+                  />
+                  <button style={{ ...buttonPrimary, fontSize: "0.75rem", padding: "0.5rem 1rem", whiteSpace: "nowrap" }} onClick={copyLink}>
+                    {linkCopied ? "Copied!" : "Copy"}
+                  </button>
+                </div>
+                {form.customer_email && (
+                  <p style={{ color: colors.body, fontSize: "0.7rem", marginTop: "0.5rem" }}>
+                    Agreement also sent to {form.customer_email} via email.
+                  </p>
+                )}
+                <button
+                  style={{ ...buttonSecondary, marginTop: "0.75rem", fontSize: "0.75rem" }}
+                  onClick={() => { setOnboardLink(null); setView("list"); setForm({ ...emptyForm }); }}
+                >
+                  Done — Go to Jobs List
+                </button>
+              </div>
+            )}
+
+            {!onboardLink && (
+              <div style={{ display: "flex", gap: "0.75rem", marginTop: "0.5rem" }}>
+                <button style={{ ...buttonPrimary, opacity: saving ? 0.6 : 1 }} onClick={handleCreate} disabled={saving}>
+                  {saving ? "Creating..." : "Create Job"}
+                </button>
+                <button style={buttonSecondary} onClick={() => setView("list")}>Cancel</button>
+              </div>
+            )}
           </div>
         </div>
       </div>
