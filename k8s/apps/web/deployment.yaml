@@ -20,6 +20,10 @@ spec:
           operator: Equal
           value: "true"
           effect: NoSchedule
+      dnsConfig:
+        options:
+          - name: ndots
+            value: "1"
       containers:
         - name: web
           image: us-central1-docker.pkg.dev/sunriseobx-proj/sunriseobx-images/web:latest
@@ -32,6 +36,8 @@ spec:
               value: "production"
             - name: NEXT_PUBLIC_API_URL
               value: ""
+            - name: INTERNAL_API_URL
+              value: "http://10.8.9.27:8080"
             - name: JWT_SECRET
               valueFrom:
                 secretKeyRef:

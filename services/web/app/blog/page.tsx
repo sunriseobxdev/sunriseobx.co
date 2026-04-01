@@ -3,13 +3,16 @@ import Footer from "@/components/Footer";
 import Link from "next/link";
 import type { Metadata } from "next";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Blog & Resources",
   description:
     "Construction tips, product guides, and news from Sunrise Construction on the Outer Banks.",
 };
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://api.sunriseobx.co";
+// Use INTERNAL_API_URL (set in k8s deployment) for server-side fetches
+const API_BASE = process.env.INTERNAL_API_URL || "http://sunriseobx-api:8080";
 
 interface BlogPost {
   id: string;
@@ -27,7 +30,7 @@ interface BlogPost {
 async function getPosts(): Promise<BlogPost[]> {
   try {
     const res = await fetch(`${API_BASE}/api/cms/posts`, {
-      next: { revalidate: 3600 },
+      cache: "no-store",
     });
     if (!res.ok) return [];
     return res.json();
