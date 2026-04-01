@@ -93,6 +93,19 @@ interface Agreement {
   id: string;
   status: string;
   signed_at: string | null;
+  created_at: string | null;
+}
+
+interface AgreementDetail {
+  id: string;
+  full_html: string;
+  status: string;
+  signed_at: string | null;
+  signature_data: string | null;
+  signer_ip: string | null;
+  scope_of_work_html: string;
+  compensation_html: string;
+  created_at: string;
 }
 
 interface Payment {
@@ -162,6 +175,7 @@ export default function JobsPage() {
   const [milestoneTitle, setMilestoneTitle] = useState("");
   const [onboardLink, setOnboardLink] = useState<string | null>(null);
   const [linkCopied, setLinkCopied] = useState(false);
+  const [viewingAgreement, setViewingAgreement] = useState<AgreementDetail | null>(null);
 
   useEffect(() => {
     loadJobs();
@@ -325,24 +339,90 @@ export default function JobsPage() {
           </div>
         </div>
 
-        {/* Onboard Link */}
+        {/* Agreements */}
         {(j.agreements || []).length > 0 && (
-          <div style={{ ...cardStyle, marginTop: "1.5rem", background: "rgba(249,115,22,0.05)", borderColor: "rgba(249,115,22,0.2)" }}>
-            <h3 style={{ color: colors.accent, fontSize: "0.85rem", fontWeight: 700, marginBottom: "0.5rem" }}>Customer Onboarding Link</h3>
+          <div style={{ ...cardStyle, marginTop: "1.5rem" }}>
+            <h3 style={{ color: colors.heading, fontSize: "0.85rem", fontWeight: 700, marginBottom: "0.75rem" }}>Agreements</h3>
             {(j.agreements || []).map((agr: Agreement) => {
               const link = `${typeof window !== "undefined" ? window.location.origin : ""}/onboard/${agr.id}`;
               return (
-                <div key={agr.id} style={{ display: "flex", gap: "0.5rem", alignItems: "center", marginBottom: "0.5rem" }}>
-                  <input readOnly value={link} style={{ ...inputStyle, flex: 1, fontSize: "0.7rem" }} onClick={(e) => (e.target as HTMLInputElement).select()} />
-                  <button style={{ ...buttonPrimary, fontSize: "0.65rem", padding: "0.4rem 0.75rem", whiteSpace: "nowrap" }} onClick={() => { navigator.clipboard.writeText(link); }}>
-                    Copy
-                  </button>
-                  <span style={badgeStyle(agr.status === "signed" ? "success" : agr.status === "sent" ? "info" : "muted")}>
-                    {agr.status}
-                  </span>
+                <div key={agr.id} style={{ padding: "0.75rem", borderRadius: "8px", background: agr.status === "signed" ? "rgba(16,185,129,0.06)" : "rgba(249,115,22,0.05)", border: `1px solid ${agr.status === "signed" ? "rgba(16,185,129,0.2)" : "rgba(249,115,22,0.15)"}`, marginBottom: "0.5rem" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.5rem" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                      <span style={{ color: colors.heading, fontSize: "0.8rem", fontWeight: 600 }}>Independent Contractor Agreement</span>
+                      <span style={badgeStyle(agr.status === "signed" ? "success" : agr.status === "sent" ? "info" : agr.status === "viewed" ? "warning" : "muted")}>
+                        {agr.status}
+                      </span>
+                    </div>
+                    {agr.signed_at && <span style={{ color: colors.muted, fontSize: "0.65rem" }}>Signed {new Date(agr.signed_at).toLocaleDateString()}</span>}
+                  </div>
+                  <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
+                    <button
+                      style={{ ...buttonPrimary, fontSize: "0.65rem", padding: "0.35rem 0.75rem" }}
+                      onClick={async () => {
+                        const detail = await apiFetch(`/api/agreements/jobs/${j.id}/agreements/${agr.id}`);
+                        setViewingAgreement(detail);
+                      }}
+                    >
+                      View Agreement
+                    </button>
+                    <button
+                      style={{ ...buttonSecondary, fontSize: "0.65rem", padding: "0.35rem 0.75rem" }}
+                      onClick={() => { navigator.clipboard.writeText(link); }}
+                    >
+                      Copy Link
+                    </button>
+                    {agr.status === "draft" && (
+                      <button
+                        style={{ ...buttonSecondary, fontSize: "0.65rem", padding: "0.35rem 0.75rem", color: colors.info }}
+                        onClick={async () => {
+                          await apiFetch(`/api/agreements/jobs/${j.id}/agreements/${agr.id}/send`, { method: "POST" });
+                          loadJobDetail(j.id);
+                        }}
+                      >
+                        Send to Customer
+                      </button>
+                    )}
+                  </div>
                 </div>
               );
             })}
+          </div>
+        )}
+
+        {/* Agreement Viewer Modal */}
+        {viewingAgreement && (
+          <div style={{ position: "fixed", inset: 0, zIndex: 50, display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.7)" }} onClick={() => setViewingAgreement(null)} />
+            <div style={{ position: "relative", background: "white", borderRadius: "12px", maxWidth: "800px", width: "95%", maxHeight: "90vh", overflow: "hidden", display: "flex", flexDirection: "column" }}>
+              {/* Modal Header */}
+              <div style={{ padding: "1rem 1.5rem", borderBottom: "1px solid #e2e8f0", display: "flex", justifyContent: "space-between", alignItems: "center", flexShrink: 0 }}>
+                <div>
+                  <h2 style={{ margin: 0, fontSize: "1rem", fontWeight: 700, color: "#1a3550" }}>Agreement — {j.job_number}</h2>
+                  <span style={badgeStyle(viewingAgreement.status === "signed" ? "success" : "muted")}>{viewingAgreement.status}</span>
+                </div>
+                <button onClick={() => setViewingAgreement(null)} style={{ background: "none", border: "none", fontSize: "1.5rem", cursor: "pointer", color: "#627d98" }}>&times;</button>
+              </div>
+              {/* Signature Info */}
+              {viewingAgreement.signed_at && (
+                <div style={{ padding: "0.75rem 1.5rem", background: "#ecfdf5", borderBottom: "1px solid #a7f3d0", flexShrink: 0 }}>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: "1.5rem", fontSize: "0.75rem", color: "#059669" }}>
+                    <div><strong>Signed:</strong> {new Date(viewingAgreement.signed_at).toLocaleString()}</div>
+                    {viewingAgreement.signer_ip && <div><strong>IP:</strong> {viewingAgreement.signer_ip}</div>}
+                  </div>
+                  {viewingAgreement.signature_data && (
+                    <div style={{ marginTop: "0.5rem" }}>
+                      <strong style={{ fontSize: "0.7rem", color: "#059669" }}>Signature:</strong>
+                      <img src={viewingAgreement.signature_data} alt="Signature" style={{ display: "block", maxWidth: "300px", height: "60px", marginTop: "0.25rem", border: "1px solid #a7f3d0", borderRadius: "4px", background: "white", padding: "0.25rem" }} />
+                    </div>
+                  )}
+                </div>
+              )}
+              {/* Agreement Body */}
+              <div style={{ padding: "1.5rem", overflowY: "auto", flex: 1 }}>
+                <div dangerouslySetInnerHTML={{ __html: viewingAgreement.full_html }} />
+              </div>
+            </div>
           </div>
         )}
 
