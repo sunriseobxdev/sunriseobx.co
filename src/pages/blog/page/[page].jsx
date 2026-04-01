@@ -52,7 +52,7 @@ export async function getStaticPaths() {
 
 export async function getStaticProps( { params } ) {
     const page = Number(params?.page) || 1
-    const { posts, total } = getPaginatedPostsData( PER_PAGE, page );
+    const { posts, total } = await getPaginatedPostsData( PER_PAGE, page );
   
     if (!posts.length) {
       return {

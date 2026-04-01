@@ -1,0 +1,15 @@
+[package]
+name = "sunrise-common"
+version = "0.1.0"
+edition = "2021"
+description = "Transport-agnostic client and types for the SunriseOBX API"
+
+[dependencies]
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+async-trait = { workspace = true }
+url = { workspace = true }
+log = { workspace = true }
+chrono = { workspace = true }
+uuid = { workspace = true }

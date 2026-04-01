@@ -14,6 +14,9 @@ interface Invoice {
   total: string;
   status: string;
   pdf_path: string;
+  job_id?: string;
+  job_number?: string;
+  job_title?: string;
   line_items?: { description: string; quantity: number; rate: number; amount: number }[];
   client_email?: string;
   client_address?: string;
@@ -47,6 +50,7 @@ export default function InvoicesPage() {
   const [invoices, setInvoices] = useState<Invoice[]>([]);
   const [flash, setFlash] = useState<{ type: 'success' | 'error'; msg: string } | null>(null);
   const [loading, setLoading] = useState(false);
+  const [jobId, setJobId] = useState<string>('');
 
   // Create form
   const [invoiceNumber, setInvoiceNumber] = useState('');
@@ -74,6 +78,21 @@ export default function InvoicesPage() {
   }, []);
 
   useEffect(() => { loadInvoices(); }, [loadInvoices]);
+
+  // Pre-fill from job context via query params
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const params = new URLSearchParams(window.location.search);
+    const qJob = params.get('job');
+    const qClient = params.get('client');
+    const qAddress = params.get('address');
+    if (qJob) {
+      setJobId(qJob);
+      if (qClient) setClientName(qClient);
+      if (qAddress) setClientAddress(qAddress);
+      setView('create');
+    }
+  }, []);
 
   function addLineItem() {
     setLineItems([...lineItems, { description: '', quantity: '1', rate: '' }]);
@@ -117,6 +136,7 @@ export default function InvoicesPage() {
           })),
           taxRate: parseFloat(taxRate) / 100 || 0,
           notes,
+          ...(jobId ? { jobId } : {}),
         }),
       });
       showFlash('success', 'Invoice created');
@@ -182,6 +202,7 @@ export default function InvoicesPage() {
                 <tr>
                   <th style={thStyle}>Invoice #</th>
                   <th style={thStyle}>Client</th>
+                  <th style={thStyle}>Job</th>
                   <th style={thStyle}>Date</th>
                   <th style={thStyle}>Due</th>
                   <th style={thStyle}>Total</th>
@@ -194,6 +215,15 @@ export default function InvoicesPage() {
                   <tr key={inv.id}>
                     <td style={tdStyle}>{inv.invoice_number}</td>
                     <td style={tdStyle}>{inv.client_name}</td>
+                    <td style={tdStyle}>
+                      {inv.job_number ? (
+                        <a href="/desk/jobs" onClick={(e) => { e.preventDefault(); /* TODO: navigate to job detail */ }} style={{ color: colors.accent, textDecoration: 'none', fontSize: '0.75rem' }}>
+                          {inv.job_number}
+                        </a>
+                      ) : (
+                        <span style={{ color: colors.muted, fontSize: '0.75rem' }}>—</span>
+                      )}
+                    </td>
                     <td style={tdStyle}>{new Date(inv.issue_date).toLocaleDateString()}</td>
                     <td style={tdStyle}>{new Date(inv.due_date).toLocaleDateString()}</td>
                     <td style={{ ...tdStyle, fontWeight: 600, color: colors.heading }}>{usd(inv.total)}</td>
@@ -216,7 +246,7 @@ export default function InvoicesPage() {
                   </tr>
                 ))}
                 {invoices.length === 0 && (
-                  <tr><td colSpan={7} style={{ ...tdStyle, textAlign: 'center', color: colors.muted }}>No invoices</td></tr>
+                  <tr><td colSpan={8} style={{ ...tdStyle, textAlign: 'center', color: colors.muted }}>No invoices</td></tr>
                 )}
               </tbody>
             </table>

@@ -24,5 +24,6 @@ COPY --from=ts-sdk-builder /app/ts-sdk /app/ts-sdk/
 COPY --from=builder /app/services/api/dist ./dist
 COPY --from=builder /app/services/api/node_modules ./node_modules
 COPY --from=builder /app/services/api/package.json ./
+COPY --from=builder /app/services/api/assets ./assets
 EXPOSE 8080
 CMD ["node", "dist/index.js"]

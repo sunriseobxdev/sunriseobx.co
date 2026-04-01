@@ -1,0 +1,21 @@
+[package]
+name = "sunrise-cli"
+version = "0.1.0"
+edition = "2021"
+description = "CLI for the SunriseOBX admin API"
+
+[[bin]]
+name = "sunrise-cli"
+path = "src/main.rs"
+
+[dependencies]
+sunrise-common = { workspace = true }
+sunrise-sys = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+tokio = { workspace = true }
+clap = { version = "4", features = ["derive", "env"] }
+env_logger = "0.11"
+log = { workspace = true }
+chrono = { workspace = true }
+uuid = { workspace = true }

@@ -1,143 +1,71 @@
-import fs from 'fs'
-import path from 'path'
-import matter from 'gray-matter'
 import { remark } from 'remark'
 import html from 'remark-html'
 
-const postsDirectory = path.join(process.cwd(), 'src/data/posts')
+const API_BASE = process.env.API_URL || 'https://api.sunriseobx.co'
 
-export function getSortedPostsData() {
-  // Get file names under /posts
-  const fileNames = fs.readdirSync(postsDirectory)
-  const allPostsData = fileNames.map(fileName => {
-    // Remove ".md" from file name to get id
-    const id = fileName.replace(/\.md$/, '')
-
-    // Read markdown file as string
-    const fullPath = path.join(postsDirectory, fileName)
-    const fileContents = fs.readFileSync(fullPath, 'utf8')
-
-    // Use gray-matter to parse the post metadata section
-    const matterResult = matter(fileContents)
-
-    // Combine the data with the id
-    return {
-      id,
-      ...matterResult.data
-    }
-  })
-
-  // Sort posts by date
-  return allPostsData.sort((a, b) => {
-    if (a.date < b.date) {
-      return 1
-    } else {
-      return -1
-    }
-  })
+async function fetchPosts() {
+  const res = await fetch(`${API_BASE}/api/cms/posts`)
+  if (!res.ok) return []
+  return res.json()
 }
 
-export function getPaginatedPostsData(limit, page) {
-  // Get file names under /posts
-  const fileNames = fs.readdirSync(postsDirectory)
-  const allPostsData = fileNames.map(fileName => {
-    // Remove ".md" from file name to get id
-    const id = fileName.replace(/\.md$/, '')
-
-    // Read markdown file as string
-    const fullPath = path.join(postsDirectory, fileName)
-    const fileContents = fs.readFileSync(fullPath, 'utf8')
-
-    // Use gray-matter to parse the post metadata section
-    const matterResult = matter(fileContents)
-
-    // Combine the data with the id
-    return {
-      id,
-      ...matterResult.data
-    }
-  })
-
-  // Sort posts by date
-  allPostsData.sort((a, b) => {
-    if (a.date < b.date) {
-      return 1
-    } else {
-      return -1
-    }
-  })
-
-  const paginatedPosts = allPostsData.slice((page - 1) * limit, page * limit)
-
-  return { posts: paginatedPosts, total: allPostsData.length }
+function mapPost(post) {
+  const content = post.content || {}
+  return {
+    id: post.slug,
+    title: post.title,
+    description: post.excerpt,
+    date: post.published_at,
+    image: post.image_url,
+    category: content.categories || [],
+    author: content.author || { name: '', avatar: '' },
+  }
 }
 
-export function getRelatedPosts(current_id) {
-  // Get file names under /posts
-  const fileNames = fs.readdirSync(postsDirectory)
-  const allData = [];
-
-  fileNames.map(fileName => {
-    // Remove ".md" from file name to get id
-    const id = fileName.replace(/\.md$/, '')
-
-    // Read markdown file as string
-    const fullPath = path.join(postsDirectory, fileName)
-    const fileContents = fs.readFileSync(fullPath, 'utf8')
-
-    // Use gray-matter to parse the post metadata section
-    const matterResult = matter(fileContents)
-
-    // Exclude current id from result
-
-    if ( id != current_id ) {
-      // Combine the data with the id
-      allData.push({
-        id,
-        ...matterResult.data
-      });
-    }
-  })
-
-  // Sort posts by date
-  return allData.sort((a, b) => {
-    if (a.category > b.category) {
-      return 1
-    } else {
-      return -1
-    }
-  })
+export async function getSortedPostsData() {
+  const posts = await fetchPosts()
+  return posts.map(mapPost)
 }
 
-export function getAllPostsIds() {
-  const fileNames = fs.readdirSync(postsDirectory)
+export async function getPaginatedPostsData(limit, page) {
+  const allPosts = await getSortedPostsData()
+  const paginatedPosts = allPosts.slice((page - 1) * limit, page * limit)
+  return { posts: paginatedPosts, total: allPosts.length }
+}
 
-  return fileNames.map(fileName => {
-    return {
-      params: {
-        id: fileName.replace(/\.md$/, '')
-      }
-    }
-  })
+export async function getRelatedPosts(current_id) {
+  const allPosts = await getSortedPostsData()
+  return allPosts.filter(p => p.id !== current_id)
+}
+
+export async function getAllPostsIds() {
+  const allPosts = await getSortedPostsData()
+  return allPosts.map(post => ({
+    params: { id: post.id }
+  }))
 }
 
 export async function getPostData(id) {
-  const fullPath = path.join(postsDirectory, `${id}.md`)
-  const fileContents = fs.readFileSync(fullPath, 'utf8')
+  const res = await fetch(`${API_BASE}/api/cms/posts/${id}`)
+  if (!res.ok) return null
+  const post = await res.json()
+  const content = post.content || {}
 
-  // Use gray-matter to parse the post metadata section
-  const matterResult = matter(fileContents)
-
-  // Use remark to convert markdown into HTML string
   const processedContent = await remark()
     .use(html)
-    .process(matterResult.content)
+    .process(content.markdown || '')
   const contentHtml = processedContent.toString()
 
-  // Combine the data with the id and contentHtml
   return {
-    id,
+    id: post.slug,
+    title: post.title,
+    description: post.excerpt,
+    date: post.published_at,
+    image: post.image_url,
     contentHtml,
-    ...matterResult.data
+    category: content.categories || [],
+    author: content.author || { name: '', avatar: '' },
+    gallery: content.gallery || { enabled: false, items: [], cols: 3 },
+    additional: content.additional || { enabled: false, content: '' },
   }
 }

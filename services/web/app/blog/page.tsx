@@ -9,71 +9,38 @@ export const metadata: Metadata = {
     "Construction tips, product guides, and news from Sunrise Construction on the Outer Banks.",
 };
 
-const featuredPost = {
-  slug: "building-with-wincore",
-  title: "Why Wincore Windows Are the #1 Choice for Outer Banks Homes",
-  excerpt:
-    "Hurricane-resistant glass, salt air corrosion protection, and energy-efficient Low-E coatings — discover why coastal homeowners are choosing Wincore for their window replacements.",
-  image: "/img/windowReplacements.jpg",
-  date: "2024-12-15",
-  category: "Windows",
-  readTime: "5 min read",
-};
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://api.sunriseobx.co";
 
-const posts = [
-  {
-    slug: "salt-box-roofing-package",
-    title: "The Salt Box Package: Premium Roofing Built for the Coast",
-    excerpt:
-      "Our Salt Box roofing package combines CertainTeed shingles with Low-E ThermaSheet underlayment for maximum protection and energy savings.",
-    image: "/img/roofReplacements.jpeg",
-    date: "2024-11-20",
-    category: "Roofing",
-    readTime: "4 min read",
-  },
-  {
-    slug: "cool-coastal-house-package",
-    title: "Cool Coastal House: Siding That Saves You Money",
-    excerpt:
-      "Transform your home's exterior with premium siding and Low-E HouseWrap — blocks 97% of radiant heat while looking beautiful.",
-    image: "/img/newSidingMakeover.jpeg",
-    date: "2024-10-08",
-    category: "Siding",
-    readTime: "4 min read",
-  },
-  {
-    slug: "fortified-roofing-insurance-savings",
-    title: "How FORTIFIED Roofing Can Save You 50% on Insurance",
-    excerpt:
-      "IBHS FORTIFIED certification isn't just about protection — many insurers offer substantial premium discounts for homes built to this standard.",
-    image: "/img/solarDefense.jpg",
-    date: "2024-09-15",
-    category: "FORTIFIED",
-    readTime: "6 min read",
-  },
-  {
-    slug: "hurricane-prep-obx-homeowners",
-    title: "Hurricane Season Prep: What Every OBX Homeowner Should Know",
-    excerpt:
-      "From roof inspections to impact-resistant upgrades, here's your complete guide to preparing your Outer Banks home for hurricane season.",
-    image: "/img/drone-inspection.jpg",
-    date: "2024-08-01",
-    category: "Tips",
-    readTime: "7 min read",
-  },
-  {
-    slug: "choosing-right-siding-obx",
-    title: "Choosing the Right Siding for Your Coastal Home",
-    excerpt:
-      "Salt air, UV exposure, and hurricane winds — not all siding is created equal. Here's how to pick materials that last on the OBX.",
-    image: "/img/about-one.jpeg",
-    date: "2024-07-10",
-    category: "Siding",
-    readTime: "5 min read",
-  },
-];
+interface BlogPost {
+  id: string;
+  slug: string;
+  title: string;
+  excerpt: string;
+  image_url: string;
+  published_at: string;
+  content?: {
+    categories?: string[];
+    author?: { name: string; avatar: string };
+  };
+}
 
-export default function BlogPage() {
+async function getPosts(): Promise<BlogPost[]> {
+  try {
+    const res = await fetch(`${API_BASE}/api/cms/posts`, {
+      next: { revalidate: 3600 },
+    });
+    if (!res.ok) return [];
+    return res.json();
+  } catch {
+    return [];
+  }
+}
+
+export default async function BlogPage() {
+  const posts = await getPosts();
+  const featured = posts[0] || null;
+  const rest = posts.slice(1);
+
   return (
     <main className="overflow-hidden">
       <Header />
@@ -96,45 +63,48 @@ export default function BlogPage() {
       </section>
 
       {/* Featured post */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid lg:grid-cols-2 gap-10 items-center bg-navy-50 rounded-3xl overflow-hidden">
-            <div className="h-80 lg:h-full">
-              <img
-                src={featuredPost.image}
-                alt={featuredPost.title}
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <div className="p-8 lg:p-12">
-              <div className="flex items-center gap-3 mb-4">
-                <span className="px-3 py-1 bg-sunrise-100 text-sunrise-700 text-xs font-bold rounded-full">
-                  {featuredPost.category}
-                </span>
-                <span className="text-navy-400 text-xs">{featuredPost.readTime}</span>
+      {featured && (
+        <section className="py-20 bg-white">
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="grid lg:grid-cols-2 gap-10 items-center bg-navy-50 rounded-3xl overflow-hidden">
+              <div className="h-80 lg:h-full">
+                <img
+                  src={featured.image_url}
+                  alt={featured.title}
+                  className="w-full h-full object-cover"
+                />
               </div>
-              <h2 className="text-2xl lg:text-3xl font-extrabold text-navy-900 leading-snug">
-                {featuredPost.title}
-              </h2>
-              <p className="mt-4 text-navy-600 leading-relaxed">
-                {featuredPost.excerpt}
-              </p>
-              <div className="mt-6 flex items-center justify-between">
-                <time className="text-sm text-navy-400">
-                  {new Date(featuredPost.date).toLocaleDateString("en-US", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })}
-                </time>
-                <span className="text-sunrise-600 font-semibold text-sm">
-                  Read Article &rarr;
-                </span>
+              <div className="p-8 lg:p-12">
+                <div className="flex items-center gap-3 mb-4">
+                  {featured.content?.categories?.[0] && (
+                    <span className="px-3 py-1 bg-sunrise-100 text-sunrise-700 text-xs font-bold rounded-full">
+                      {featured.content.categories[0]}
+                    </span>
+                  )}
+                </div>
+                <h2 className="text-2xl lg:text-3xl font-extrabold text-navy-900 leading-snug">
+                  {featured.title}
+                </h2>
+                <p className="mt-4 text-navy-600 leading-relaxed">
+                  {featured.excerpt}
+                </p>
+                <div className="mt-6 flex items-center justify-between">
+                  <time className="text-sm text-navy-400">
+                    {new Date(featured.published_at).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}
+                  </time>
+                  <span className="text-sunrise-600 font-semibold text-sm">
+                    Read Article &rarr;
+                  </span>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* All posts */}
       <section className="py-20 bg-navy-50">
@@ -142,49 +112,53 @@ export default function BlogPage() {
           <h2 className="text-2xl font-extrabold text-navy-900 mb-10">
             Latest Articles
           </h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {posts.map((post) => (
-              <article
-                key={post.slug}
-                className="group bg-white rounded-2xl overflow-hidden border border-navy-100 hover:shadow-xl hover:border-sunrise-200 transition-all"
-              >
-                <div className="relative h-52 overflow-hidden">
-                  <img
-                    src={post.image}
-                    alt={post.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                  <div className="absolute top-4 left-4">
-                    <span className="px-3 py-1 bg-white/90 backdrop-blur-sm text-navy-700 text-xs font-bold rounded-full">
-                      {post.category}
+          {rest.length > 0 ? (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {rest.map((post) => (
+                <article
+                  key={post.id}
+                  className="group bg-white rounded-2xl overflow-hidden border border-navy-100 hover:shadow-xl hover:border-sunrise-200 transition-all"
+                >
+                  <div className="relative h-52 overflow-hidden">
+                    <img
+                      src={post.image_url}
+                      alt={post.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    {post.content?.categories?.[0] && (
+                      <div className="absolute top-4 left-4">
+                        <span className="px-3 py-1 bg-white/90 backdrop-blur-sm text-navy-700 text-xs font-bold rounded-full">
+                          {post.content.categories[0]}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                  <div className="p-6">
+                    <div className="flex items-center gap-3 mb-3">
+                      <time className="text-xs text-navy-400">
+                        {new Date(post.published_at).toLocaleDateString("en-US", {
+                          year: "numeric",
+                          month: "short",
+                          day: "numeric",
+                        })}
+                      </time>
+                    </div>
+                    <h3 className="text-lg font-bold text-navy-900 group-hover:text-sunrise-600 transition leading-snug">
+                      {post.title}
+                    </h3>
+                    <p className="mt-3 text-sm text-navy-500 leading-relaxed line-clamp-3">
+                      {post.excerpt}
+                    </p>
+                    <span className="inline-block mt-4 text-sm font-semibold text-sunrise-600 group-hover:translate-x-1 transition-transform">
+                      Read More &rarr;
                     </span>
                   </div>
-                </div>
-                <div className="p-6">
-                  <div className="flex items-center gap-3 mb-3">
-                    <time className="text-xs text-navy-400">
-                      {new Date(post.date).toLocaleDateString("en-US", {
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric",
-                      })}
-                    </time>
-                    <span className="text-xs text-navy-300">&middot;</span>
-                    <span className="text-xs text-navy-400">{post.readTime}</span>
-                  </div>
-                  <h3 className="text-lg font-bold text-navy-900 group-hover:text-sunrise-600 transition leading-snug">
-                    {post.title}
-                  </h3>
-                  <p className="mt-3 text-sm text-navy-500 leading-relaxed line-clamp-3">
-                    {post.excerpt}
-                  </p>
-                  <span className="inline-block mt-4 text-sm font-semibold text-sunrise-600 group-hover:translate-x-1 transition-transform">
-                    Read More &rarr;
-                  </span>
-                </div>
-              </article>
-            ))}
-          </div>
+                </article>
+              ))}
+            </div>
+          ) : (
+            <p className="text-navy-400 text-center py-8">No articles yet.</p>
+          )}
         </div>
       </section>
 

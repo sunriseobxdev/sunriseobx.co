@@ -16,6 +16,11 @@ import { apiKeysRouter } from "./routes/api-keys.js";
 import { cmsRouter } from "./routes/cms.js";
 import { parcelsRouter } from "./routes/parcels.js";
 import { campaignsRouter } from "./routes/campaigns.js";
+import { jobsRouter } from "./routes/jobs.js";
+import { customerAuthRouter } from "./routes/customer-auth.js";
+import { paymentsRouter } from "./routes/payments.js";
+import { agreementsRouter } from "./routes/agreements.js";
+import { customerJobsRouter } from "./routes/customer-jobs.js";
 import { runMigrations } from "./lib/migrate.js";
 
 const app = express();
@@ -23,6 +28,9 @@ const port = parseInt(process.env.PORT || "8080", 10);
 
 app.use(helmet());
 app.use(cors());
+
+// Stripe webhook needs raw body — must come before express.json()
+app.use("/api/stripe/webhook", express.raw({ type: "application/json" }));
 app.use(express.json());
 
 app.get("/health", (_req, res) => {
@@ -41,6 +49,15 @@ app.use("/api", contactRouter);
 
 // Public CMS routes (published posts/projects)
 app.use("/api/cms", cmsRouter);
+
+// Agreement routes (templates require auth inside, onboard is public)
+app.use("/api/agreements", agreementsRouter);
+
+// Customer auth routes (public — OTP, verify, profile)
+app.use("/customer/auth", customerAuthRouter);
+
+// Customer job portal routes
+app.use("/customer/jobs", customerJobsRouter);
 
 // IAM routes — auth + manage_users enforced inside iamRouter
 app.use("/api/iam", iamRouter);
@@ -72,6 +89,12 @@ app.use("/api/parcels", parcelsRouter);
 
 // Campaign management routes
 app.use("/api/campaigns", campaignsRouter);
+
+// Job management routes (auth + RBAC enforced inside router)
+app.use("/api/jobs", jobsRouter);
+
+// Payment routes (Stripe)
+app.use("/api", paymentsRouter);
 
 async function main() {
   await runMigrations();

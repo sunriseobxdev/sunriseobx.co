@@ -33,6 +33,7 @@
     "remark": "^15.0.1",
     "remark-html": "^16.0.1",
     "sass": "^1.82.0",
+    "stripe": "^21.0.1",
     "swiper": "^11.1.15"
   },
   "devDependencies": {

@@ -12,7 +12,7 @@ cmsRouter.get("/posts", async (_req, res) => {
   }
   const pool = getPool();
   const result = await pool.query(
-    `SELECT id, slug, title, excerpt, image_url, published_at
+    `SELECT id, slug, title, excerpt, content, image_url, published_at
      FROM cms_posts WHERE status = 'published'
      ORDER BY published_at DESC`
   );

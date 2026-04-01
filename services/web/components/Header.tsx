@@ -34,6 +34,13 @@ export default function Header() {
             Contact
           </Link>
           <Link
+            href="/portal/login"
+            className="text-navy-400 hover:text-white transition text-sm font-medium"
+            title="Customer Portal"
+          >
+            Log In
+          </Link>
+          <Link
             href="/contact"
             className="bg-sunrise-600 hover:bg-sunrise-700 text-white px-5 py-2 rounded-lg text-sm font-semibold transition"
           >
@@ -67,6 +74,13 @@ export default function Header() {
               {link.label}
             </Link>
           ))}
+          <Link
+            href="/portal/login"
+            onClick={() => setMobileOpen(false)}
+            className="block text-navy-400 hover:text-white transition py-1"
+          >
+            Customer Log In
+          </Link>
           <Link
             href="/contact"
             onClick={() => setMobileOpen(false)}

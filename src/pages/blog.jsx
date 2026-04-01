@@ -42,13 +42,14 @@ const Blog = ( { posts, totalPosts, currentPage } ) => {
 export default Blog;
 
 export async function getStaticProps() {
-  const { posts, total } = getPaginatedPostsData( PER_PAGE, 1 );
+  const { posts, total } = await getPaginatedPostsData( PER_PAGE, 1 );
 
   return {
     props: {
       posts,
       totalPosts: total,
       currentPage: 1
-    }
+    },
+    revalidate: 3600,
   }
 }

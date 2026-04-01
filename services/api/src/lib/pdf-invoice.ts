@@ -3,7 +3,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const LOGO_PATH = path.resolve(__dirname, "../../assets/logo-eagle-spr.png");
+const LOGO_PATH = path.resolve(__dirname, "../../assets/logo.png");
 
 const GOLD = "#c9a84c";
 const GOLD_DARK = "#8a6d2b";
@@ -74,9 +74,9 @@ export function generateInvoicePdf(data: InvoiceData): Promise<Buffer> {
     }
 
     doc.font("Helvetica-Bold").fontSize(16).fillColor(GOLD);
-    doc.text("SPRIMAGE", 120, y + 5, { width: 200 });
+    doc.text("SUNRISE CONSTRUCTION", 120, y + 5, { width: 250 });
     doc.font("Helvetica").fontSize(7.5).fillColor(TEXT_MUTED);
-    doc.text(data.companyName || "Sprimage Labs", 120, y + 25);
+    doc.text(data.companyName || "Sunrise Construction Services LLC", 120, y + 25);
     doc.text(data.companyAddress || "inquiries@sprimage.com", 120, y + 36);
 
     doc.font("Helvetica-Bold").fontSize(24).fillColor(GOLD);

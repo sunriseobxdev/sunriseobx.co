@@ -58,6 +58,13 @@ spec:
                 name: sunriseobx-api
                 port:
                   number: 8080
+          - path: /customer/*
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: sunriseobx-api
+                port:
+                  number: 8080
           - path: /*
             pathType: ImplementationSpecific
             backend:

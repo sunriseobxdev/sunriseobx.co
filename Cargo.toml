@@ -4,10 +4,16 @@ members = [
     "crates/darecounty-sys",
     "crates/darecounty-cli",
     "crates/darecounty-web-sys",
+    "crates/sunrise-common",
+    "crates/sunrise-sys",
+    "crates/sunrise-cli",
+    "crates/sunrise-web-sys",
 ]
 resolver = "2"
 
 [workspace.dependencies]
+sunrise-common = { path = "crates/sunrise-common" }
+sunrise-sys = { path = "crates/sunrise-sys" }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 thiserror = "2"
@@ -16,3 +22,4 @@ tokio = { version = "1", features = ["full"] }
 url = "2"
 log = "0.4"
 chrono = { version = "0.4", features = ["serde"] }
+uuid = { version = "1", features = ["serde", "v4"] }

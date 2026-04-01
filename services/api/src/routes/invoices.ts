@@ -8,8 +8,8 @@ import { generateInvoicePdf, type InvoiceData } from "../lib/pdf-invoice.js";
 export const invoiceRouter = Router();
 invoiceRouter.use(authMiddleware);
 
-const COMPANY_NAME = "Sprimage Labs";
-const COMPANY_ADDRESS = "inquiries@sprimage.com";
+const COMPANY_NAME = "Sunrise Construction Services LLC";
+const COMPANY_ADDRESS = "121 Pine Grove Lane, Point Harbor, NC 27964\nhello@sunriseobx.co | (252) 619-7966";
 
 // ── List invoices ──
 invoiceRouter.get(
@@ -19,9 +19,11 @@ invoiceRouter.get(
     try {
       const pool = getPool();
       const result = await pool.query(
-        `SELECT id, invoice_number, client_name, issue_date, due_date,
-                total, status, pdf_path, created_at
-         FROM invoices ORDER BY issue_date DESC`
+        `SELECT i.id, i.invoice_number, i.client_name, i.issue_date, i.due_date,
+                i.total, i.status, i.pdf_path, i.created_at, i.job_id,
+                j.job_number, j.title AS job_title
+         FROM invoices i LEFT JOIN jobs j ON i.job_id = j.id
+         ORDER BY i.issue_date DESC`
       );
       res.json(result.rows);
     } catch (err) {
@@ -62,7 +64,7 @@ invoiceRouter.post(
       const pool = getPool();
       const {
         invoiceNumber, clientName, clientEmail, clientAddress,
-        issueDate, dueDate, lineItems, taxRate, notes, status,
+        issueDate, dueDate, lineItems, taxRate, notes, status, jobId,
       } = req.body;
 
       if (!invoiceNumber || !clientName || !issueDate || !dueDate || !lineItems) {
@@ -109,8 +111,8 @@ invoiceRouter.post(
         `INSERT INTO invoices (
           invoice_number, client_name, client_email, client_address,
           issue_date, due_date, line_items, subtotal, tax_rate,
-          tax_amount, total, notes, status, pdf_path, created_by
-        ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15)
+          tax_amount, total, notes, status, pdf_path, created_by, job_id
+        ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16)
         RETURNING *`,
         [
           invoiceNumber, clientName, clientEmail || null, clientAddress || null,
@@ -118,6 +120,7 @@ invoiceRouter.post(
           effectiveTaxRate, taxAmount, total, notes || null,
           status || "draft", gcsPath,
           req.user!.userId !== "legacy" ? req.user!.userId : null,
+          jobId || null,
         ]
       );
 
@@ -128,7 +131,8 @@ invoiceRouter.post(
         return;
       }
       console.error("Create invoice error:", err);
-      res.status(500).json({ error: "Internal server error" });
+      const msg = err instanceof Error ? err.message : String(err);
+      res.status(500).json({ error: "Internal server error", detail: msg });
     }
   }
 );

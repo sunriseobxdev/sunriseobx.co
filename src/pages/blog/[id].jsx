@@ -106,25 +106,26 @@ const PostsDetail = ( props ) => {
 export default PostsDetail;
 
 export async function getStaticPaths() {
-    const paths = getAllPostsIds()
+    const paths = await getAllPostsIds()
 
     return {
       paths,
-      fallback: false
+      fallback: 'blocking'
     }
 }
 
 export async function getStaticProps(req) {
   const { params } = req;
     const postData = await getPostData(params.id)
+    if (!postData) return { notFound: true }
     const relatedPosts = await getRelatedPosts(params.id)
-
 
     return {
       props: {
         data: postData,
         related: relatedPosts,
         url: `blog/${params.id}`
-      }
+      },
+      revalidate: 3600,
     }
 }

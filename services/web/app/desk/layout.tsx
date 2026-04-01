@@ -7,6 +7,7 @@ import { useAuthStore } from "@/lib/store";
 
 const navItems = [
   { href: "/desk", label: "Dashboard", icon: "📊" },
+  { href: "/desk/jobs", label: "Jobs", icon: "🔨", privilege: "manage_jobs" },
   { href: "/desk/parcels", label: "Parcels", icon: "🗺️" },
   { href: "/desk/cms", label: "Content", icon: "📝" },
   { href: "/desk/campaigns", label: "Campaigns", icon: "📬" },

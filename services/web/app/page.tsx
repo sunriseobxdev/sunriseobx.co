@@ -5,60 +5,60 @@ import Footer from "@/components/Footer";
 
 const services = [
   {
-    title: "Roof Replacements",
-    description:
-      "CertainTeed ShingleMaster-certified installers delivering premium shingle and TPO systems with enhanced warranty coverage.",
-    image: "/img/roofReplacements.jpeg",
-    href: "/services#roofing",
-  },
-  {
     title: "Premium Siding",
     description:
-      "Expert siding installation with Low-E HouseWrap — blocks 97% of radiant heat for maximum energy savings.",
+      "AZEK PVC lap siding with matching trims, LP SmartSide, James Hardie, and traditional cedar shake. Installed over Benjamin Obdyke HydroGap or Low-E HouseWrap for superior weather protection.",
     image: "/img/newSidingMakeover.jpeg",
     href: "/services#siding",
   },
   {
-    title: "Wincore Windows",
+    title: "ViWinco Impact Windows",
     description:
-      "Hurricane-resistant Wincore windows with energy-efficient Low-E coatings. Industry-leading warranties.",
+      "ViWinco OceanView impact-rated windows with higher DP ratings and lifetime service. Hurricane-resistant laminated glass engineered for coastal exposure.",
     image: "/img/windowReplacements.jpg",
     href: "/services#windows",
   },
   {
+    title: "Redecking & Railings",
+    description:
+      "TimberTech composite decking, TimberTech PVC railings, and pressure-treated decking built to withstand salt air and coastal weather year after year.",
+    image: "/img/Beach-houses-1500.jpg",
+    href: "/services#decking",
+  },
+  {
+    title: "Roof Replacements",
+    description:
+      "Complete roof replacement systems with premium architectural shingles, stainless steel fasteners, and ice & water shield for lasting coastal protection.",
+    image: "/img/roofReplacements.jpeg",
+    href: "/services#roofing",
+  },
+  {
     title: "Exterior Construction",
     description:
-      "Full exterior renovation and new construction engineered for salt air, high winds, and storm surge.",
-    image: "/img/Beach-houses-1500.jpg",
+      "Full exterior renovation and new construction engineered for salt air, high winds, and storm surge. X-bracing, underpinning, and structural repairs.",
+    image: "/img/solarDefense.jpg",
     href: "/services#exterior",
   },
   {
     title: "FORTIFIED Roofing",
     description:
-      "IBHS-certified roofing systems proven to reduce storm damage. Earn up to 50% insurance discounts.",
-    image: "/img/solarDefense.jpg",
-    href: "/services#fortified",
-  },
-  {
-    title: "Storm Damage Repair",
-    description:
-      "Rapid response storm damage assessment and repair. We work directly with your insurance company.",
+      "IBHS-certified FORTIFIED roofing systems proven to reduce storm damage. Earn up to 50% insurance premium discounts.",
     image: "/img/drone-inspection.jpg",
-    href: "/contact",
+    href: "/services#fortified",
   },
 ];
 
 const projects = [
-  { image: "/img/project-1.jpg", title: "Oceanfront Roof Replacement", location: "Nags Head" },
-  { image: "/img/project-5.jpg", title: "Coastal Exterior Renovation", location: "Southern Shores" },
-  { image: "/img/project-3.jpg", title: "Wincore Window Install", location: "Duck" },
-  { image: "/img/project-8.jpg", title: "Rental Property Siding", location: "Corolla" },
+  { image: "/img/project-1.jpg", title: "AZEK Lap Siding Makeover", location: "Southern Shores" },
+  { image: "/img/project-5.jpg", title: "ViWinco Impact Window Install", location: "Duck" },
+  { image: "/img/project-3.jpg", title: "TimberTech Deck & Railing", location: "Nags Head" },
+  { image: "/img/project-8.jpg", title: "Full Exterior Renovation", location: "Corolla" },
 ];
 
 const certifications = [
   { image: "/img/slider/fortified.png", name: "IBHS FORTIFIED" },
-  { image: "/img/slider/wincore.png", name: "Wincore Windows" },
-  { image: "/img/slider/low-e.png", name: "Low-E Products" },
+  { image: "/img/slider/wincore.png", name: "ViWinco / Wincore" },
+  { image: "/img/slider/low-e.png", name: "Low-E / HydroGap" },
   { image: "/img/slider/dpor.png", name: "VA DPOR Licensed" },
   { image: "/img/slider/drone-pilot.png", name: "FAA Licensed" },
 ];
@@ -78,7 +78,7 @@ const testimonials = [
   },
   {
     quote:
-      "The Wincore windows they installed are beautiful and have held up perfectly through two storm seasons. Great team to work with from start to finish.",
+      "The ViWinco impact windows they installed are beautiful and have held up perfectly through two storm seasons. Great team to work with from start to finish.",
     name: "Jennifer L.",
     location: "Duck, NC",
   },

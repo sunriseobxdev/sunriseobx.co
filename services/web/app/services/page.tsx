@@ -6,7 +6,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Our Services",
   description:
-    "Roofing, siding, windows, exterior construction, and FORTIFIED roofing services for the Outer Banks. Certified CertainTeed ShingleMaster and Wincore Windows dealer.",
+    "AZEK siding, ViWinco impact windows, TimberTech decking, roofing, and FORTIFIED roofing for the Outer Banks. Licensed, insured, and certified.",
 };
 
 const services = [
@@ -33,41 +33,61 @@ const services = [
   {
     id: "siding",
     title: "Premium Siding",
-    subtitle: "Low-E HouseWrap Technology",
+    subtitle: "AZEK \u00b7 LP SmartSide \u00b7 James Hardie \u00b7 Cedar",
     image: "/img/newSidingMakeover.jpeg",
     description:
-      "Our team of skilled artisans brings years of experience to every siding installation. Whether you prefer classic styles or modern designs, we approach each project with a commitment to craftsmanship that transforms your vision into reality.",
+      "We install the best siding products on the market. AZEK PVC lap siding with matching trims is our flagship offering \u2014 zero maintenance, zero rot, lifetime beauty. We also offer LP SmartSide, James Hardie fiber cement, Plygem vinyl, and traditional cedar shake for every style and budget.",
     features: [
-      "Classic and modern siding designs",
-      "Low-E HouseWrap — blocks 97% radiant heat",
-      "Adds R-Value to your wall system",
-      "Meets IECC Code without 2x6 framing",
-      "Built-in overlap for full coverage",
-      "Professional trim and accent work",
+      "AZEK 7.5\u2033 Reveal cellular PVC lap siding & trims",
+      "LP SmartSide engineered wood siding",
+      "James Hardie fiber cement siding",
+      "Traditional cedar shake installation",
+      "Benjamin Obdyke HydroGap drainable WRB",
+      "Low-E HouseWrap \u2014 blocks 97% radiant heat",
     ],
     highlight:
-      "Low-E HouseWrap provides a thermal break between the elements and your home — used by top builders and remodelers nationwide.",
+      "Every siding install is backed by HydroGap or Low-E HouseWrap for superior moisture management and energy efficiency \u2014 installed with stainless steel fasteners and Huber ZIP flashing tape.",
     bgColor: "bg-white",
     textColor: "text-navy-900",
   },
   {
     id: "windows",
-    title: "Wincore Windows",
-    subtitle: "Hurricane-Resistant & Energy Efficient",
+    title: "ViWinco & Wincore Windows",
+    subtitle: "Impact-Rated \u00b7 Lifetime Service \u00b7 Higher DP Ratings",
     image: "/img/windowReplacements.jpg",
     description:
-      "New windows regulate temperature, reduce drafts, enhance your home's appearance, and increase property value. Our expert installation of Wincore\u00ae Windows delivers both beauty and performance with industry-leading warranties.",
+      "ViWinco OceanView impact-rated windows are our primary line \u2014 laminated impact-resistant glass with higher design pressure (DP) ratings and lifetime service. We also offer Wincore windows for budget-conscious projects. Both lines are engineered for hurricane zones and coastal salt air.",
     features: [
-      "Authorized Wincore\u00ae dealer",
-      "Hurricane-resistant glass options",
-      "Energy-efficient Low-E coatings",
-      "Coastal salt air corrosion protection",
-      "Industry-leading transferable warranty",
-      "Professional measurement & installation",
+      "ViWinco OceanView impact-rated windows & doors",
+      "Higher DP ratings for extreme wind exposure",
+      "Lifetime service and manufacturer support",
+      "Wincore 500 Series also available",
+      "Dual-pane Low-E glass with Argon gas fill",
+      "Professional measurement & flashing integration",
     ],
     highlight:
-      "With every Wincore\u00ae purchase, a portion supports Tough Enough To Wear Pink\u2122 — advancing breast cancer research.",
+      "ViWinco impact windows meet or exceed required design pressure ratings for the Outer Banks \u2014 providing storm protection without the need for separate hurricane shutters.",
     bgColor: "bg-navy-50",
+    textColor: "text-navy-900",
+  },
+  {
+    id: "decking",
+    title: "Redecking & Railings",
+    subtitle: "TimberTech \u00b7 Composite \u00b7 Pressure-Treated",
+    image: "/img/Beach-houses-1500.jpg",
+    description:
+      "Coastal decks take a beating. We replace deteriorated decking boards, install new TimberTech composite or PVC railings, and build pressure-treated decks that withstand salt air, UV, and heavy foot traffic from rental guests.",
+    features: [
+      "TimberTech composite decking",
+      "TimberTech PVC railings",
+      "Pressure-treated decking replacement",
+      "Stainless steel & marine-grade fasteners",
+      "Structural inspection of joists & framing",
+      "Code-compliant coastal construction",
+    ],
+    highlight:
+      "Upon removal of existing boards, we conduct a thorough structural inspection of all framing \u2014 joists, beams, posts, and stair stringers \u2014 before installing new decking.",
+    bgColor: "bg-white",
     textColor: "text-navy-900",
   },
   {

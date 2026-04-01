@@ -1,6 +1,6 @@
 import { Storage } from "@google-cloud/storage";
 
-const BUCKET_NAME = process.env.GCS_DOCUMENTS_BUCKET || "sprimage-proj-documents";
+const BUCKET_NAME = process.env.GCS_DOCUMENTS_BUCKET || "sunriseobx-proj-documents";
 
 let storage: Storage | null = null;
 
@@ -26,6 +26,7 @@ export async function getSignedUrl(destPath: string, expiresMinutes: number = 15
   const bucket = getStorage().bucket(BUCKET_NAME);
   const file = bucket.file(destPath);
   const [url] = await file.getSignedUrl({
+    version: "v4",
     action: "read",
     expires: Date.now() + expiresMinutes * 60 * 1000,
   });
