@@ -70,6 +70,13 @@ export default function CustomerJobDetailPage() {
 
   if (!job) return <div style={{ color: "#627d98", textAlign: "center", padding: "3rem" }}>Loading...</div>;
 
+  const responsiveStyles = `
+    @media (min-width: 768px) {
+      .portal-overview-grid { grid-template-columns: 1fr 1fr !important; }
+      .portal-job-header { flex-direction: row !important; }
+    }
+  `;
+
   const s = STATUS_LABELS[job.status] || STATUS_LABELS.draft;
   const completedMilestones = job.milestones.filter((m) => m.status === "completed").length;
   const totalMilestones = job.milestones.length;
@@ -85,10 +92,11 @@ export default function CustomerJobDetailPage() {
 
   return (
     <div>
+      <style>{responsiveStyles}</style>
       <Link href="/portal" style={{ color: "#f97316", fontSize: "0.8rem", fontWeight: 600, textDecoration: "none" }}>&larr; Back to Jobs</Link>
 
       {/* Header */}
-      <div style={{ ...card, marginTop: "1rem", display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+      <div style={{ ...card, marginTop: "1rem", display: "flex", flexDirection: "column", gap: "0.75rem" }} className="portal-job-header">
         <div>
           <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "0.25rem" }}>
             <span style={{ fontWeight: 700, color: "#f97316" }}>{job.job_number}</span>
@@ -110,16 +118,16 @@ export default function CustomerJobDetailPage() {
         </div>
       </div>
 
-      {/* Tabs */}
-      <div style={{ display: "flex", gap: "0.25rem", marginBottom: "1rem", borderBottom: "2px solid #e2e8f0", paddingBottom: "0" }}>
+      {/* Tabs — scrollable on mobile */}
+      <div style={{ display: "flex", gap: "0.25rem", marginBottom: "1rem", borderBottom: "2px solid #e2e8f0", paddingBottom: "0", overflowX: "auto", WebkitOverflowScrolling: "touch" }}>
         {tabs.map((t) => (
           <button
             key={t.key}
             onClick={() => setTab(t.key)}
             style={{
-              padding: "0.5rem 1rem", border: "none", borderBottom: tab === t.key ? "2px solid #f97316" : "2px solid transparent",
+              padding: "0.5rem 0.75rem", border: "none", borderBottom: tab === t.key ? "2px solid #f97316" : "2px solid transparent",
               background: "none", color: tab === t.key ? "#f97316" : "#627d98",
-              fontWeight: 600, fontSize: "0.8rem", cursor: "pointer", marginBottom: "-2px",
+              fontWeight: 600, fontSize: "0.75rem", cursor: "pointer", marginBottom: "-2px", whiteSpace: "nowrap", flexShrink: 0,
             }}
           >
             {t.label}
@@ -129,7 +137,7 @@ export default function CustomerJobDetailPage() {
 
       {/* Overview Tab */}
       {tab === "overview" && (
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "1rem" }} className="portal-overview-grid">
           <div style={card}>
             <h3 style={sectionTitle}>Job Details</h3>
             <div style={{ fontSize: "0.8rem", color: "#334e68", lineHeight: 1.8 }}>
@@ -153,7 +161,7 @@ export default function CustomerJobDetailPage() {
             )}
           </div>
           {job.change_orders.length > 0 && (
-            <div style={{ ...card, gridColumn: "1 / -1" }}>
+            <div style={card}>
               <h3 style={sectionTitle}>Change Orders</h3>
               {job.change_orders.map((co) => (
                 <div key={co.id} style={{ display: "flex", justifyContent: "space-between", padding: "0.4rem 0", borderBottom: "1px solid #f0f4f8", fontSize: "0.8rem" }}>

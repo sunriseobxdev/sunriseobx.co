@@ -40,20 +40,22 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
   return (
     <CustomerCtx.Provider value={{ customer, logout }}>
       <div style={{ minHeight: "100vh", background: "#f8fafc" }}>
-        <header style={{ background: "#1a3550", borderBottom: "3px solid #f97316", padding: "0 1.5rem", height: "64px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <Link href="/portal" style={{ color: "white", fontWeight: 800, fontSize: "1.1rem", textDecoration: "none" }}>
-            <span style={{ color: "#f97316" }}>Sunrise</span> Portal
-          </Link>
-          <div style={{ display: "flex", alignItems: "center", gap: "1.5rem" }}>
-            <Link href="/portal" style={{ color: pathname === "/portal" ? "#f97316" : "#9fb3c8", textDecoration: "none", fontSize: "0.85rem", fontWeight: 600 }}>
-              My Jobs
+        <header style={{ background: "#1a3550", borderBottom: "3px solid #f97316", padding: "0 1rem" }}>
+          <div style={{ height: "56px", display: "flex", alignItems: "center", justifyContent: "space-between", maxWidth: "1000px", margin: "0 auto" }}>
+            <Link href="/portal" style={{ color: "white", fontWeight: 800, fontSize: "1rem", textDecoration: "none" }}>
+              <span style={{ color: "#f97316" }}>Sunrise</span> Portal
             </Link>
-            <Link href="/portal/profile" style={{ color: pathname === "/portal/profile" ? "#f97316" : "#9fb3c8", textDecoration: "none", fontSize: "0.85rem", fontWeight: 600 }}>
-              Profile
-            </Link>
-            <button onClick={logout} style={{ background: "none", border: "1px solid #627d98", color: "#9fb3c8", padding: "0.3rem 0.75rem", borderRadius: "6px", fontSize: "0.75rem", cursor: "pointer" }}>
-              Log Out
-            </button>
+            <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+              <Link href="/portal" style={{ color: pathname === "/portal" ? "#f97316" : "#9fb3c8", textDecoration: "none", fontSize: "0.8rem", fontWeight: 600 }}>
+                Jobs
+              </Link>
+              <Link href="/portal/profile" style={{ color: pathname === "/portal/profile" ? "#f97316" : "#9fb3c8", textDecoration: "none", fontSize: "0.8rem", fontWeight: 600 }}>
+                Profile
+              </Link>
+              <button onClick={logout} style={{ background: "none", border: "1px solid #627d98", color: "#9fb3c8", padding: "0.25rem 0.5rem", borderRadius: "6px", fontSize: "0.7rem", cursor: "pointer" }}>
+                Out
+              </button>
+            </div>
           </div>
         </header>
         <main style={{ maxWidth: "1000px", margin: "0 auto", padding: "2rem 1.5rem" }}>

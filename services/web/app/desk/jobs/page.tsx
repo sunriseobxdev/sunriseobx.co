@@ -246,7 +246,7 @@ export default function JobsPage() {
           <span style={badgeStyle(STATUS_COLORS[j.status] || "muted")}>{j.status}</span>
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem" }}>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4" style={{ marginBottom: 0 }}>
           {/* Job Info */}
           <div style={cardStyle}>
             <h3 style={{ color: colors.heading, fontSize: "0.85rem", fontWeight: 700, marginBottom: "0.75rem" }}>Job Info</h3>
@@ -334,6 +334,7 @@ export default function JobsPage() {
           {(j.invoices || []).length === 0 ? (
             <p style={{ color: colors.muted, fontSize: "0.8rem" }}>No invoices yet</p>
           ) : (
+            <div style={{ overflowX: "auto" }}>
             <table style={tableStyle}>
               <thead>
                 <tr>
@@ -370,6 +371,7 @@ export default function JobsPage() {
                 ))}
               </tbody>
             </table>
+            </div>
           )}
         </div>
 
@@ -411,7 +413,7 @@ export default function JobsPage() {
               <label style={labelStyle}>Job Title</label>
               <input style={inputStyle} value={form.title} onChange={F("title")} placeholder="e.g. Winter Siding & Window Replacement" />
             </div>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <label style={labelStyle}>Customer Email</label>
                 <input style={inputStyle} value={form.customer_email} onChange={F("customer_email")} placeholder="client@example.com" />
@@ -434,7 +436,7 @@ export default function JobsPage() {
               <label style={labelStyle}>Job Address</label>
               <input style={inputStyle} value={form.job_address_line1} onChange={F("job_address_line1")} placeholder="22 Ocean Blvd" />
             </div>
-            <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr", gap: "1rem" }}>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div>
                 <label style={labelStyle}>City</label>
                 <input style={inputStyle} value={form.job_address_city} onChange={F("job_address_city")} placeholder="Southern Shores" />
@@ -448,7 +450,7 @@ export default function JobsPage() {
                 <input style={inputStyle} value={form.job_address_zip} onChange={F("job_address_zip")} placeholder="27949" />
               </div>
             </div>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <label style={labelStyle}>Contract Amount ($)</label>
                 <input style={inputStyle} type="number" value={form.contract_amount} onChange={F("contract_amount")} placeholder="45000" />
@@ -458,7 +460,7 @@ export default function JobsPage() {
                 <input style={inputStyle} type="number" value={form.deposit_amount} onChange={F("deposit_amount")} placeholder="15000" />
               </div>
             </div>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <label style={labelStyle}>Estimated Start</label>
                 <input style={inputStyle} type="date" value={form.estimated_start} onChange={F("estimated_start")} />
@@ -501,6 +503,7 @@ export default function JobsPage() {
       </div>
 
       <div style={cardStyle}>
+        <div style={{ overflowX: "auto" }}>
         <table style={tableStyle}>
           <thead>
             <tr>
@@ -538,6 +541,7 @@ export default function JobsPage() {
             ))}
           </tbody>
         </table>
+        </div>
         {jobs.length === 0 && (
           <p style={{ color: colors.muted, textAlign: "center", padding: "2rem 0" }}>No jobs yet</p>
         )}
