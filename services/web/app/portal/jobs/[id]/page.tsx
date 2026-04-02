@@ -27,7 +27,7 @@ interface JobDetail {
   events: { id: string; title: string; start_time: string; end_time: string | null; event_type: string }[];
   change_orders: { id: string; title: string; amount: number | null; status: string }[];
   agreements: { id: string; status: string; signed_at: string | null }[];
-  payments: { id: string; amount: number; status: string; payment_type: string; paid_at: string | null }[];
+  payments: { id: string; amount: number; description: string | null; status: string; payment_type: string; paid_at: string | null }[];
   photos: { id: string; url: string; caption: string | null; phase: string | null }[];
   messages: { id: string; sender_type: string; sender_name: string; body: string; created_at: string }[];
   punch_list: { id: string; item: string; status: string; completed_at: string | null }[];
@@ -148,16 +148,41 @@ export default function CustomerJobDetailPage() {
             </div>
           </div>
           <div style={card}>
-            <h3 style={sectionTitle}>Payments</h3>
-            {job.payments.length === 0 ? (
-              <p style={{ color: "#627d98", fontSize: "0.8rem" }}>No payments yet</p>
-            ) : (
-              job.payments.map((p) => (
-                <div key={p.id} style={{ display: "flex", justifyContent: "space-between", padding: "0.4rem 0", borderBottom: "1px solid #f0f4f8", fontSize: "0.8rem" }}>
-                  <span style={{ color: "#334e68" }}>{p.payment_type} — {p.status}</span>
-                  <span style={{ fontWeight: 600, color: p.status === "succeeded" ? "#059669" : "#334e68" }}>{usd.format(p.amount)}</span>
+            <h3 style={sectionTitle}>Payments & Invoices</h3>
+            {job.payments.length > 0 && job.payments.map((p) => (
+              <div key={p.id} style={{ display: "flex", justifyContent: "space-between", padding: "0.5rem 0", borderBottom: "1px solid #f0f4f8", fontSize: "0.8rem" }}>
+                <div>
+                  <span style={{ color: "#334e68", fontWeight: 500 }}>{p.description || p.payment_type}</span>
+                  {p.paid_at && <span style={{ color: "#627d98", fontSize: "0.7rem", marginLeft: "0.5rem" }}>{new Date(p.paid_at).toLocaleDateString()}</span>}
                 </div>
-              ))
+                <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                  <span style={{ fontWeight: 600, color: p.status === "succeeded" ? "#059669" : "#334e68" }}>{usd.format(p.amount)}</span>
+                  <span style={{ padding: "0.1rem 0.4rem", borderRadius: "4px", fontSize: "0.6rem", fontWeight: 700, color: p.status === "succeeded" ? "#059669" : "#d97706", background: p.status === "succeeded" ? "#ecfdf5" : "#fffbeb" }}>{p.status}</span>
+                </div>
+              </div>
+            ))}
+            {/* Pay Deposit Button */}
+            {job.deposit_amount && !job.deposit_paid && (
+              <div style={{ marginTop: "1rem", padding: "1rem", background: "#fffbeb", border: "1px solid #fde68a", borderRadius: "8px" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <div>
+                    <p style={{ margin: 0, fontWeight: 600, color: "#1a3550", fontSize: "0.85rem" }}>Deposit Due</p>
+                    <p style={{ margin: "0.15rem 0 0", color: "#627d98", fontSize: "0.75rem" }}>Required before work begins</p>
+                  </div>
+                  <div style={{ textAlign: "right" }}>
+                    <div style={{ fontWeight: 700, color: "#1a3550", fontSize: "1rem" }}>{usd.format(job.deposit_amount)}</div>
+                    <button
+                      style={{ marginTop: "0.5rem", padding: "0.5rem 1.5rem", background: "#059669", color: "white", border: "none", borderRadius: "8px", fontWeight: 700, fontSize: "0.8rem", cursor: "pointer" }}
+                      onClick={() => alert("Stripe Checkout coming soon — contact Sunrise Construction to arrange payment.")}
+                    >
+                      Pay Now
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+            {job.payments.length === 0 && (job.deposit_paid || !job.deposit_amount) && (
+              <p style={{ color: "#627d98", fontSize: "0.8rem" }}>No payments yet</p>
             )}
           </div>
           {job.change_orders.length > 0 && (

@@ -51,6 +51,15 @@ interface JobDetail extends Job {
   agreements: Agreement[];
   payments: Payment[];
   invoices: JobInvoice[];
+  messages: JobMessage[];
+}
+
+interface JobMessage {
+  id: string;
+  sender_type: string;
+  sender_name: string;
+  body: string;
+  created_at: string;
 }
 
 interface JobInvoice {
@@ -173,6 +182,7 @@ export default function JobsPage() {
   const [form, setForm] = useState({ ...emptyForm });
   const [saving, setSaving] = useState(false);
   const [milestoneTitle, setMilestoneTitle] = useState("");
+  const [messageBody, setMessageBody] = useState("");
   const [onboardLink, setOnboardLink] = useState<string | null>(null);
   const [linkCopied, setLinkCopied] = useState(false);
   const [viewingAgreement, setViewingAgreement] = useState<AgreementDetail | null>(null);
@@ -523,6 +533,55 @@ export default function JobsPage() {
             </table>
             </div>
           )}
+        </div>
+
+        {/* Messages */}
+        <div style={{ ...cardStyle, marginTop: "1.5rem" }}>
+          <h3 style={{ color: colors.heading, fontSize: "0.85rem", fontWeight: 700, marginBottom: "0.75rem" }}>
+            Messages {(j.messages || []).length > 0 && <span style={{ color: colors.muted, fontWeight: 400 }}>({(j.messages || []).length})</span>}
+          </h3>
+          <div style={{ maxHeight: "350px", overflowY: "auto", marginBottom: "0.75rem" }}>
+            {(j.messages || []).length === 0 ? (
+              <p style={{ color: colors.muted, fontSize: "0.8rem" }}>No messages yet</p>
+            ) : (
+              (j.messages || []).map((m) => (
+                <div key={m.id} style={{ padding: "0.6rem 0.75rem", marginBottom: "0.5rem", borderRadius: "8px", background: m.sender_type === "admin" ? "rgba(249,115,22,0.06)" : "rgba(45,95,138,0.08)" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "0.2rem" }}>
+                    <span style={{ fontWeight: 600, fontSize: "0.7rem", color: m.sender_type === "admin" ? colors.accent : colors.info }}>
+                      {m.sender_name || (m.sender_type === "admin" ? "Admin" : "Customer")}
+                    </span>
+                    <span style={{ fontSize: "0.6rem", color: colors.muted }}>{new Date(m.created_at).toLocaleString()}</span>
+                  </div>
+                  <p style={{ margin: 0, fontSize: "0.8rem", color: colors.body, whiteSpace: "pre-wrap" }}>{m.body}</p>
+                </div>
+              ))
+            )}
+          </div>
+          <div style={{ display: "flex", gap: "0.5rem" }}>
+            <input
+              style={{ ...inputStyle, flex: 1 }}
+              value={messageBody}
+              onChange={(e) => setMessageBody(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey && messageBody.trim()) {
+                  e.preventDefault();
+                  apiFetch(`/api/jobs/${j.id}/messages`, { method: "POST", body: JSON.stringify({ body: messageBody }) })
+                    .then(() => { setMessageBody(""); loadJobDetail(j.id); });
+                }
+              }}
+              placeholder="Type a message to the customer..."
+            />
+            <button
+              style={{ ...buttonPrimary, fontSize: "0.75rem" }}
+              onClick={() => {
+                if (!messageBody.trim()) return;
+                apiFetch(`/api/jobs/${j.id}/messages`, { method: "POST", body: JSON.stringify({ body: messageBody }) })
+                  .then(() => { setMessageBody(""); loadJobDetail(j.id); });
+              }}
+            >
+              Send
+            </button>
+          </div>
         </div>
 
         {/* Notes */}
