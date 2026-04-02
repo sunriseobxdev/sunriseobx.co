@@ -97,8 +97,9 @@ app.use("/api/jobs", jobsRouter);
 // Support ticket routes (customer + admin)
 app.use("/", supportRouter);
 
-// Payment routes (Stripe)
+// Payment routes (Stripe) - mounted at both /api and / for customer routes
 app.use("/api", paymentsRouter);
+app.use("/", paymentsRouter);
 
 async function main() {
   await runMigrations();

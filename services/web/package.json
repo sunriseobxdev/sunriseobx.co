@@ -8,17 +8,19 @@
     "start": "next start"
   },
   "dependencies": {
+    "@stripe/react-stripe-js": "^6.1.0",
+    "@stripe/stripe-js": "^9.0.1",
+    "jose": "^6.0.11",
     "next": "^15.3.2",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "zustand": "^5.0.5",
-    "jose": "^6.0.11"
+    "zustand": "^5.0.5"
   },
   "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.7",
     "@types/node": "^22.15.17",
     "@types/react": "^19.1.4",
     "@types/react-dom": "^19.1.5",
-    "@tailwindcss/postcss": "^4.1.7",
     "tailwindcss": "^4.1.7",
     "typescript": "^5.8.3"
   }

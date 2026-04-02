@@ -3,7 +3,10 @@
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { customerFetch } from "@/lib/customer";
+
+const PaymentForm = dynamic(() => import("@/components/PaymentForm"), { ssr: false });
 
 interface JobDetail {
   id: string;
@@ -51,6 +54,7 @@ export default function CustomerJobDetailPage() {
   const [job, setJob] = useState<JobDetail | null>(null);
   const [msgBody, setMsgBody] = useState("");
   const [tab, setTab] = useState<"overview" | "timeline" | "calendar" | "documents" | "messages">("overview");
+  const [showPayment, setShowPayment] = useState(false);
 
   useEffect(() => {
     if (params.id) {
@@ -150,19 +154,34 @@ export default function CustomerJobDetailPage() {
           <div style={card}>
             <h3 style={sectionTitle}>Payments & Invoices</h3>
             {job.payments.length > 0 && job.payments.map((p) => (
-              <div key={p.id} style={{ display: "flex", justifyContent: "space-between", padding: "0.5rem 0", borderBottom: "1px solid #f0f4f8", fontSize: "0.8rem" }}>
+              <div key={p.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "0.5rem 0", borderBottom: "1px solid #f0f4f8", fontSize: "0.8rem" }}>
                 <div>
-                  <span style={{ color: "#334e68", fontWeight: 500 }}>{p.description || p.payment_type}</span>
+                  <span style={{ color: "#334e68", fontWeight: 500 }}>{p.payment_type}</span>
                   {p.paid_at && <span style={{ color: "#627d98", fontSize: "0.7rem", marginLeft: "0.5rem" }}>{new Date(p.paid_at).toLocaleDateString()}</span>}
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
                   <span style={{ fontWeight: 600, color: p.status === "succeeded" ? "#059669" : "#334e68" }}>{usd.format(p.amount)}</span>
                   <span style={{ padding: "0.1rem 0.4rem", borderRadius: "4px", fontSize: "0.6rem", fontWeight: 700, color: p.status === "succeeded" ? "#059669" : "#d97706", background: p.status === "succeeded" ? "#ecfdf5" : "#fffbeb" }}>{p.status}</span>
+                  {p.status === "succeeded" && (
+                    <button
+                      style={{ padding: "0.15rem 0.5rem", background: "none", border: "1px solid #d1d5db", borderRadius: "4px", fontSize: "0.6rem", color: "#627d98", cursor: "pointer" }}
+                      onClick={async () => {
+                        try {
+                          const data = await customerFetch(`/customer/jobs/${job.id}/payments/${p.id}/receipt`);
+                          window.open(data.url, "_blank");
+                        } catch {
+                          alert("Receipt not yet available");
+                        }
+                      }}
+                    >
+                      Receipt
+                    </button>
+                  )}
                 </div>
               </div>
             ))}
-            {/* Pay Deposit Button */}
-            {job.deposit_amount && !job.deposit_paid && (
+            {/* Pay Deposit */}
+            {job.deposit_amount && !job.deposit_paid && !showPayment && (
               <div style={{ marginTop: "1rem", padding: "1rem", background: "#fffbeb", border: "1px solid #fde68a", borderRadius: "8px" }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                   <div>
@@ -173,12 +192,34 @@ export default function CustomerJobDetailPage() {
                     <div style={{ fontWeight: 700, color: "#1a3550", fontSize: "1rem" }}>{usd.format(job.deposit_amount)}</div>
                     <button
                       style={{ marginTop: "0.5rem", padding: "0.5rem 1.5rem", background: "#059669", color: "white", border: "none", borderRadius: "8px", fontWeight: 700, fontSize: "0.8rem", cursor: "pointer" }}
-                      onClick={() => alert("Stripe Checkout coming soon — contact Sunrise Construction to arrange payment.")}
+                      onClick={() => setShowPayment(true)}
                     >
                       Pay Now
                     </button>
                   </div>
                 </div>
+              </div>
+            )}
+            {/* Inline Stripe Payment Form */}
+            {showPayment && job.deposit_amount && (
+              <div style={{ marginTop: "1rem", padding: "1.5rem", background: "white", border: "1px solid #e2e8f0", borderRadius: "12px" }}>
+                <h3 style={{ fontSize: "0.9rem", fontWeight: 700, color: "#1a3550", marginBottom: "0.25rem" }}>
+                  Pay Deposit — {usd.format(job.deposit_amount)}
+                </h3>
+                <p style={{ color: "#627d98", fontSize: "0.75rem", marginBottom: "1rem" }}>
+                  Secure payment powered by Stripe. Your card details never touch our servers.
+                </p>
+                <PaymentForm
+                  jobId={job.id}
+                  amount={job.deposit_amount}
+                  paymentType="deposit"
+                  description={`${job.job_number} — Deposit`}
+                  onSuccess={() => {
+                    setShowPayment(false);
+                    customerFetch(`/customer/jobs/${params.id}`).then(setJob);
+                  }}
+                  onCancel={() => setShowPayment(false)}
+                />
               </div>
             )}
             {job.payments.length === 0 && (job.deposit_paid || !job.deposit_amount) && (
