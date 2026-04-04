@@ -649,66 +649,94 @@ export async function runMigrations(): Promise<void> {
 
 async function seedAgreementTemplate(pool: pg.Pool): Promise<void> {
   const existing = await pool.query("SELECT count(*)::int AS cnt FROM agreement_templates");
-  if (existing.rows[0].cnt > 0) return;
+  const isUpdate = existing.rows[0].cnt > 0;
 
   const boilerplate = `
 <p>2. The Services will also include any other tasks which the Parties may agree on. The Contractor hereby agrees to provide such Services to the Client.</p>
 
-<h4 style="text-decoration: underline;">Term of Agreement</h4>
-<p>3. The term of this Agreement (the "Term") will begin on the date of this Agreement and will remain in full force and effect until the completion of the Services, subject to earlier termination as provided in this Agreement. The Term of this Agreement may be extended by mutual written agreement of the Parties.</p>
+<h4>Term of Agreement</h4>
+
+<p>3. The term of this Agreement (the &ldquo;Term&rdquo;) will begin on the date of this Agreement and will remain in full force and effect until the completion of the Services, subject to earlier termination as provided in this Agreement. The Term of this Agreement may be extended by mutual written agreement of the Parties.</p>
 
 <p>4. In the event that either Party breaches a material provision under this Agreement, the non-defaulting Party may terminate this Agreement and require the defaulting Party to indemnify the non-defaulting Party against all reasonable damages.</p>
 
-<h4 style="text-decoration: underline;">Performance</h4>
+<h4>Performance</h4>
+
 <p>5. The Parties agree to do everything necessary to ensure that the terms of this Agreement take effect.</p>
 
-<h4 style="text-decoration: underline;">Currency</h4>
-<p>6. Except as otherwise provided in this Agreement, all monetary amounts referred to in this Agreement are in US Dollars.</p>
+<h4>Currency</h4>
 
-<h4 style="text-decoration: underline;">Reimbursement of Expenses</h4>
-<p>10. In connection with providing the Services hereunder, the Contractor will only be reimbursed for expenses that have been approved in advance.</p>
+<p>6. Except as otherwise provided in this Agreement, all monetary amounts referred to in this Agreement are in USD (United States Dollars).</p>
+
+<h4>Reimbursement of Expenses</h4>
+
+<p>10. In connection with providing the Services hereunder, the Contractor will only be reimbursed for expenses that have been approved in advance by the Client.</p>
+
 <p>11. The Contractor will furnish vouchers to the Client for all such expenses.</p>
 
-<h4 style="text-decoration: underline;">Ownership of Materials and Intellectual Property</h4>
-<p>12. All intellectual property and related materials (the "Intellectual Property") including any related work in progress that is developed or produced under this Agreement, will be the property of the Contractor. The Client is granted a non-exclusive limited-use license of this Intellectual Property.</p>
-<p>13. Title, copyright, intellectual property rights and distribution rights of the Intellectual Property remain exclusively with the Contractor.</p>
+<h4>Ownership of Materials and Intellectual Property</h4>
 
-<h4 style="text-decoration: underline;">Return of Property</h4>
+<p>12. All intellectual property and related materials (the &ldquo;Intellectual Property&rdquo;), including any related work in progress that is developed or produced under this Agreement, will be the property of the Contractor. The Client is granted a non-exclusive, limited-use license of this Intellectual Property.</p>
+
+<p>13. Title, copyright, intellectual property rights, and distribution rights of the Intellectual Property remain exclusively with the Contractor.</p>
+
+<h4>Return of Property</h4>
+
 <p>14. Upon the expiry or termination of this Agreement, the Contractor will return to the Client any property, documentation, records, or Confidential Information which is the property of the Client.</p>
 
-<h4 style="text-decoration: underline;">Capacity/Independent Contractor</h4>
-<p>15. In providing the Services under this Agreement it is expressly agreed that the Contractor is acting as an independent contractor and not as an employee. The Contractor and the Client acknowledge that this Agreement does not create a partnership or joint venture between them, and is exclusively a contract for service.</p>
+<h4>Capacity / Independent Contractor</h4>
 
-<h4 style="text-decoration: underline;">Indemnification</h4>
-<p>17. Except to the extent paid in settlement from any applicable insurance policies, and to the extent permitted by applicable law, each Party agrees to indemnify and hold harmless the other Party, and its respective affiliates, officers, agents, employees, and permitted successors and assigns against any and all claims, losses, damages, liabilities, penalties, punitive damages, expenses, reasonable legal fees and costs of any kind or amount whatsoever, which result from or arise out of any act or omission of the indemnifying party, its respective affiliates, officers, agents, employees, and permitted successors and assigns that occurs in connection with this Agreement. This indemnification will survive the termination of this Agreement.</p>
+<p>15. In providing the Services under this Agreement, it is expressly agreed that the Contractor is acting as an independent contractor and not as an employee. The Contractor and the Client acknowledge that this Agreement does not create a partnership or joint venture between them, and is exclusively a contract for service.</p>
 
-<h4 style="text-decoration: underline;">Insurance</h4>
-<p>18. The Contractor will be required to maintain general liability insurance including coverage for bodily injury and property damage at a level that would be considered reasonable in the industry of the Contractor based on the risk associated with the characteristics of this Agreement and only to the extent permitted by law. All insurance policies will remain materially unchanged for the duration of this Agreement.</p>
+<h4>Indemnification</h4>
 
-<h4 style="text-decoration: underline;">Legal Expenses</h4>
+<p>17. Except to the extent paid in settlement from any applicable insurance policies, and to the extent permitted by applicable law, each Party agrees to indemnify and hold harmless the other Party, and its respective affiliates, officers, agents, employees, and permitted successors and assigns against any and all claims, losses, damages, liabilities, penalties, punitive damages, expenses, reasonable legal fees, and costs of any kind or amount whatsoever, which result from or arise out of any act or omission of the indemnifying Party, its respective affiliates, officers, agents, employees, and permitted successors and assigns that occurs in connection with this Agreement. This indemnification will survive the termination of this Agreement.</p>
+
+<h4>Insurance</h4>
+
+<p>18. The Contractor will be required to maintain general liability insurance, including coverage for bodily injury and property damage, at a level that would be considered reasonable in the industry of the Contractor based on the risk associated with the characteristics of this Agreement and only to the extent permitted by law. All insurance policies will remain materially unchanged for the duration of this Agreement.</p>
+
+<h4>Legal Expenses</h4>
+
 <p>19. In the event that legal action is brought to enforce or interpret any term of this Agreement, the prevailing Party will be entitled to recover, in addition to any other damages or award, all reasonable legal costs and fees associated with the action.</p>
 
-<h4 style="text-decoration: underline;">Modification of Agreement</h4>
-<p>20. Any amendment or modification of this Agreement or additional obligation assumed by either Party in connection with this Agreement will only be binding if evidenced in writing signed by each Party or an authorized representative of each Party.</p>
+<h4>Modification of Agreement</h4>
 
-<h4 style="text-decoration: underline;">Time of the Essence</h4>
+<p>20. Any amendment or modification of this Agreement, or additional obligation assumed by either Party in connection with this Agreement, will only be binding if evidenced in writing signed by each Party or an authorized representative of each Party.</p>
+
+<h4>Time of the Essence</h4>
+
 <p>21. Time is of the essence in this Agreement. No extension or variation of this Agreement will operate as a waiver of this provision.</p>
 
-<h4 style="text-decoration: underline;">Entire Agreement</h4>
-<p>22. It is agreed that there is no representation, warranty, collateral agreement or condition affecting this Agreement except as expressly provided in this Agreement.</p>
+<h4>Entire Agreement</h4>
 
-<h4 style="text-decoration: underline;">Governing Law</h4>
+<p>22. It is agreed that there is no representation, warranty, collateral agreement, or condition affecting this Agreement except as expressly provided in this Agreement.</p>
+
+<h4>Governing Law</h4>
+
 <p>23. This Agreement shall be governed by and construed in accordance with the laws of the State of North Carolina.</p>
 `;
 
-  await pool.query(
-    `INSERT INTO agreement_templates (name, description, boilerplate_html)
-     VALUES ($1, $2, $3)`,
-    [
-      "Standard Independent Contractor Agreement",
-      "Default boilerplate for all Sunrise Construction independent contractor agreements (sections 2-23).",
-      boilerplate,
-    ]
-  );
-  console.log("Seeded agreement template");
+  if (isUpdate) {
+    await pool.query(
+      `UPDATE agreement_templates SET boilerplate_html = $1, description = $2 WHERE name = $3`,
+      [
+        boilerplate,
+        "Default boilerplate for all Sunrise Construction independent contractor agreements (sections 2-23).",
+        "Standard Independent Contractor Agreement",
+      ]
+    );
+    console.log("Updated agreement template boilerplate");
+  } else {
+    await pool.query(
+      `INSERT INTO agreement_templates (name, description, boilerplate_html)
+       VALUES ($1, $2, $3)`,
+      [
+        "Standard Independent Contractor Agreement",
+        "Default boilerplate for all Sunrise Construction independent contractor agreements (sections 2-23).",
+        boilerplate,
+      ]
+    );
+    console.log("Seeded agreement template");
+  }
 }

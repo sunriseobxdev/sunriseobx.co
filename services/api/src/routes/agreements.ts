@@ -125,39 +125,62 @@ agreementsRouter.post(
       day: "numeric",
     });
 
+    // Build client address string with proper spacing
+    const clientAddr = [j.address_line1, j.city, j.state || "NC"].filter(Boolean).join(", ") + (j.zip ? ` ${j.zip}` : "");
+
     // Render full agreement HTML
     const fullHtml = `
-      <div style="font-family: 'Times New Roman', serif; max-width: 700px; margin: 0 auto; padding: 2rem; line-height: 1.6;">
-        <h2 style="text-align: center; text-decoration: underline;">INDEPENDENT CONTRACTOR AGREEMENT</h2>
-        <p><strong><u>THIS INDEPENDENT CONTRACTOR AGREEMENT (the "Agreement") dated ${today}</u></strong></p>
-        <p><strong>BETWEEN:</strong></p>
-        <p style="text-align: center;">
-          ${j.customer_name || "_______________"} of ${j.address_line1 || ""} ${j.city || ""}, ${j.state || "NC"} ${j.zip || ""}<br/>
-          (the "Client")
+      <div style="font-family: 'Times New Roman', Georgia, serif; max-width: 720px; margin: 0 auto; padding: 2.5rem; line-height: 1.8; color: #111; font-size: 14px;">
+        <style>
+          .agreement-body p { margin: 0.6em 0; text-align: justify; }
+          .agreement-body h3 { font-size: 15px; margin: 1.5em 0 0.5em; text-decoration: underline; page-break-after: avoid; }
+          .agreement-body h4 { font-size: 14px; margin: 1.4em 0 0.4em; text-decoration: underline; page-break-after: avoid; }
+          .agreement-body li { margin: 0.3em 0; }
+          .agreement-body ol, .agreement-body ul { margin: 0.5em 0 0.5em 1.5em; }
+        </style>
+        <div class="agreement-body">
+
+        <h2 style="text-align: center; text-decoration: underline; font-size: 18px; margin-bottom: 1.5em; letter-spacing: 0.5px;">INDEPENDENT CONTRACTOR AGREEMENT</h2>
+
+        <p><strong><u>THIS INDEPENDENT CONTRACTOR AGREEMENT</u></strong> (the &ldquo;Agreement&rdquo;) dated <strong>${today}</strong></p>
+
+        <p style="margin-top: 1.2em;"><strong>BETWEEN:</strong></p>
+
+        <p style="text-align: center; margin: 1em 0;">
+          <strong>${j.customer_name || "_______________"}</strong><br/>
+          ${clientAddr || "_______________"}<br/>
+          (the &ldquo;Client&rdquo;)
         </p>
-        <p style="text-align: center;"><strong>- AND -</strong></p>
-        <p style="text-align: center;">
-          Sunrise Construction of 121 Pine Grove Lane Point Harbor, NC 27964<br/>
-          (the "Contractor").
+
+        <p style="text-align: center; margin: 0.8em 0;"><strong>&mdash; AND &mdash;</strong></p>
+
+        <p style="text-align: center; margin: 1em 0;">
+          <strong>Sunrise Construction</strong><br/>
+          121 Pine Grove Lane, Point Harbor, NC 27964<br/>
+          (the &ldquo;Contractor&rdquo;)
         </p>
-        <p><strong>BACKGROUND:</strong></p>
-        <ol type="A" style="margin-left: 1rem;">
-          <li>The Client is of the opinion that the Contractor has the necessary qualifications, experience and abilities to provide services to the Client.</li>
+
+        <p style="margin-top: 1.2em;"><strong>BACKGROUND:</strong></p>
+        <ol type="A" style="margin-left: 1.5em;">
+          <li>The Client is of the opinion that the Contractor has the necessary qualifications, experience, and abilities to provide services to the Client.</li>
           <li>The Contractor is agreeable to providing such services to the Client on the terms and conditions set out in this Agreement.</li>
         </ol>
+
         <p><strong>IN CONSIDERATION OF</strong> the matters described above and of the mutual benefits and obligations set forth in this Agreement, the receipt and sufficiency of which consideration is hereby acknowledged, the Client and the Contractor agree as follows:</p>
 
-        <h3 style="text-decoration: underline;">Services Provided</h3>
-        <p>1. The Client hereby agrees to engage the Contractor to provide the Client with services (the "Services") consisting of:</p>
-        <div style="margin-left: 2rem;">
+        <h3>1. Services Provided</h3>
+        <p>The Client hereby agrees to engage the Contractor to provide the Client with the following services (the &ldquo;Services&rdquo;):</p>
+        <div style="margin: 0.8em 0 0.8em 2em;">
           ${scope_of_work_html}
         </div>
 
         ${boilerplate}
 
-        <h3 style="text-decoration: underline;">Compensation</h3>
-        <div>
+        <h3>Compensation</h3>
+        <div style="margin: 0.5em 0;">
           ${compensation_html}
+        </div>
+
         </div>
       </div>
     `;

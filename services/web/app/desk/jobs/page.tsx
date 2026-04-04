@@ -238,7 +238,7 @@ export default function JobsPage() {
             method: "POST",
             body: JSON.stringify({
               template_id: templateId,
-              scope_of_work_html: form.scope_of_work,
+              scope_of_work_html: form.scope_of_work.includes("<") ? form.scope_of_work : form.scope_of_work.split(/\n\n+/).map(p => `<p>${p.replace(/\n/g, "<br/>")}</p>`).join("\n"),
               compensation_html: compensationHtml,
             }),
           });
