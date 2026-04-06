@@ -96,6 +96,7 @@ export async function sendJobUpdate(
   milestoneTitle: string,
   message: string
 ): Promise<void> {
+  const portalUrl = process.env.PUBLIC_URL || "https://sunriseobx.co";
   await sendEmail(
     email,
     `Job Update: ${jobNumber} — ${milestoneTitle}`,
@@ -103,12 +104,19 @@ export async function sendJobUpdate(
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 2rem;">
         <h2 style="color: #1a3550;">Sunrise Construction</h2>
         <p>Hi ${customerName || "there"},</p>
-        <p>There's an update on your project <strong>${jobNumber}</strong>:</p>
+        <p>There&rsquo;s an update on your project <strong>${jobNumber}</strong>:</p>
         <div style="background: #f0f7ff; border-left: 4px solid #f97316; padding: 1rem; margin: 1rem 0; border-radius: 4px;">
           <strong>${milestoneTitle}</strong>
           <p style="margin: 0.5rem 0 0;">${message}</p>
         </div>
-        <p style="color: #666; font-size: 0.9rem;">Log in to your portal to see full details.</p>
+        <div style="text-align: center; margin: 2rem 0;">
+          <a href="${portalUrl}/portal" style="display: inline-block; background: #f97316; color: white; padding: 0.75rem 2rem; border-radius: 8px; text-decoration: none; font-weight: bold;">
+            View Your Project
+          </a>
+        </div>
+        <p style="color: #666; font-size: 0.9rem;">If you have any questions, please contact us at (252) 305-4313 or reply to this email.</p>
+        <hr style="border: none; border-top: 1px solid #ddd; margin: 2rem 0;" />
+        <p style="color: #999; font-size: 0.8rem;">Sunrise Construction<br/>121 Pine Grove Lane, Point Harbor, NC 27964</p>
       </div>
     `
   );

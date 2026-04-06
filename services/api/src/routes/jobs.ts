@@ -2,6 +2,7 @@ import { Router } from "express";
 import { authMiddleware } from "../middleware/auth.js";
 import { requirePrivilege } from "../middleware/rbac.js";
 import { getPool } from "../lib/db.js";
+import { sendJobUpdate } from "../lib/email.js";
 
 export const jobsRouter = Router();
 jobsRouter.use(authMiddleware);
@@ -218,6 +219,26 @@ jobsRouter.put("/:id/milestones/:mid", requirePrivilege("manage_jobs"), async (r
     res.status(404).json({ error: "Not found" });
     return;
   }
+
+  // Email customer about the milestone update
+  const milestone = result.rows[0];
+  try {
+    const job = await pool.query(
+      `SELECT j.job_number, j.title AS job_title, c.email, c.full_name
+       FROM jobs j LEFT JOIN customers c ON j.customer_id = c.id
+       WHERE j.id = $1`,
+      [req.params.id]
+    );
+    const j = job.rows[0];
+    if (j?.email) {
+      const statusLabel = milestone.status === "completed" ? "Completed" : milestone.status === "in_progress" ? "In Progress" : "Upcoming";
+      const msg = milestone.description || `Status updated to: ${statusLabel}`;
+      await sendJobUpdate(j.email, j.full_name, j.job_number, milestone.title, msg);
+    }
+  } catch (err) {
+    console.error("Milestone email failed (non-blocking):", err);
+  }
+
   res.json(result.rows[0]);
 });
 
