@@ -9,22 +9,67 @@ export const metadata: Metadata = {
     "Browse our portfolio of completed construction projects across the Outer Banks — roofing, siding, windows, and full exterior renovations.",
 };
 
-const projects = [
-  { id: 1, title: "Oceanfront Roof Replacement", location: "Nags Head, NC", service: "Roofing", image: "/img/project-1.jpg", featured: true },
-  { id: 2, title: "Beachfront Siding Makeover", location: "Kill Devil Hills, NC", service: "Siding", image: "/img/project-2.jpg", featured: true },
-  { id: 3, title: "Hurricane-Ready Windows", location: "Duck, NC", service: "Windows", image: "/img/project-3.jpg", featured: true },
-  { id: 4, title: "FORTIFIED Roof System", location: "Kitty Hawk, NC", service: "FORTIFIED", image: "/img/project-4.jpg", featured: false },
-  { id: 5, title: "Coastal Exterior Renovation", location: "Southern Shores, NC", service: "Exterior", image: "/img/project-5.jpg", featured: false },
-  { id: 6, title: "Storm Damage Restoration", location: "Hatteras, NC", service: "Roofing", image: "/img/project-6.jpg", featured: false },
-  { id: 7, title: "Full Home Exterior Upgrade", location: "Manteo, NC", service: "Exterior", image: "/img/project-7.jpg", featured: false },
-  { id: 8, title: "Rental Property Renovation", location: "Corolla, NC", service: "Siding", image: "/img/project-8.jpg", featured: false },
-  { id: 9, title: "Beachfront Window Install", location: "Avon, NC", service: "Windows", image: "/img/project-9.jpg", featured: false },
-  { id: 10, title: "Oceanview Roof Upgrade", location: "Nags Head, NC", service: "Roofing", image: "/img/project-10.jpg", featured: false },
-  { id: 11, title: "Historic Home Siding", location: "Manteo, NC", service: "Siding", image: "/img/project-11.jpg", featured: false },
-  { id: 12, title: "New Construction Exterior", location: "Corolla, NC", service: "Exterior", image: "/img/project-12.jpg", featured: false },
+export const revalidate = 60; // revalidate every 60 seconds
+
+interface CmsProject {
+  id: string;
+  slug: string;
+  title: string;
+  description?: string;
+  images: string[] | { url: string; alt?: string }[];
+  services?: string;
+  location?: string;
+  featured: boolean;
+}
+
+// Fallback data when CMS has no published projects yet
+const fallbackProjects = [
+  { id: "1", title: "Oceanfront Roof Replacement", location: "Nags Head, NC", services: "Roofing", image: "/img/project-1.jpg", featured: true },
+  { id: "2", title: "Beachfront Siding Makeover", location: "Kill Devil Hills, NC", services: "Siding", image: "/img/project-2.jpg", featured: true },
+  { id: "3", title: "Hurricane-Ready Windows", location: "Duck, NC", services: "Windows", image: "/img/project-3.jpg", featured: true },
+  { id: "4", title: "FORTIFIED Roof System", location: "Kitty Hawk, NC", services: "FORTIFIED", image: "/img/project-4.jpg", featured: false },
+  { id: "5", title: "Coastal Exterior Renovation", location: "Southern Shores, NC", services: "Exterior", image: "/img/project-5.jpg", featured: false },
+  { id: "6", title: "Storm Damage Restoration", location: "Hatteras, NC", services: "Roofing", image: "/img/project-6.jpg", featured: false },
+  { id: "7", title: "Full Home Exterior Upgrade", location: "Manteo, NC", services: "Exterior", image: "/img/project-7.jpg", featured: false },
+  { id: "8", title: "Rental Property Renovation", location: "Corolla, NC", services: "Siding", image: "/img/project-8.jpg", featured: false },
+  { id: "9", title: "Beachfront Window Install", location: "Avon, NC", services: "Windows", image: "/img/project-9.jpg", featured: false },
+  { id: "10", title: "Oceanview Roof Upgrade", location: "Nags Head, NC", services: "Roofing", image: "/img/project-10.jpg", featured: false },
+  { id: "11", title: "Historic Home Siding", location: "Manteo, NC", services: "Siding", image: "/img/project-11.jpg", featured: false },
+  { id: "12", title: "New Construction Exterior", location: "Corolla, NC", services: "Exterior", image: "/img/project-12.jpg", featured: false },
 ];
 
-export default function ProjectsPage() {
+function getImage(proj: CmsProject): string {
+  if (!proj.images || proj.images.length === 0) return "/img/project-1.jpg";
+  const first = proj.images[0];
+  if (typeof first === "string") return first;
+  return first.url || "/img/project-1.jpg";
+}
+
+async function getProjects(): Promise<{ id: string; title: string; location?: string; services?: string; image: string; featured: boolean }[]> {
+  try {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://sunriseobx-api:8080";
+    const res = await fetch(`${apiUrl}/api/cms/projects`, { next: { revalidate: 60 } });
+    if (!res.ok) return fallbackProjects;
+    const data: CmsProject[] = await res.json();
+    if (data.length === 0) return fallbackProjects;
+    return data.map((p) => ({
+      id: p.id,
+      title: p.title,
+      location: p.location,
+      services: p.services,
+      image: getImage(p),
+      featured: p.featured,
+    }));
+  } catch {
+    return fallbackProjects;
+  }
+}
+
+export default async function ProjectsPage() {
+  const projects = await getProjects();
+  const featured = projects.filter((p) => p.featured);
+  const all = projects;
+
   return (
     <main className="overflow-hidden">
       <Header />
@@ -51,19 +96,18 @@ export default function ProjectsPage() {
       </section>
 
       {/* Featured projects — large */}
-      <section className="py-20 lg:py-28 bg-white">
-        <div className="max-w-7xl mx-auto px-6">
-          <p className="text-sunrise-600 font-semibold text-sm tracking-widest uppercase mb-3">
-            Featured Work
-          </p>
-          <h2 className="text-3xl font-extrabold text-navy-900 mb-10">
-            Recent Highlights
-          </h2>
+      {featured.length > 0 && (
+        <section className="py-20 lg:py-28 bg-white">
+          <div className="max-w-7xl mx-auto px-6">
+            <p className="text-sunrise-600 font-semibold text-sm tracking-widest uppercase mb-3">
+              Featured Work
+            </p>
+            <h2 className="text-3xl font-extrabold text-navy-900 mb-10">
+              Recent Highlights
+            </h2>
 
-          <div className="grid lg:grid-cols-3 gap-6">
-            {projects
-              .filter((p) => p.featured)
-              .map((project) => (
+            <div className="grid lg:grid-cols-3 gap-6">
+              {featured.map((project) => (
                 <div
                   key={project.id}
                   className="group relative overflow-hidden rounded-2xl h-[450px] cursor-pointer"
@@ -76,18 +120,19 @@ export default function ProjectsPage() {
                   <div className="absolute inset-0 bg-gradient-to-t from-navy-900/90 via-navy-900/20 to-transparent" />
                   <div className="absolute top-5 left-5">
                     <span className="px-3 py-1.5 bg-sunrise-600 text-white text-xs font-bold rounded-full uppercase tracking-wider">
-                      {project.service}
+                      {project.services || "Exterior"}
                     </span>
                   </div>
                   <div className="absolute bottom-0 left-0 right-0 p-6">
                     <h3 className="text-xl font-bold text-white">{project.title}</h3>
-                    <p className="text-navy-300 text-sm mt-1">{project.location}</p>
+                    {project.location && <p className="text-navy-300 text-sm mt-1">{project.location}</p>}
                   </div>
                 </div>
               ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* All projects grid */}
       <section className="py-20 lg:py-28 bg-navy-50">
@@ -100,7 +145,7 @@ export default function ProjectsPage() {
           </h2>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-            {projects.map((project) => (
+            {all.map((project) => (
               <div
                 key={project.id}
                 className="group relative overflow-hidden rounded-xl h-72 cursor-pointer"
@@ -113,10 +158,10 @@ export default function ProjectsPage() {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-4 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-300">
                   <span className="text-xs text-sunrise-400 font-semibold uppercase">
-                    {project.service}
+                    {project.services || "Exterior"}
                   </span>
                   <h3 className="text-white font-bold text-sm mt-0.5">{project.title}</h3>
-                  <p className="text-navy-300 text-xs">{project.location}</p>
+                  {project.location && <p className="text-navy-300 text-xs">{project.location}</p>}
                 </div>
               </div>
             ))}

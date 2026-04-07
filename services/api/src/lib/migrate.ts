@@ -560,6 +560,33 @@ CREATE INDEX IF NOT EXISTS idx_invoices_job_id ON invoices(job_id);
 ALTER TABLE invoices ADD COLUMN IF NOT EXISTS stripe_payment_intent_id VARCHAR(255);
 ALTER TABLE invoices ADD COLUMN IF NOT EXISTS paid_at TIMESTAMPTZ;
 
+CREATE TABLE IF NOT EXISTS estimates (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  estimate_number VARCHAR(50) UNIQUE NOT NULL,
+  client_name VARCHAR(200) NOT NULL,
+  client_email VARCHAR(255),
+  client_address TEXT,
+  client_phone VARCHAR(50),
+  job_address TEXT,
+  description TEXT,
+  line_items JSONB NOT NULL DEFAULT '[]'::jsonb,
+  subtotal NUMERIC(12,2) NOT NULL DEFAULT 0,
+  tax_rate NUMERIC(5,4) DEFAULT 0,
+  tax_amount NUMERIC(12,2) DEFAULT 0,
+  total NUMERIC(12,2) NOT NULL DEFAULT 0,
+  notes TEXT,
+  valid_until DATE,
+  status VARCHAR(20) DEFAULT 'draft',
+  sent_at TIMESTAMPTZ,
+  accepted_at TIMESTAMPTZ,
+  job_id UUID REFERENCES jobs(id),
+  pdf_path VARCHAR(500),
+  created_by UUID REFERENCES users(id),
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+CREATE INDEX IF NOT EXISTS idx_estimates_status ON estimates(status);
+
 CREATE INDEX IF NOT EXISTS idx_job_photos_job_id ON job_photos(job_id);
 CREATE INDEX IF NOT EXISTS idx_job_documents_job_id ON job_documents(job_id);
 CREATE INDEX IF NOT EXISTS idx_job_messages_job_id ON job_messages(job_id);

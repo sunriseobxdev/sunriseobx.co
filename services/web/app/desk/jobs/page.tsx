@@ -288,6 +288,35 @@ export default function JobsPage() {
     if (selectedJob?.id === id) loadJobDetail(id);
   }
 
+  async function deleteJob(id: string, jobNumber: string) {
+    if (!confirm(`Delete job ${jobNumber}? This will remove all milestones, payments, documents, and other related data. This cannot be undone.`)) return;
+    await apiFetch(`/api/jobs/${id}`, { method: "DELETE" });
+    setSelectedJob(null);
+    setView("list");
+    loadJobs();
+  }
+
+  async function addChangeOrder(jobId: string) {
+    const title = prompt("Change order title:");
+    if (!title?.trim()) return;
+    const desc = prompt("Description (optional):") || "";
+    const amtStr = prompt("Amount (optional):") || "";
+    const amount = amtStr ? parseFloat(amtStr) : null;
+    await apiFetch(`/api/jobs/${jobId}/change-orders`, {
+      method: "POST",
+      body: JSON.stringify({ title, description: desc, amount }),
+    });
+    loadJobDetail(jobId);
+  }
+
+  async function updateChangeOrder(jobId: string, coId: string, status: string) {
+    await apiFetch(`/api/jobs/${jobId}/change-orders/${coId}`, {
+      method: "PUT",
+      body: JSON.stringify({ status }),
+    });
+    loadJobDetail(jobId);
+  }
+
   async function addMilestone(jobId: string) {
     if (!milestoneTitle.trim()) return;
     await apiFetch(`/api/jobs/${jobId}/milestones`, {
@@ -315,8 +344,14 @@ export default function JobsPage() {
           <button style={buttonSecondary} onClick={() => { setView("list"); setSelectedJob(null); }}>
             &larr; Back
           </button>
-          <h1 style={{ ...pageTitle, margin: 0 } as React.CSSProperties}>{j.job_number} — {j.title}</h1>
+          <h1 style={{ ...pageTitle, margin: 0, flex: 1 } as React.CSSProperties}>{j.job_number} — {j.title}</h1>
           <span style={badgeStyle(STATUS_COLORS[j.status] || "muted")}>{j.status}</span>
+          <button
+            style={{ ...buttonSecondary, fontSize: "0.7rem", padding: "0.3rem 0.75rem", color: colors.danger, borderColor: "rgba(239,68,68,0.3)" }}
+            onClick={() => deleteJob(j.id, j.job_number)}
+          >
+            Delete
+          </button>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4" style={{ marginBottom: 0 }}>
@@ -467,18 +502,32 @@ export default function JobsPage() {
         </div>
 
         {/* Change Orders */}
-        {j.change_orders.length > 0 && (
-          <div style={{ ...cardStyle, marginTop: "1.5rem" }}>
-            <h3 style={{ color: colors.heading, fontSize: "0.85rem", fontWeight: 700, marginBottom: "0.75rem" }}>Change Orders</h3>
-            {j.change_orders.map((co) => (
+        <div style={{ ...cardStyle, marginTop: "1.5rem" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.75rem" }}>
+            <h3 style={{ color: colors.heading, fontSize: "0.85rem", fontWeight: 700, margin: 0 }}>Change Orders</h3>
+            <button style={{ ...buttonPrimary, fontSize: "0.7rem", padding: "0.3rem 0.75rem" }} onClick={() => addChangeOrder(j.id)}>+ Add</button>
+          </div>
+          {j.change_orders.length === 0 ? (
+            <p style={{ color: colors.muted, fontSize: "0.8rem" }}>No change orders</p>
+          ) : (
+            j.change_orders.map((co) => (
               <div key={co.id} style={{ display: "flex", alignItems: "center", gap: "0.75rem", padding: "0.5rem 0", borderBottom: `1px solid ${colors.borderLight}` }}>
                 <span style={badgeStyle(co.status === "approved" ? "success" : co.status === "rejected" ? "danger" : "warning")}>{co.status}</span>
-                <span style={{ color: colors.body, fontSize: "0.8rem", flex: 1 }}>{co.title}</span>
-                {co.amount && <span style={{ color: colors.accent, fontSize: "0.8rem" }}>{usd.format(co.amount)}</span>}
+                <div style={{ flex: 1 }}>
+                  <span style={{ color: colors.body, fontSize: "0.8rem" }}>{co.title}</span>
+                  {co.description && <p style={{ margin: "0.15rem 0 0", color: colors.muted, fontSize: "0.7rem" }}>{co.description}</p>}
+                </div>
+                {co.amount != null && <span style={{ color: colors.accent, fontSize: "0.8rem", fontWeight: 600 }}>{usd.format(co.amount)}</span>}
+                {co.status === "pending" && (
+                  <div style={{ display: "flex", gap: "0.25rem" }}>
+                    <button style={{ ...buttonSecondary, fontSize: "0.6rem", padding: "0.2rem 0.5rem", color: colors.success, borderColor: "rgba(16,185,129,0.3)" }} onClick={() => updateChangeOrder(j.id, co.id, "approved")}>Approve</button>
+                    <button style={{ ...buttonSecondary, fontSize: "0.6rem", padding: "0.2rem 0.5rem", color: colors.danger, borderColor: "rgba(239,68,68,0.3)" }} onClick={() => updateChangeOrder(j.id, co.id, "rejected")}>Reject</button>
+                  </div>
+                )}
               </div>
-            ))}
-          </div>
-        )}
+            ))
+          )}
+        </div>
 
         {/* Invoices */}
         <div style={{ ...cardStyle, marginTop: "1.5rem" }}>

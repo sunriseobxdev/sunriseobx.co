@@ -22,6 +22,7 @@ import { paymentsRouter } from "./routes/payments.js";
 import { agreementsRouter } from "./routes/agreements.js";
 import { customerJobsRouter } from "./routes/customer-jobs.js";
 import { supportRouter } from "./routes/support.js";
+import { estimatesRouter } from "./routes/estimates.js";
 import { runMigrations } from "./lib/migrate.js";
 
 const app = express();
@@ -84,6 +85,9 @@ app.use("/api/payroll", payrollRouter);
 
 // Invoice routes
 app.use("/api/invoices", invoiceRouter);
+
+// Estimate routes
+app.use("/api/estimates", estimatesRouter);
 
 // Dare County GIS parcel routes
 app.use("/api/parcels", parcelsRouter);

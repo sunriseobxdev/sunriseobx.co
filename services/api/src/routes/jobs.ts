@@ -178,6 +178,27 @@ jobsRouter.put("/:id", requirePrivilege("manage_jobs"), async (req, res) => {
   res.json(result.rows[0]);
 });
 
+// Delete job and all related records
+jobsRouter.delete("/:id", requirePrivilege("manage_jobs"), async (req, res) => {
+  const pool = getPool();
+  const job = await pool.query(`SELECT id, job_number FROM jobs WHERE id = $1`, [req.params.id]);
+  if (job.rows.length === 0) {
+    res.status(404).json({ error: "Job not found" });
+    return;
+  }
+  // Delete child records first (no cascade on all FKs)
+  const tables = [
+    "job_milestones", "job_events", "job_change_orders", "job_agreements",
+    "job_payments", "job_photos", "job_documents", "job_messages", "job_punch_list",
+  ];
+  for (const t of tables) {
+    await pool.query(`DELETE FROM ${t} WHERE job_id = $1`, [req.params.id]);
+  }
+  await pool.query(`UPDATE invoices SET job_id = NULL WHERE job_id = $1`, [req.params.id]);
+  await pool.query(`DELETE FROM jobs WHERE id = $1`, [req.params.id]);
+  res.json({ deleted: true, job_number: job.rows[0].job_number });
+});
+
 // --- Milestones ---
 
 jobsRouter.get("/:id/milestones", requirePrivilege("manage_jobs"), async (req, res) => {
