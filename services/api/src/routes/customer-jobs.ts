@@ -100,3 +100,23 @@ customerJobsRouter.post("/:id/messages", async (req, res) => {
   );
   res.status(201).json(result.rows[0]);
 });
+
+// Customer's invoices — matched by email or by job ownership
+customerJobsRouter.get("/invoices", async (req, res) => {
+  const pool = getPool();
+  const customer = await pool.query(`SELECT email FROM customers WHERE id = $1`, [req.customer!.customerId]);
+  if (customer.rows.length === 0) {
+    res.json([]);
+    return;
+  }
+  const email = customer.rows[0].email;
+  const result = await pool.query(
+    `SELECT id, invoice_number, client_name, total, status, due_date, paid_at, viewed_at
+     FROM invoices
+     WHERE client_email = $1
+        OR job_id IN (SELECT id FROM jobs WHERE customer_id = $2)
+     ORDER BY issue_date DESC`,
+    [email, req.customer!.customerId]
+  );
+  res.json(result.rows);
+});

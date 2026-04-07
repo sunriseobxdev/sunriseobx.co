@@ -20,8 +20,9 @@ invoiceRouter.get(
     try {
       const pool = getPool();
       const result = await pool.query(
-        `SELECT i.id, i.invoice_number, i.client_name, i.issue_date, i.due_date,
+        `SELECT i.id, i.invoice_number, i.client_name, i.client_email, i.issue_date, i.due_date,
                 i.total, i.status, i.pdf_path, i.created_at, i.job_id,
+                i.viewed_at, i.paid_at,
                 j.job_number, j.title AS job_title
          FROM invoices i LEFT JOIN jobs j ON i.job_id = j.id
          ORDER BY i.issue_date DESC`
@@ -221,7 +222,7 @@ invoiceRouter.post(
       }
 
       const portalUrl = process.env.PUBLIC_URL || "https://sunriseobx.co";
-      const payLink = `${portalUrl}/portal/invoices/${invoice.id}`;
+      const payLink = `${portalUrl}/pay/${invoice.id}`;
 
       let pdfUrl = "";
       if (invoice.pdf_path) {
@@ -258,7 +259,7 @@ invoiceRouter.post(
   }
 );
 
-// ── Public: view invoice (for customer pay page) ──
+// ── Public: view invoice (for customer pay page, no auth) ──
 invoiceRouter.get(
   "/public/:id",
   async (req, res) => {
@@ -274,6 +275,11 @@ invoiceRouter.get(
         res.status(404).json({ error: "Invoice not found" });
         return;
       }
+      // Track first view
+      await pool.query(
+        `UPDATE invoices SET viewed_at = COALESCE(viewed_at, NOW()) WHERE id = $1`,
+        [req.params.id]
+      );
       res.json(result.rows[0]);
     } catch (err) {
       console.error("Public invoice error:", err);

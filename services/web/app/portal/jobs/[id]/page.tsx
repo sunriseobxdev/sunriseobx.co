@@ -193,7 +193,7 @@ export default function CustomerJobDetailPage() {
                   <span style={{ padding: "0.1rem 0.4rem", borderRadius: "4px", fontSize: "0.6rem", fontWeight: 700, color: inv.status === "paid" ? "#059669" : "#d97706", background: inv.status === "paid" ? "#ecfdf5" : "#fffbeb" }}>{inv.status}</span>
                   {inv.status !== "paid" && (
                     <a
-                      href={`/portal/invoices/${inv.id}`}
+                      href={`/pay/${inv.id}`}
                       style={{ padding: "0.15rem 0.5rem", background: "#059669", border: "none", borderRadius: "4px", fontSize: "0.6rem", color: "white", cursor: "pointer", textDecoration: "none", fontWeight: 700 }}
                     >
                       Pay

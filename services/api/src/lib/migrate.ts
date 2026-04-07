@@ -559,6 +559,7 @@ CREATE INDEX IF NOT EXISTS idx_invoices_job_id ON invoices(job_id);
 
 ALTER TABLE invoices ADD COLUMN IF NOT EXISTS stripe_payment_intent_id VARCHAR(255);
 ALTER TABLE invoices ADD COLUMN IF NOT EXISTS paid_at TIMESTAMPTZ;
+ALTER TABLE invoices ADD COLUMN IF NOT EXISTS viewed_at TIMESTAMPTZ;
 
 CREATE TABLE IF NOT EXISTS estimates (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),

@@ -15,6 +15,15 @@ interface Job {
   contract_amount: number | null;
 }
 
+interface CustomerInvoice {
+  id: string;
+  invoice_number: string;
+  total: string;
+  status: string;
+  due_date: string;
+  paid_at: string | null;
+}
+
 const STATUS_LABELS: Record<string, { label: string; color: string; bg: string }> = {
   draft: { label: "Draft", color: "#627d98", bg: "#f0f4f8" },
   pending: { label: "Pending", color: "#d97706", bg: "#fffbeb" },
@@ -29,11 +38,11 @@ const usd = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" 
 export default function PortalDashboard() {
   const { customer } = useCustomer();
   const [jobs, setJobs] = useState<Job[]>([]);
+  const [invoices, setInvoices] = useState<CustomerInvoice[]>([]);
 
   useEffect(() => {
-    customerFetch("/customer/jobs")
-      .then(setJobs)
-      .catch(() => {});
+    customerFetch("/customer/jobs").then(setJobs).catch(() => {});
+    customerFetch("/customer/jobs/invoices").then(setInvoices).catch(() => {});
   }, []);
 
   return (
@@ -93,6 +102,50 @@ export default function PortalDashboard() {
               </Link>
             );
           })}
+        </div>
+      )}
+
+      {/* Invoices */}
+      {invoices.length > 0 && (
+        <div style={{ marginTop: "2rem" }}>
+          <h2 style={{ fontSize: "1.1rem", fontWeight: 700, color: "#1a3550", marginBottom: "0.75rem" }}>Invoices</h2>
+          <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+            {invoices.map((inv) => {
+              const isPaid = inv.status === "paid";
+              return (
+                <div
+                  key={inv.id}
+                  style={{
+                    background: "white", borderRadius: "12px", padding: "1rem 1.25rem",
+                    border: "1px solid #e2e8f0", display: "flex", alignItems: "center",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <div>
+                    <span style={{ fontWeight: 600, color: "#1a3550", fontSize: "0.9rem" }}>{inv.invoice_number}</span>
+                    <span style={{ color: "#627d98", fontSize: "0.75rem", marginLeft: "0.75rem" }}>
+                      Due {new Date(inv.due_date).toLocaleDateString()}
+                    </span>
+                  </div>
+                  <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                    <span style={{ fontWeight: 700, color: "#1a3550" }}>{usd.format(Number(inv.total))}</span>
+                    {isPaid ? (
+                      <span style={{ padding: "0.2rem 0.6rem", borderRadius: "6px", fontSize: "0.7rem", fontWeight: 700, color: "#059669", background: "#ecfdf5" }}>
+                        Paid{inv.paid_at ? ` ${new Date(inv.paid_at).toLocaleDateString()}` : ""}
+                      </span>
+                    ) : (
+                      <a
+                        href={`/pay/${inv.id}`}
+                        style={{ padding: "0.35rem 1rem", background: "#059669", color: "white", borderRadius: "6px", fontSize: "0.75rem", fontWeight: 700, textDecoration: "none" }}
+                      >
+                        Pay Now
+                      </a>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
       )}
     </div>

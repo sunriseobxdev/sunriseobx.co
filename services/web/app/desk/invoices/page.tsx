@@ -24,6 +24,8 @@ interface Invoice {
   tax_rate?: string;
   tax_amount?: string;
   notes?: string;
+  viewed_at?: string;
+  paid_at?: string;
 }
 
 function usd(n: string | number): string {
@@ -185,7 +187,7 @@ export default function InvoicesPage() {
   }
 
   function copyPayLink(invoiceId: string) {
-    const url = `${window.location.origin}/portal/invoices/${invoiceId}`;
+    const url = `${window.location.origin}/pay/${invoiceId}`;
     navigator.clipboard.writeText(url);
     showFlash('success', 'Payment link copied');
   }
@@ -244,9 +246,17 @@ export default function InvoicesPage() {
                     <td style={tdStyle}>{new Date(inv.due_date).toLocaleDateString()}</td>
                     <td style={{ ...tdStyle, fontWeight: 600, color: colors.heading }}>{usd(inv.total)}</td>
                     <td style={tdStyle}>
-                      <span style={badgeStyle(statusBadgeVariant[inv.status] || 'muted')}>
-                        {inv.status}
-                      </span>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.2rem' }}>
+                        <span style={badgeStyle(statusBadgeVariant[inv.status] || 'muted')}>
+                          {inv.status}
+                        </span>
+                        {inv.viewed_at && inv.status !== 'paid' && (
+                          <span style={{ fontSize: '0.6rem', color: colors.info }}>Viewed {new Date(inv.viewed_at).toLocaleDateString()}</span>
+                        )}
+                        {inv.paid_at && (
+                          <span style={{ fontSize: '0.6rem', color: colors.success }}>Paid {new Date(inv.paid_at).toLocaleDateString()}</span>
+                        )}
+                      </div>
                     </td>
                     <td style={tdStyle}>
                       <div style={{ display: 'flex', gap: '0.3rem', flexWrap: 'wrap' }}>
