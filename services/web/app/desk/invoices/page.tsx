@@ -174,6 +174,22 @@ export default function InvoicesPage() {
     }
   }
 
+  async function sendToCustomer(invoiceId: string) {
+    try {
+      await apiFetch(`/api/invoices/${invoiceId}/send`, { method: 'POST' });
+      showFlash('success', 'Invoice sent to customer');
+      loadInvoices();
+    } catch (err) {
+      showFlash('error', err instanceof Error ? err.message : 'Failed to send');
+    }
+  }
+
+  function copyPayLink(invoiceId: string) {
+    const url = `${window.location.origin}/portal/invoices/${invoiceId}`;
+    navigator.clipboard.writeText(url);
+    showFlash('success', 'Payment link copied');
+  }
+
   return (
     <div style={{ maxWidth: '900px', animation: 'fadeSlideUp 0.3s ease' }}>
       {flash && (
@@ -233,10 +249,16 @@ export default function InvoicesPage() {
                       </span>
                     </td>
                     <td style={tdStyle}>
-                      <div style={{ display: 'flex', gap: '0.3rem' }}>
+                      <div style={{ display: 'flex', gap: '0.3rem', flexWrap: 'wrap' }}>
                         <button onClick={() => viewPdf(inv.id)} style={buttonSecondary}>PDF</button>
-                        {canManage && inv.status === 'draft' && (
+                        {canManage && inv.status === 'draft' && inv.client_email && (
+                          <button onClick={() => sendToCustomer(inv.id)} style={{ ...buttonSecondary, color: colors.accent, borderColor: 'rgba(249,115,22,0.3)' }}>Send</button>
+                        )}
+                        {canManage && inv.status === 'draft' && !inv.client_email && (
                           <button onClick={() => updateStatus(inv.id, 'sent')} style={buttonSecondary}>Mark Sent</button>
+                        )}
+                        {canManage && inv.status !== 'paid' && (
+                          <button onClick={() => copyPayLink(inv.id)} style={buttonSecondary}>Link</button>
                         )}
                         {canManage && inv.status === 'sent' && (
                           <button onClick={() => updateStatus(inv.id, 'paid')} style={{ ...buttonSecondary, color: colors.success, borderColor: 'rgba(16,185,129,0.3)' }}>Mark Paid</button>

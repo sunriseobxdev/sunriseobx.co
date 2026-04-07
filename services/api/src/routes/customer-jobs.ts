@@ -37,7 +37,7 @@ customerJobsRouter.get("/:id", async (req, res) => {
     return;
   }
 
-  const [milestones, events, changeOrders, agreements, payments, photos, messages, punchList] =
+  const [milestones, events, changeOrders, agreements, payments, photos, messages, punchList, invoices] =
     await Promise.all([
       pool.query(`SELECT id, title, description, status, due_date, completed_at FROM job_milestones WHERE job_id = $1 ORDER BY sort_order, created_at`, [req.params.id]),
       pool.query(`SELECT id, title, description, start_time, end_time, all_day, event_type FROM job_events WHERE job_id = $1 ORDER BY start_time`, [req.params.id]),
@@ -47,6 +47,7 @@ customerJobsRouter.get("/:id", async (req, res) => {
       pool.query(`SELECT id, url, caption, phase, created_at FROM job_photos WHERE job_id = $1 ORDER BY created_at`, [req.params.id]),
       pool.query(`SELECT id, sender_type, sender_name, body, created_at FROM job_messages WHERE job_id = $1 ORDER BY created_at`, [req.params.id]),
       pool.query(`SELECT id, item, status, completed_at FROM job_punch_list WHERE job_id = $1 ORDER BY created_at`, [req.params.id]),
+      pool.query(`SELECT id, invoice_number, total, status, due_date, paid_at FROM invoices WHERE job_id = $1 ORDER BY issue_date`, [req.params.id]),
     ]);
 
   res.json({
@@ -59,6 +60,7 @@ customerJobsRouter.get("/:id", async (req, res) => {
     photos: photos.rows,
     messages: messages.rows,
     punch_list: punchList.rows,
+    invoices: invoices.rows,
   });
 });
 

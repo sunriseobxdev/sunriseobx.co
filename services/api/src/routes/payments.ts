@@ -259,6 +259,81 @@ paymentsRouter.get(
   }
 );
 
+// --- Invoice payment (public — no auth, uses invoice ID) ---
+paymentsRouter.post(
+  "/api/invoices/:id/pay",
+  async (req, res) => {
+    const stripe = getStripe();
+    if (!stripe) {
+      res.status(503).json({ error: "Stripe not configured" });
+      return;
+    }
+
+    const pool = getPool();
+    const inv = await pool.query(
+      `SELECT id, invoice_number, client_name, client_email, total, status, stripe_payment_intent_id
+       FROM invoices WHERE id = $1`,
+      [req.params.id]
+    );
+    if (inv.rows.length === 0) {
+      res.status(404).json({ error: "Invoice not found" });
+      return;
+    }
+
+    const invoice = inv.rows[0];
+    if (invoice.status === "paid") {
+      res.status(400).json({ error: "Invoice already paid" });
+      return;
+    }
+
+    // Reuse existing PaymentIntent if one exists and hasn't succeeded
+    if (invoice.stripe_payment_intent_id) {
+      try {
+        const existing = await stripe.paymentIntents.retrieve(invoice.stripe_payment_intent_id);
+        if (existing.status !== "succeeded" && existing.status !== "canceled") {
+          res.json({ clientSecret: existing.client_secret });
+          return;
+        }
+      } catch { /* create new one */ }
+    }
+
+    // Create Stripe customer if we have an email
+    let stripeCustomerId: string | undefined;
+    if (invoice.client_email) {
+      const customers = await stripe.customers.list({ email: invoice.client_email, limit: 1 });
+      if (customers.data.length > 0) {
+        stripeCustomerId = customers.data[0].id;
+      } else {
+        const c = await stripe.customers.create({
+          email: invoice.client_email,
+          name: invoice.client_name || undefined,
+        });
+        stripeCustomerId = c.id;
+      }
+    }
+
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: Math.round(Number(invoice.total) * 100),
+      currency: "usd",
+      customer: stripeCustomerId,
+      description: `Invoice ${invoice.invoice_number}`,
+      metadata: {
+        invoice_id: invoice.id,
+        invoice_number: invoice.invoice_number,
+        type: "invoice",
+      },
+      automatic_payment_methods: { enabled: true },
+    });
+
+    await pool.query(
+      `UPDATE invoices SET stripe_payment_intent_id = $1 WHERE id = $2`,
+      [paymentIntent.id, invoice.id]
+    );
+
+    res.json({ clientSecret: paymentIntent.client_secret });
+  }
+);
+
 // --- Stripe webhook ---
 paymentsRouter.post(
   "/stripe/webhook",
@@ -369,6 +444,44 @@ paymentsRouter.post(
         } catch (err) {
           console.error("Receipt generation error (payment still succeeded):", err);
         }
+
+        // Handle invoice payments
+        if (pi.metadata.type === "invoice" && pi.metadata.invoice_id) {
+          await pool.query(
+            `UPDATE invoices SET status = 'paid', paid_at = NOW() WHERE id = $1`,
+            [pi.metadata.invoice_id]
+          );
+
+          // Email confirmation
+          try {
+            const inv = await pool.query(
+              `SELECT invoice_number, client_name, client_email, total FROM invoices WHERE id = $1`,
+              [pi.metadata.invoice_id]
+            );
+            if (inv.rows.length > 0 && inv.rows[0].client_email) {
+              const i = inv.rows[0];
+              const usd = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(i.total);
+              await sendEmail(
+                i.client_email,
+                `Payment Received — Invoice ${i.invoice_number}`,
+                `<div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;padding:2rem;">
+                  <h2 style="color:#1a3550;">Sunrise Construction</h2>
+                  <p>Hi ${i.client_name || "there"},</p>
+                  <p>We&rsquo;ve received your payment of <strong>${usd}</strong> for invoice <strong>${i.invoice_number}</strong>. Thank you!</p>
+                  <div style="background:#ecfdf5;border:1px solid #a7f3d0;padding:1rem;border-radius:8px;text-align:center;margin:1.5rem 0;">
+                    <span style="color:#059669;font-weight:700;font-size:1.1rem;">&#10003; Paid in Full</span>
+                  </div>
+                  <p style="color:#666;font-size:0.85rem;">If you have any questions, contact us at (252) 305-4313.</p>
+                  <hr style="border:none;border-top:1px solid #ddd;margin:2rem 0;" />
+                  <p style="color:#999;font-size:0.8rem;">Sunrise Construction Services LLC<br/>121 Pine Grove Lane, Point Harbor, NC 27964</p>
+                </div>`
+              );
+            }
+          } catch (err) {
+            console.error("Invoice payment email error (non-blocking):", err);
+          }
+        }
+
         break;
       }
       case "payment_intent.payment_failed": {

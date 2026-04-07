@@ -4,6 +4,7 @@ import { requirePrivilege } from "../middleware/rbac.js";
 import { getPool } from "../lib/db.js";
 import { uploadBuffer, getSignedUrl } from "../lib/gcs.js";
 import { generateInvoicePdf, type InvoiceData } from "../lib/pdf-invoice.js";
+import { sendEmail } from "../lib/email.js";
 
 export const invoiceRouter = Router();
 invoiceRouter.use(authMiddleware);
@@ -195,6 +196,87 @@ invoiceRouter.get(
       res.json({ url });
     } catch (err) {
       console.error("Get invoice PDF error:", err);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  }
+);
+
+// ── Send invoice to customer via email ──
+invoiceRouter.post(
+  "/:id/send",
+  authMiddleware,
+  requirePrivilege("manage_invoices"),
+  async (req, res) => {
+    try {
+      const pool = getPool();
+      const inv = await pool.query("SELECT * FROM invoices WHERE id = $1", [req.params.id]);
+      if (inv.rows.length === 0) {
+        res.status(404).json({ error: "Invoice not found" });
+        return;
+      }
+      const invoice = inv.rows[0];
+      if (!invoice.client_email) {
+        res.status(400).json({ error: "Invoice has no client email" });
+        return;
+      }
+
+      const portalUrl = process.env.PUBLIC_URL || "https://sunriseobx.co";
+      const payLink = `${portalUrl}/portal/invoices/${invoice.id}`;
+
+      let pdfUrl = "";
+      if (invoice.pdf_path) {
+        try { pdfUrl = await getSignedUrl(invoice.pdf_path, 60 * 24 * 30); } catch { /* ok */ }
+      }
+
+      await sendEmail(
+        invoice.client_email,
+        `Invoice ${invoice.invoice_number} from Sunrise Construction — ${new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(invoice.total)}`,
+        `<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 2rem;">
+          <h2 style="color: #1a3550;">Sunrise Construction</h2>
+          <p>Hi ${invoice.client_name || "there"},</p>
+          <p>Please find your invoice <strong>${invoice.invoice_number}</strong> for <strong>${new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(invoice.total)}</strong>.</p>
+          <p style="color: #627d98; font-size: 0.85rem;">Due date: <strong>${new Date(invoice.due_date).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}</strong></p>
+          <div style="text-align: center; margin: 2rem 0;">
+            <a href="${payLink}" style="display: inline-block; background: #059669; color: white; padding: 0.75rem 2rem; border-radius: 8px; text-decoration: none; font-weight: bold;">
+              View &amp; Pay Invoice
+            </a>
+          </div>
+          ${pdfUrl ? `<p style="text-align: center;"><a href="${pdfUrl}" style="color: #f97316; font-size: 0.85rem;">Download PDF</a></p>` : ""}
+          <p style="color: #666; font-size: 0.85rem;">If you have any questions, please contact us at (252) 305-4313 or reply to this email.</p>
+          <hr style="border: none; border-top: 1px solid #ddd; margin: 2rem 0;" />
+          <p style="color: #999; font-size: 0.8rem;">Sunrise Construction Services LLC<br/>121 Pine Grove Lane, Point Harbor, NC 27964</p>
+        </div>`
+      );
+
+      // Mark as sent
+      await pool.query(`UPDATE invoices SET status = 'sent' WHERE id = $1 AND status = 'draft'`, [invoice.id]);
+      res.json({ sent: true });
+    } catch (err) {
+      console.error("Send invoice error:", err);
+      res.status(500).json({ error: "Failed to send invoice" });
+    }
+  }
+);
+
+// ── Public: view invoice (for customer pay page) ──
+invoiceRouter.get(
+  "/public/:id",
+  async (req, res) => {
+    try {
+      const pool = getPool();
+      const result = await pool.query(
+        `SELECT id, invoice_number, client_name, client_email, issue_date, due_date,
+                line_items, subtotal, tax_rate, tax_amount, total, notes, status, paid_at
+         FROM invoices WHERE id = $1`,
+        [req.params.id]
+      );
+      if (result.rows.length === 0) {
+        res.status(404).json({ error: "Invoice not found" });
+        return;
+      }
+      res.json(result.rows[0]);
+    } catch (err) {
+      console.error("Public invoice error:", err);
       res.status(500).json({ error: "Internal server error" });
     }
   }

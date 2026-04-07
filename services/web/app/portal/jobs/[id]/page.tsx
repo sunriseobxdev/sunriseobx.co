@@ -31,6 +31,7 @@ interface JobDetail {
   change_orders: { id: string; title: string; amount: number | null; status: string }[];
   agreements: { id: string; status: string; signed_at: string | null }[];
   payments: { id: string; amount: number; description: string | null; status: string; payment_type: string; paid_at: string | null }[];
+  invoices: { id: string; invoice_number: string; total: string; status: string; due_date: string; paid_at: string | null }[];
   photos: { id: string; url: string; caption: string | null; phase: string | null }[];
   messages: { id: string; sender_type: string; sender_name: string; body: string; created_at: string }[];
   punch_list: { id: string; item: string; status: string; completed_at: string | null }[];
@@ -176,6 +177,27 @@ export default function CustomerJobDetailPage() {
                     >
                       Receipt
                     </button>
+                  )}
+                </div>
+              </div>
+            ))}
+            {/* Invoices */}
+            {job.invoices?.length > 0 && job.invoices.map((inv) => (
+              <div key={inv.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "0.5rem 0", borderBottom: "1px solid #f0f4f8", fontSize: "0.8rem" }}>
+                <div>
+                  <span style={{ color: "#334e68", fontWeight: 500 }}>{inv.invoice_number}</span>
+                  <span style={{ color: "#627d98", fontSize: "0.7rem", marginLeft: "0.5rem" }}>Due {new Date(inv.due_date).toLocaleDateString()}</span>
+                </div>
+                <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                  <span style={{ fontWeight: 600, color: inv.status === "paid" ? "#059669" : "#334e68" }}>{usd.format(Number(inv.total))}</span>
+                  <span style={{ padding: "0.1rem 0.4rem", borderRadius: "4px", fontSize: "0.6rem", fontWeight: 700, color: inv.status === "paid" ? "#059669" : "#d97706", background: inv.status === "paid" ? "#ecfdf5" : "#fffbeb" }}>{inv.status}</span>
+                  {inv.status !== "paid" && (
+                    <a
+                      href={`/portal/invoices/${inv.id}`}
+                      style={{ padding: "0.15rem 0.5rem", background: "#059669", border: "none", borderRadius: "4px", fontSize: "0.6rem", color: "white", cursor: "pointer", textDecoration: "none", fontWeight: 700 }}
+                    >
+                      Pay
+                    </a>
                   )}
                 </div>
               </div>

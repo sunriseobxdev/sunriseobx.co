@@ -557,6 +557,9 @@ CREATE TABLE IF NOT EXISTS job_punch_list (
 ALTER TABLE invoices ADD COLUMN IF NOT EXISTS job_id UUID REFERENCES jobs(id);
 CREATE INDEX IF NOT EXISTS idx_invoices_job_id ON invoices(job_id);
 
+ALTER TABLE invoices ADD COLUMN IF NOT EXISTS stripe_payment_intent_id VARCHAR(255);
+ALTER TABLE invoices ADD COLUMN IF NOT EXISTS paid_at TIMESTAMPTZ;
+
 CREATE INDEX IF NOT EXISTS idx_job_photos_job_id ON job_photos(job_id);
 CREATE INDEX IF NOT EXISTS idx_job_documents_job_id ON job_documents(job_id);
 CREATE INDEX IF NOT EXISTS idx_job_messages_job_id ON job_messages(job_id);
