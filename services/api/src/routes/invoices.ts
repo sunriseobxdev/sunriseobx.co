@@ -7,7 +7,6 @@ import { generateInvoicePdf, type InvoiceData } from "../lib/pdf-invoice.js";
 import { sendEmail } from "../lib/email.js";
 
 export const invoiceRouter = Router();
-invoiceRouter.use(authMiddleware);
 
 const COMPANY_NAME = "Sunrise Construction Services LLC";
 const COMPANY_ADDRESS = "121 Pine Grove Lane, Point Harbor, NC 27964\nhello@sunriseobx.co | (252) 619-7966";
@@ -15,6 +14,7 @@ const COMPANY_ADDRESS = "121 Pine Grove Lane, Point Harbor, NC 27964\nhello@sunr
 // ── List invoices ──
 invoiceRouter.get(
   "/",
+  authMiddleware,
   requirePrivilege("view_invoices"),
   async (_req, res) => {
     try {
@@ -35,9 +35,39 @@ invoiceRouter.get(
   }
 );
 
+// ── Public: view invoice (for customer pay page, no auth) ──
+invoiceRouter.get(
+  "/public/:id",
+  async (req, res) => {
+    try {
+      const pool = getPool();
+      const result = await pool.query(
+        `SELECT id, invoice_number, client_name, client_email, issue_date, due_date,
+                line_items, subtotal, tax_rate, tax_amount, total, notes, status, paid_at
+         FROM invoices WHERE id = $1`,
+        [req.params.id]
+      );
+      if (result.rows.length === 0) {
+        res.status(404).json({ error: "Invoice not found" });
+        return;
+      }
+      // Track first view
+      await pool.query(
+        `UPDATE invoices SET viewed_at = COALESCE(viewed_at, NOW()) WHERE id = $1`,
+        [req.params.id]
+      );
+      res.json(result.rows[0]);
+    } catch (err) {
+      console.error("Public invoice error:", err);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  }
+);
+
 // ── Get single invoice ──
 invoiceRouter.get(
   "/:id",
+  authMiddleware,
   requirePrivilege("view_invoices"),
   async (req, res) => {
     try {
@@ -60,6 +90,7 @@ invoiceRouter.get(
 // ── Create invoice + generate PDF ──
 invoiceRouter.post(
   "/",
+  authMiddleware,
   requirePrivilege("manage_invoices"),
   async (req, res) => {
     try {
@@ -142,6 +173,7 @@ invoiceRouter.post(
 // ── Update invoice status ──
 invoiceRouter.put(
   "/:id",
+  authMiddleware,
   requirePrivilege("manage_invoices"),
   async (req, res) => {
     try {
@@ -181,6 +213,7 @@ invoiceRouter.put(
 // ── Get signed URL for invoice PDF ──
 invoiceRouter.get(
   "/:id/pdf",
+  authMiddleware,
   requirePrivilege("view_invoices"),
   async (req, res) => {
     try {
@@ -259,31 +292,3 @@ invoiceRouter.post(
   }
 );
 
-// ── Public: view invoice (for customer pay page, no auth) ──
-invoiceRouter.get(
-  "/public/:id",
-  async (req, res) => {
-    try {
-      const pool = getPool();
-      const result = await pool.query(
-        `SELECT id, invoice_number, client_name, client_email, issue_date, due_date,
-                line_items, subtotal, tax_rate, tax_amount, total, notes, status, paid_at
-         FROM invoices WHERE id = $1`,
-        [req.params.id]
-      );
-      if (result.rows.length === 0) {
-        res.status(404).json({ error: "Invoice not found" });
-        return;
-      }
-      // Track first view
-      await pool.query(
-        `UPDATE invoices SET viewed_at = COALESCE(viewed_at, NOW()) WHERE id = $1`,
-        [req.params.id]
-      );
-      res.json(result.rows[0]);
-    } catch (err) {
-      console.error("Public invoice error:", err);
-      res.status(500).json({ error: "Internal server error" });
-    }
-  }
-);
