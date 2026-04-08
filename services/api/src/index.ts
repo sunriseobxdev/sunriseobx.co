@@ -61,6 +61,13 @@ app.use("/customer/auth", customerAuthRouter);
 // Customer job portal routes
 app.use("/customer/jobs", customerJobsRouter);
 
+// Invoice routes (public /public/:id must be before auth-protected /api mounts)
+app.use("/api/invoices", invoiceRouter);
+
+// Payment routes (Stripe) — public invoice pay + webhook must come before auth /api mounts
+app.use("/api", paymentsRouter);
+app.use("/", paymentsRouter);
+
 // IAM routes — auth + manage_users enforced inside iamRouter
 app.use("/api/iam", iamRouter);
 
@@ -83,9 +90,6 @@ app.use("/api/keys", authMiddleware, apiKeysRouter);
 // Payroll routes
 app.use("/api/payroll", payrollRouter);
 
-// Invoice routes
-app.use("/api/invoices", invoiceRouter);
-
 // Estimate routes
 app.use("/api/estimates", estimatesRouter);
 
@@ -101,9 +105,6 @@ app.use("/api/jobs", jobsRouter);
 // Support ticket routes (customer + admin)
 app.use("/", supportRouter);
 
-// Payment routes (Stripe) - mounted at both /api and / for customer routes
-app.use("/api", paymentsRouter);
-app.use("/", paymentsRouter);
 
 async function main() {
   await runMigrations();
