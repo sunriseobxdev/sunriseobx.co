@@ -145,6 +145,21 @@ export default function EstimatesPage() {
     loadEstimates();
   }
 
+  function copyLink(id: string) {
+    navigator.clipboard.writeText(`${window.location.origin}/estimate/${id}`);
+    showFlash('success', 'Estimate link copied');
+  }
+
+  async function convertToJob(id: string) {
+    try {
+      const result = await apiFetch(`/api/estimates/${id}/convert`, { method: 'POST' });
+      showFlash('success', `Job ${result.job?.job_number} created`);
+      loadEstimates();
+    } catch (err) {
+      showFlash('error', err instanceof Error ? err.message : 'Failed to convert');
+    }
+  }
+
   return (
     <div style={{ maxWidth: '900px', animation: 'fadeSlideUp 0.3s ease' }}>
       {flash && (
@@ -187,11 +202,12 @@ export default function EstimatesPage() {
                     <td style={tdStyle}>
                       <div style={{ display: 'flex', gap: '0.3rem', flexWrap: 'wrap' }}>
                         <button onClick={() => viewPdf(est.id)} style={buttonSecondary}>PDF</button>
+                        <button onClick={() => copyLink(est.id)} style={buttonSecondary}>Link</button>
                         {est.status === 'draft' && est.client_email && (
                           <button onClick={() => sendEstimate(est.id)} style={{ ...buttonSecondary, color: colors.accent, borderColor: 'rgba(249,115,22,0.3)' }}>Send</button>
                         )}
-                        {est.status === 'sent' && (
-                          <button onClick={() => updateStatus(est.id, 'accepted')} style={{ ...buttonSecondary, color: colors.success, borderColor: 'rgba(16,185,129,0.3)' }}>Accepted</button>
+                        {est.status === 'accepted' && (
+                          <button onClick={() => convertToJob(est.id)} style={{ ...buttonSecondary, color: colors.success, borderColor: 'rgba(16,185,129,0.3)' }}>Create Job</button>
                         )}
                         <button onClick={() => deleteEstimate(est.id)} style={{ ...buttonSecondary, color: colors.danger, borderColor: 'rgba(239,68,68,0.3)' }}>Del</button>
                       </div>

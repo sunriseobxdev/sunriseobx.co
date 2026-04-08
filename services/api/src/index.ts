@@ -61,8 +61,9 @@ app.use("/customer/auth", customerAuthRouter);
 // Customer job portal routes
 app.use("/customer/jobs", customerJobsRouter);
 
-// Invoice routes (public /public/:id must be before auth-protected /api mounts)
+// Invoice & estimate routes (public endpoints must be before auth-protected /api mounts)
 app.use("/api/invoices", invoiceRouter);
+app.use("/api/estimates", estimatesRouter);
 
 // Payment routes (Stripe) — public invoice pay + webhook must come before auth /api mounts
 app.use("/api", paymentsRouter);
@@ -89,9 +90,6 @@ app.use("/api/keys", authMiddleware, apiKeysRouter);
 
 // Payroll routes
 app.use("/api/payroll", payrollRouter);
-
-// Estimate routes
-app.use("/api/estimates", estimatesRouter);
 
 // Dare County GIS parcel routes
 app.use("/api/parcels", parcelsRouter);

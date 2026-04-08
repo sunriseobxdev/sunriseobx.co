@@ -586,6 +586,7 @@ CREATE TABLE IF NOT EXISTS estimates (
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
+ALTER TABLE estimates ADD COLUMN IF NOT EXISTS viewed_at TIMESTAMPTZ;
 CREATE INDEX IF NOT EXISTS idx_estimates_status ON estimates(status);
 
 CREATE INDEX IF NOT EXISTS idx_job_photos_job_id ON job_photos(job_id);
