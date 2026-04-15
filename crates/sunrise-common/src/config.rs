@@ -29,7 +29,11 @@ impl SunriseConfig {
         let mut headers = HashMap::new();
         headers.insert("Content-Type".to_string(), "application/json".to_string());
         if let Some(ref token) = self.token {
-            headers.insert("Authorization".to_string(), format!("Bearer {}", token));
+            if token.starts_with("spk_") {
+                headers.insert("x-api-key".to_string(), token.clone());
+            } else {
+                headers.insert("Authorization".to_string(), format!("Bearer {}", token));
+            }
         }
         headers
     }

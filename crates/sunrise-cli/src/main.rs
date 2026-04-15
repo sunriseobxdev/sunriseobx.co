@@ -150,12 +150,15 @@ enum SupportCmd {
 // --- Auth subcommands ---
 #[derive(Subcommand)]
 enum AuthCmd {
-    /// Login and store token
+    /// Login with email/password or API key
     Login {
         #[arg(long)]
-        email: String,
+        email: Option<String>,
         #[arg(long)]
-        password: String,
+        password: Option<String>,
+        /// API key (starts with spk_)
+        #[arg(long)]
+        api_key: Option<String>,
     },
     /// Show current user profile
     Me,
@@ -461,16 +464,47 @@ async fn main() {
 async fn run(cli: &Cli, client: &SunriseClient<ReqwestTransport>) -> Result<(), sunrise_common::error::SunriseError> {
     match &cli.command {
         Commands::Auth { cmd } => match cmd {
-            AuthCmd::Login { email, password } => {
-                let resp = client.auth_login(email, password).await?;
-                if resp.pending_2fa == Some(true) {
-                    println!("2FA required. Use pending token to complete login.");
-                    if let Some(pt) = &resp.pending_token {
-                        println!("Pending token: {}", pt);
+            AuthCmd::Login { email, password, api_key } => {
+                // API key auth — just save it directly
+                if let Some(key) = api_key {
+                    save_token(key);
+                    println!("API key saved. Run: sunrise-cli auth me");
+                } else {
+                    // Interactive prompts if args not provided
+                    let email = match email {
+                        Some(e) => e.clone(),
+                        None => {
+                            eprint!("Email (or paste API key): ");
+                            let mut input = String::new();
+                            std::io::stdin().read_line(&mut input).unwrap();
+                            let input = input.trim().to_string();
+                            if input.starts_with("spk_") {
+                                save_token(&input);
+                                println!("API key saved. Run: sunrise-cli auth me");
+                                return Ok(());
+                            }
+                            input
+                        }
+                    };
+                    let password = match password {
+                        Some(p) => p.clone(),
+                        None => {
+                            eprint!("Password: ");
+                            let mut input = String::new();
+                            std::io::stdin().read_line(&mut input).unwrap();
+                            input.trim().to_string()
+                        }
+                    };
+                    let resp = client.auth_login(&email, &password).await?;
+                    if resp.pending_2fa == Some(true) {
+                        println!("2FA required. Use pending token to complete login.");
+                        if let Some(pt) = &resp.pending_token {
+                            println!("Pending token: {}", pt);
+                        }
+                    } else if let Some(token) = &resp.token {
+                        save_token(token);
+                        println!("Login successful. Token saved to {:?}", token_path());
                     }
-                } else if let Some(token) = &resp.token {
-                    save_token(token);
-                    println!("Login successful. Token saved to {:?}", token_path());
                 }
             }
             AuthCmd::Me => {
