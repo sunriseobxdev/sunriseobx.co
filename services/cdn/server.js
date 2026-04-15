@@ -19,6 +19,16 @@ app.use((req, res, next) => {
 
 app.get("/health", (_req, res) => res.json({ status: "ok" }));
 
+// Debug: test GCS access
+app.get("/debug/gcs", async (_req, res) => {
+  try {
+    const [files] = await bucket.getFiles({ prefix: "img/", delimiter: "/", maxResults: 5 });
+    res.json({ ok: true, count: files.length, files: files.map(f => f.name) });
+  } catch (err) {
+    res.status(500).json({ error: String(err), stack: err.stack?.split("\n").slice(0, 3) });
+  }
+});
+
 // Autoindex — list files/dirs at a prefix
 app.get("/{*splat}", async (req, res) => {
   const rawPath = decodeURIComponent(req.path).replace(/^\/+/, "");
