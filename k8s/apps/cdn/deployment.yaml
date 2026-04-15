@@ -15,6 +15,11 @@ spec:
       labels:
         app: cdn
     spec:
+      tolerations:
+        - key: cloud.google.com/gke-spot
+          operator: Equal
+          value: "true"
+          effect: NoSchedule
       containers:
         - name: cdn
           image: us-central1-docker.pkg.dev/sunriseobx-proj/sunriseobx-images/cdn:latest

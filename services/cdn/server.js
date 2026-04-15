@@ -20,7 +20,7 @@ app.use((req, res, next) => {
 app.get("/health", (_req, res) => res.json({ status: "ok" }));
 
 // Autoindex — list files/dirs at a prefix
-app.get("*", async (req, res) => {
+app.get("/{*splat}", async (req, res) => {
   const rawPath = decodeURIComponent(req.path).replace(/^\/+/, "");
 
   // If path looks like a file (has extension), serve it
@@ -46,11 +46,10 @@ app.get("*", async (req, res) => {
   const prefix = rawPath ? (rawPath.endsWith("/") ? rawPath : rawPath + "/") : "";
   try {
     const [files] = await bucket.getFiles({ prefix, delimiter: "/" });
-    const apiResponse = files as any;
 
     // Get "subdirectories" from the API prefixes
     const [, , apiMeta] = await bucket.getFiles({ prefix, delimiter: "/", autoPaginate: false });
-    const prefixes: string[] = (apiMeta as any)?.prefixes || [];
+    const prefixes = apiMeta?.prefixes || [];
 
     const dirs = prefixes.map((p) => {
       const name = p.replace(prefix, "").replace(/\/$/, "");
