@@ -10,6 +10,7 @@ const navItems = [
   { href: "/desk/jobs", label: "Jobs", icon: "🔨", privilege: "manage_jobs" },
   { href: "/desk/parcels", label: "Parcels", icon: "🗺️" },
   { href: "/desk/cms", label: "Content", icon: "📝" },
+  { href: "/desk/media", label: "Media", icon: "🖼️", privilege: "manage_jobs" },
   { href: "/desk/campaigns", label: "Campaigns", icon: "📬" },
   { href: "/desk/trade", label: "Trade", icon: "📈", privilege: "trade" },
   { href: "/desk/market", label: "Market", icon: "🏪" },

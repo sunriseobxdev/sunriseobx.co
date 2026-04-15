@@ -6,4 +6,6 @@ resources:
   - api/deployment.yaml
   - api/service.yaml
   - pkg/deployment.yaml
+  - cdn/deployment.yaml
+  - cdn/service.yaml
   - ingress/ingress.yaml

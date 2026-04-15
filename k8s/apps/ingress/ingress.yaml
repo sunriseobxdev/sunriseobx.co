@@ -9,6 +9,7 @@ spec:
     - www.sunriseobx.co
     - api.sunriseobx.co
     - pkg.sunriseobx.co
+    - cdn.sunriseobx.co
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -39,6 +40,16 @@ spec:
             backend:
               service:
                 name: sunriseobx-pkg
+                port:
+                  number: 8080
+    - host: cdn.sunriseobx.co
+      http:
+        paths:
+          - path: /*
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: sunriseobx-cdn
                 port:
                   number: 8080
     - host: sunriseobx.co

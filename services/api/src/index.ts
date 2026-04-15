@@ -23,6 +23,7 @@ import { agreementsRouter } from "./routes/agreements.js";
 import { customerJobsRouter } from "./routes/customer-jobs.js";
 import { supportRouter } from "./routes/support.js";
 import { estimatesRouter } from "./routes/estimates.js";
+import { mediaRouter } from "./routes/media.js";
 import { runMigrations } from "./lib/migrate.js";
 
 const app = express();
@@ -90,6 +91,9 @@ app.use("/api/keys", authMiddleware, apiKeysRouter);
 
 // Payroll routes
 app.use("/api/payroll", payrollRouter);
+
+// Media management (CDN assets)
+app.use("/api/media", mediaRouter);
 
 // Dare County GIS parcel routes
 app.use("/api/parcels", parcelsRouter);
