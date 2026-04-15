@@ -6,6 +6,7 @@ use sunrise_sys::ReqwestTransport;
 use std::path::PathBuf;
 
 mod media_fs;
+mod media_mount;
 
 #[derive(Parser)]
 #[command(name = "sunrise-cli")]
@@ -964,9 +965,9 @@ async fn run(cli: &Cli, client: &SunriseClient<ReqwestTransport>) -> Result<(), 
         Commands::MountMedia { mountpoint, media_url } => {
             let token = cli.token.clone().or_else(load_token)
                 .ok_or_else(|| sunrise_common::error::SunriseError::Auth("Not logged in. Run: sunrise-cli auth login".to_string()))?;
-            match media_fs::mount(media_url, &token, mountpoint) {
-                Ok(()) => println!("Unmounted."),
-                Err(e) => eprintln!("Mount error: {}", e),
+            match media_mount::mount(media_url, &token, mountpoint).await {
+                Ok(()) => {}
+                Err(e) => eprintln!("Error: {}", e),
             }
         },
     }

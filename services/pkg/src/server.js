@@ -14,10 +14,11 @@ try {
 const INSTALL_SCRIPT = `#!/usr/bin/env bash
 set -euo pipefail
 
-BINARY="darecounty-cli"
+BINARY="sunrise-cli"
 INSTALL_DIR="\${HOME}/.local/bin"
 
-echo "==> Installing Dare County CLI"
+echo ""
+echo "  ☀  Sunrise Construction CLI"
 echo ""
 
 OS="\$(uname -s | tr '[:upper:]' '[:lower:]')"
@@ -34,17 +35,61 @@ case "\$OS" in
 esac
 
 TARGET="\${ARCH}-\${PLATFORM}"
-URL="https://pkg.sunriseobx.co/cli/\${TARGET}/darecounty-cli"
+URL="https://pkg.sunriseobx.co/cli/\${TARGET}/sunrise-cli"
 
 echo "  Platform: \${OS}/\${ARCH}"
 mkdir -p "\$INSTALL_DIR"
-echo "==> Downloading..."
+echo "  Downloading..."
 curl -fsSL "\$URL" -o "\${INSTALL_DIR}/\${BINARY}" || wget -qO "\${INSTALL_DIR}/\${BINARY}" "\$URL"
 chmod +x "\${INSTALL_DIR}/\${BINARY}"
 
-echo "==> Installed to \${INSTALL_DIR}/\${BINARY}"
-echo "==> Run: darecounty-cli --help"
+# Add to PATH if not already there
+if [[ ":$PATH:" != *":\$INSTALL_DIR:"* ]]; then
+  SHELL_RC="\$HOME/.bashrc"
+  [ -f "\$HOME/.zshrc" ] && SHELL_RC="\$HOME/.zshrc"
+  echo 'export PATH="\$HOME/.local/bin:\$PATH"' >> "\$SHELL_RC"
+  export PATH="\$INSTALL_DIR:\$PATH"
+  echo "  Added \$INSTALL_DIR to PATH in \$SHELL_RC"
+fi
+
+echo ""
+echo "  ✓ Installed to \${INSTALL_DIR}/\${BINARY}"
+echo "  Run: sunrise-cli --help"
+echo ""
 `;
+
+const INSTALL_PS1 = [
+  "# Sunrise Construction CLI - Windows Installer",
+  "# Run: irm https://pkg.sunriseobx.co/install.ps1 | iex",
+  "",
+  '$ErrorActionPreference = "Stop"',
+  'Write-Host ""',
+  'Write-Host "  Sunrise Construction CLI" -ForegroundColor Yellow',
+  'Write-Host ""',
+  "",
+  '$InstallDir = "$env:USERPROFILE\\.sunrise\\bin"',
+  '$Binary = "sunrise-cli.exe"',
+  '$Url = "https://pkg.sunriseobx.co/cli/x86_64-pc-windows-msvc/sunrise-cli.exe"',
+  "",
+  'Write-Host "  Downloading..." -ForegroundColor Cyan',
+  'New-Item -ItemType Directory -Force -Path $InstallDir | Out-Null',
+  'Invoke-WebRequest -Uri $Url -OutFile "$InstallDir\\$Binary" -UseBasicParsing',
+  "",
+  "# Add to User PATH if not there",
+  '$UserPath = [Environment]::GetEnvironmentVariable("PATH", "User")',
+  'if ($UserPath -notlike "*$InstallDir*") {',
+  '    [Environment]::SetEnvironmentVariable("PATH", "$UserPath;$InstallDir", "User")',
+  '    $env:PATH = "$env:PATH;$InstallDir"',
+  '    Write-Host "  Added $InstallDir to PATH" -ForegroundColor Green',
+  "}",
+  "",
+  'Write-Host ""',
+  'Write-Host "  Installed to $InstallDir\\$Binary" -ForegroundColor Green',
+  'Write-Host "  Run: sunrise-cli --help" -ForegroundColor Cyan',
+  'Write-Host ""',
+  'Write-Host "  NOTE: Restart your terminal for PATH changes to take effect." -ForegroundColor Yellow',
+  'Write-Host ""',
+].join("\n");
 
 const server = http.createServer(async (req, res) => {
   const url = new URL(req.url, `http://localhost:${PORT}`);
@@ -60,9 +105,15 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
-  if (path === "/install-cli.sh") {
+  if (path === "/install-cli.sh" || path === "/install.sh") {
     res.writeHead(200, { "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "public, max-age=300" });
     res.end(INSTALL_SCRIPT);
+    return;
+  }
+
+  if (path === "/install.ps1") {
+    res.writeHead(200, { "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "public, max-age=300" });
+    res.end(INSTALL_PS1);
     return;
   }
 

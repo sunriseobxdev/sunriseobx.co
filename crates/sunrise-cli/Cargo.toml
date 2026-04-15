@@ -19,14 +19,24 @@ env_logger = "0.11"
 log = { workspace = true }
 chrono = { workspace = true }
 uuid = { workspace = true }
-reqwest = { version = "0.12", features = ["blocking", "multipart"] }
+reqwest = { version = "0.12", default-features = false, features = ["blocking", "multipart", "rustls-tls"] }
 tonic = "0.12"
 prost = "0.13"
 tokio-stream = "0.1"
 libc = "0.2"
+hyper = { version = "1", features = ["server", "http1"] }
+hyper-util = { version = "0.1", features = ["tokio"] }
+http-body-util = "0.1"
+bytes = "1"
+http = "1"
+quick-xml = { version = "0.37", features = ["serialize"] }
+
+[features]
+default = []
+fuse = ["fuser"]
 
 [target.'cfg(unix)'.dependencies]
-fuser = "0.15"
+fuser = { version = "0.15", optional = true }
 
 [build-dependencies]
 tonic-build = "0.12"
