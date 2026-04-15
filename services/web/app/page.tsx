@@ -8,59 +8,59 @@ const services = [
     title: "Premium Siding",
     description:
       "AZEK PVC lap siding with matching trims, LP SmartSide, James Hardie, and traditional cedar shake. Installed over Benjamin Obdyke HydroGap or Low-E HouseWrap for superior weather protection.",
-    image: "/img/newSidingMakeover.jpeg",
+    image: "https://cdn.sunriseobx.co/img/site/newSidingMakeover.jpeg",
     href: "/services#siding",
   },
   {
     title: "ViWinco Impact Windows",
     description:
       "ViWinco OceanView impact-rated windows with higher DP ratings and lifetime service. Hurricane-resistant laminated glass engineered for coastal exposure.",
-    image: "/img/windowReplacements.jpg",
+    image: "https://cdn.sunriseobx.co/img/site/windowReplacements.jpg",
     href: "/services#windows",
   },
   {
     title: "Redecking & Railings",
     description:
       "TimberTech composite decking, TimberTech PVC railings, and pressure-treated decking built to withstand salt air and coastal weather year after year.",
-    image: "/img/Beach-houses-1500.jpg",
+    image: "https://cdn.sunriseobx.co/img/site/Beach-houses-1500.jpg",
     href: "/services#decking",
   },
   {
     title: "Roof Replacements",
     description:
       "Complete roof replacement systems with premium architectural shingles, stainless steel fasteners, and ice & water shield for lasting coastal protection.",
-    image: "/img/roofReplacements.jpeg",
+    image: "https://cdn.sunriseobx.co/img/site/roofReplacements.jpeg",
     href: "/services#roofing",
   },
   {
     title: "Exterior Construction",
     description:
       "Full exterior renovation and new construction engineered for salt air, high winds, and storm surge. X-bracing, underpinning, and structural repairs.",
-    image: "/img/solarDefense.jpg",
+    image: "https://cdn.sunriseobx.co/img/site/solarDefense.jpg",
     href: "/services#exterior",
   },
   {
     title: "FORTIFIED Roofing",
     description:
       "IBHS-certified FORTIFIED roofing systems proven to reduce storm damage. Earn up to 50% insurance premium discounts.",
-    image: "/img/drone-inspection.jpg",
+    image: "https://cdn.sunriseobx.co/img/site/drone-inspection.jpg",
     href: "/services#fortified",
   },
 ];
 
 const projects = [
-  { image: "/img/project-1.jpg", title: "AZEK Lap Siding Makeover", location: "Southern Shores" },
-  { image: "/img/project-5.jpg", title: "ViWinco Impact Window Install", location: "Duck" },
-  { image: "/img/project-3.jpg", title: "TimberTech Deck & Railing", location: "Nags Head" },
-  { image: "/img/project-8.jpg", title: "Full Exterior Renovation", location: "Corolla" },
+  { image: "https://cdn.sunriseobx.co/img/site/project-1.jpg", title: "AZEK Lap Siding Makeover", location: "Southern Shores" },
+  { image: "https://cdn.sunriseobx.co/img/site/project-5.jpg", title: "ViWinco Impact Window Install", location: "Duck" },
+  { image: "https://cdn.sunriseobx.co/img/site/project-3.jpg", title: "TimberTech Deck & Railing", location: "Nags Head" },
+  { image: "https://cdn.sunriseobx.co/img/site/project-8.jpg", title: "Full Exterior Renovation", location: "Corolla" },
 ];
 
 const certifications = [
-  { image: "/img/slider/fortified.png", name: "IBHS FORTIFIED" },
-  { image: "/img/slider/wincore.png", name: "ViWinco / Wincore" },
-  { image: "/img/slider/low-e.png", name: "Low-E / HydroGap" },
-  { image: "/img/slider/dpor.png", name: "VA DPOR Licensed" },
-  { image: "/img/slider/drone-pilot.png", name: "FAA Licensed" },
+  { image: "https://cdn.sunriseobx.co/img/site/slider/fortified.png", name: "IBHS FORTIFIED" },
+  { image: "https://cdn.sunriseobx.co/img/site/slider/wincore.png", name: "ViWinco / Wincore" },
+  { image: "https://cdn.sunriseobx.co/img/site/slider/low-e.png", name: "Low-E / HydroGap" },
+  { image: "https://cdn.sunriseobx.co/img/site/slider/dpor.png", name: "VA DPOR Licensed" },
+  { image: "https://cdn.sunriseobx.co/img/site/slider/drone-pilot.png", name: "FAA Licensed" },
 ];
 
 const testimonials = [
@@ -97,7 +97,7 @@ export default function HomePage() {
             muted
             loop
             playsInline
-            poster="/img/Beach-houses-1500.jpg"
+            poster="https://cdn.sunriseobx.co/img/site/Beach-houses-1500.jpg"
             className="w-full h-full object-cover"
           >
             <source src="/intro-sunrise.mp4" type="video/mp4" />
@@ -293,7 +293,7 @@ export default function HomePage() {
 
             <div className="relative">
               <img
-                src="/img/WhyChooseUs.jpg"
+                src="https://cdn.sunriseobx.co/img/site/WhyChooseUs.jpg"
                 alt="Sunrise Construction team at work on Outer Banks home"
                 className="rounded-2xl shadow-2xl w-full h-[500px] object-cover"
               />
@@ -402,7 +402,7 @@ export default function HomePage() {
       <section className="relative py-24 lg:py-32">
         <div className="absolute inset-0">
           <img
-            src="/img/f-3.jpg"
+            src="https://cdn.sunriseobx.co/img/site/f-3.jpg"
             alt="Outer Banks construction"
             className="w-full h-full object-cover"
           />

@@ -14,7 +14,7 @@ const services = [
     id: "roofing",
     title: "Roof Replacements",
     subtitle: "CertainTeed ShingleMaster Certified",
-    image: "/img/roofReplacements.jpeg",
+    image: "https://cdn.sunriseobx.co/img/site/roofReplacements.jpeg",
     description:
       "When it's time to replace your roof, our consultants meet with you to inspect your current system and discuss the best replacement options for your coastal home. We specialize in shingle and TPO roof systems built to withstand Outer Banks weather.",
     features: [
@@ -34,7 +34,7 @@ const services = [
     id: "siding",
     title: "Premium Siding",
     subtitle: "AZEK \u00b7 LP SmartSide \u00b7 James Hardie \u00b7 Cedar",
-    image: "/img/newSidingMakeover.jpeg",
+    image: "https://cdn.sunriseobx.co/img/site/newSidingMakeover.jpeg",
     description:
       "We install the best siding products on the market. AZEK PVC lap siding with matching trims is our flagship offering \u2014 zero maintenance, zero rot, lifetime beauty. We also offer LP SmartSide, James Hardie fiber cement, Plygem vinyl, and traditional cedar shake for every style and budget.",
     features: [
@@ -54,7 +54,7 @@ const services = [
     id: "windows",
     title: "ViWinco & Wincore Windows",
     subtitle: "Impact-Rated \u00b7 Lifetime Service \u00b7 Higher DP Ratings",
-    image: "/img/windowReplacements.jpg",
+    image: "https://cdn.sunriseobx.co/img/site/windowReplacements.jpg",
     description:
       "ViWinco OceanView impact-rated windows are our primary line \u2014 laminated impact-resistant glass with higher design pressure (DP) ratings and lifetime service. We also offer Wincore windows for budget-conscious projects. Both lines are engineered for hurricane zones and coastal salt air.",
     features: [
@@ -74,7 +74,7 @@ const services = [
     id: "decking",
     title: "Redecking & Railings",
     subtitle: "TimberTech \u00b7 Composite \u00b7 Pressure-Treated",
-    image: "/img/Beach-houses-1500.jpg",
+    image: "https://cdn.sunriseobx.co/img/site/Beach-houses-1500.jpg",
     description:
       "Coastal decks take a beating. We replace deteriorated decking boards, install new TimberTech composite or PVC railings, and build pressure-treated decks that withstand salt air, UV, and heavy foot traffic from rental guests.",
     features: [
@@ -94,7 +94,7 @@ const services = [
     id: "exterior",
     title: "Exterior Construction",
     subtitle: "Built for the Outer Banks",
-    image: "/img/Beach-houses-1500.jpg",
+    image: "https://cdn.sunriseobx.co/img/site/Beach-houses-1500.jpg",
     description:
       "Complete exterior renovation and new construction engineered to withstand the Outer Banks' unique challenges — salt air, high winds, flooding, and UV exposure. We build structures that protect your family and investment.",
     features: [
@@ -114,7 +114,7 @@ const services = [
     id: "fortified",
     title: "FORTIFIED Roofing",
     subtitle: "IBHS Certified — Up to 50% Insurance Savings",
-    image: "/img/solarDefense.jpg",
+    image: "https://cdn.sunriseobx.co/img/site/solarDefense.jpg",
     description:
       "IBHS FORTIFIED roofing systems provide maximum protection against hurricanes and severe storms. Independently verified by trained evaluators, FORTIFIED homes sustain significantly less damage — and many insurers reward that with substantial premium reductions.",
     features: [
@@ -140,7 +140,7 @@ export default function ServicesPage() {
       {/* Hero */}
       <section className="relative pt-28 pb-20 lg:pb-28 bg-navy-900">
         <div className="absolute inset-0 opacity-20">
-          <img src="/img/GuysOnARoof-min.jpg" alt="" className="w-full h-full object-cover" />
+          <img src="https://cdn.sunriseobx.co/img/site/GuysOnARoof-min.jpg" alt="" className="w-full h-full object-cover" />
         </div>
         <div className="relative max-w-7xl mx-auto px-6">
           <p className="text-sunrise-400 font-semibold text-sm tracking-widest uppercase mb-4">
@@ -297,7 +297,7 @@ export default function ServicesPage() {
       {/* CTA */}
       <section className="relative py-24 lg:py-32">
         <div className="absolute inset-0">
-          <img src="/img/f-3.jpg" alt="" className="w-full h-full object-cover" />
+          <img src="https://cdn.sunriseobx.co/img/site/f-3.jpg" alt="" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-navy-900/80" />
         </div>
         <div className="relative max-w-4xl mx-auto px-6 text-center">

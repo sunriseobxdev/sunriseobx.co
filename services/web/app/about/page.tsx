@@ -62,8 +62,8 @@ const values = [
 ];
 
 const team = [
-  { name: "Marc Chiasson", role: "President & CEO", image: "/img/team-1.jpg" },
-  { name: "Zachary Wayland", role: "Operations Director", image: "/img/team-2.jpg" },
+  { name: "Marc Chiasson", role: "President & CEO", image: "https://cdn.sunriseobx.co/img/site/team-1.jpg" },
+  { name: "Zachary Wayland", role: "Operations Director", image: "https://cdn.sunriseobx.co/img/site/team-2.jpg" },
 ];
 
 export default function AboutPage() {
@@ -74,7 +74,7 @@ export default function AboutPage() {
       {/* Hero */}
       <section className="relative pt-28 pb-20 lg:pb-28 bg-navy-900">
         <div className="absolute inset-0 opacity-15">
-          <img src="/img/company.jpeg" alt="" className="w-full h-full object-cover" />
+          <img src="https://cdn.sunriseobx.co/img/site/company.jpeg" alt="" className="w-full h-full object-cover" />
         </div>
         <div className="relative max-w-7xl mx-auto px-6">
           <p className="text-sunrise-400 font-semibold text-sm tracking-widest uppercase mb-4">
@@ -135,14 +135,14 @@ export default function AboutPage() {
 
             <div className="relative">
               <img
-                src="/img/about.jpg"
+                src="https://cdn.sunriseobx.co/img/site/about.jpg"
                 alt="Sunrise Construction crew on an Outer Banks jobsite"
                 className="rounded-2xl shadow-2xl w-full h-[550px] object-cover"
               />
               <div className="absolute -bottom-8 -right-4 lg:-right-8 bg-white p-6 rounded-2xl shadow-xl border border-navy-100">
                 <div className="flex items-center gap-4">
                   <div className="w-14 h-14 bg-sunrise-100 rounded-xl flex items-center justify-center">
-                    <Image src="/img/slider/fortified.png" alt="FORTIFIED" width={32} height={32} />
+                    <Image src="https://cdn.sunriseobx.co/img/site/slider/fortified.png" alt="FORTIFIED" width={32} height={32} />
                   </div>
                   <div>
                     <p className="font-bold text-navy-900">IBHS FORTIFIED</p>
@@ -235,7 +235,7 @@ export default function AboutPage() {
       {/* Service Area */}
       <section className="relative py-24 lg:py-32">
         <div className="absolute inset-0">
-          <img src="/img/Beach-houses-1500.jpg" alt="" className="w-full h-full object-cover" />
+          <img src="https://cdn.sunriseobx.co/img/site/Beach-houses-1500.jpg" alt="" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-navy-900/85" />
         </div>
         <div className="relative max-w-7xl mx-auto px-6 text-center">

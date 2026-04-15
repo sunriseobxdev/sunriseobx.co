@@ -35,7 +35,7 @@ export default function ContactPage() {
       {/* Hero */}
       <section className="relative pt-28 pb-20 bg-navy-900">
         <div className="absolute inset-0 opacity-15">
-          <img src="/img/f-3.jpg" alt="" className="w-full h-full object-cover" />
+          <img src="https://cdn.sunriseobx.co/img/site/f-3.jpg" alt="" className="w-full h-full object-cover" />
         </div>
         <div className="relative max-w-7xl mx-auto px-6">
           <p className="text-sunrise-400 font-semibold text-sm tracking-widest uppercase mb-4">

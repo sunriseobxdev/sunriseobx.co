@@ -24,25 +24,25 @@ interface CmsProject {
 
 // Fallback data when CMS has no published projects yet
 const fallbackProjects = [
-  { id: "1", title: "Oceanfront Roof Replacement", location: "Nags Head, NC", services: "Roofing", image: "/img/project-1.jpg", featured: true },
-  { id: "2", title: "Beachfront Siding Makeover", location: "Kill Devil Hills, NC", services: "Siding", image: "/img/project-2.jpg", featured: true },
-  { id: "3", title: "Hurricane-Ready Windows", location: "Duck, NC", services: "Windows", image: "/img/project-3.jpg", featured: true },
-  { id: "4", title: "FORTIFIED Roof System", location: "Kitty Hawk, NC", services: "FORTIFIED", image: "/img/project-4.jpg", featured: false },
-  { id: "5", title: "Coastal Exterior Renovation", location: "Southern Shores, NC", services: "Exterior", image: "/img/project-5.jpg", featured: false },
-  { id: "6", title: "Storm Damage Restoration", location: "Hatteras, NC", services: "Roofing", image: "/img/project-6.jpg", featured: false },
-  { id: "7", title: "Full Home Exterior Upgrade", location: "Manteo, NC", services: "Exterior", image: "/img/project-7.jpg", featured: false },
-  { id: "8", title: "Rental Property Renovation", location: "Corolla, NC", services: "Siding", image: "/img/project-8.jpg", featured: false },
-  { id: "9", title: "Beachfront Window Install", location: "Avon, NC", services: "Windows", image: "/img/project-9.jpg", featured: false },
-  { id: "10", title: "Oceanview Roof Upgrade", location: "Nags Head, NC", services: "Roofing", image: "/img/project-10.jpg", featured: false },
-  { id: "11", title: "Historic Home Siding", location: "Manteo, NC", services: "Siding", image: "/img/project-11.jpg", featured: false },
-  { id: "12", title: "New Construction Exterior", location: "Corolla, NC", services: "Exterior", image: "/img/project-12.jpg", featured: false },
+  { id: "1", title: "Oceanfront Roof Replacement", location: "Nags Head, NC", services: "Roofing", image: "https://cdn.sunriseobx.co/img/site/project-1.jpg", featured: true },
+  { id: "2", title: "Beachfront Siding Makeover", location: "Kill Devil Hills, NC", services: "Siding", image: "https://cdn.sunriseobx.co/img/site/project-2.jpg", featured: true },
+  { id: "3", title: "Hurricane-Ready Windows", location: "Duck, NC", services: "Windows", image: "https://cdn.sunriseobx.co/img/site/project-3.jpg", featured: true },
+  { id: "4", title: "FORTIFIED Roof System", location: "Kitty Hawk, NC", services: "FORTIFIED", image: "https://cdn.sunriseobx.co/img/site/project-4.jpg", featured: false },
+  { id: "5", title: "Coastal Exterior Renovation", location: "Southern Shores, NC", services: "Exterior", image: "https://cdn.sunriseobx.co/img/site/project-5.jpg", featured: false },
+  { id: "6", title: "Storm Damage Restoration", location: "Hatteras, NC", services: "Roofing", image: "https://cdn.sunriseobx.co/img/site/project-6.jpg", featured: false },
+  { id: "7", title: "Full Home Exterior Upgrade", location: "Manteo, NC", services: "Exterior", image: "https://cdn.sunriseobx.co/img/site/project-7.jpg", featured: false },
+  { id: "8", title: "Rental Property Renovation", location: "Corolla, NC", services: "Siding", image: "https://cdn.sunriseobx.co/img/site/project-8.jpg", featured: false },
+  { id: "9", title: "Beachfront Window Install", location: "Avon, NC", services: "Windows", image: "https://cdn.sunriseobx.co/img/site/project-9.jpg", featured: false },
+  { id: "10", title: "Oceanview Roof Upgrade", location: "Nags Head, NC", services: "Roofing", image: "https://cdn.sunriseobx.co/img/site/project-10.jpg", featured: false },
+  { id: "11", title: "Historic Home Siding", location: "Manteo, NC", services: "Siding", image: "https://cdn.sunriseobx.co/img/site/project-11.jpg", featured: false },
+  { id: "12", title: "New Construction Exterior", location: "Corolla, NC", services: "Exterior", image: "https://cdn.sunriseobx.co/img/site/project-12.jpg", featured: false },
 ];
 
 function getImage(proj: CmsProject): string {
-  if (!proj.images || proj.images.length === 0) return "/img/project-1.jpg";
+  if (!proj.images || proj.images.length === 0) return "https://cdn.sunriseobx.co/img/site/project-1.jpg";
   const first = proj.images[0];
   if (typeof first === "string") return first;
-  return first.url || "/img/project-1.jpg";
+  return first.url || "https://cdn.sunriseobx.co/img/site/project-1.jpg";
 }
 
 async function getProjects(): Promise<{ id: string; title: string; location?: string; services?: string; image: string; featured: boolean }[]> {
@@ -77,7 +77,7 @@ export default async function ProjectsPage() {
       {/* Hero */}
       <section className="relative pt-28 pb-20 lg:pb-28 bg-navy-900">
         <div className="absolute inset-0 opacity-15">
-          <img src="/img/construction-2.jpeg" alt="" className="w-full h-full object-cover" />
+          <img src="https://cdn.sunriseobx.co/img/site/construction-2.jpeg" alt="" className="w-full h-full object-cover" />
         </div>
         <div className="relative max-w-7xl mx-auto px-6">
           <p className="text-sunrise-400 font-semibold text-sm tracking-widest uppercase mb-4">
@@ -172,7 +172,7 @@ export default async function ProjectsPage() {
       {/* CTA */}
       <section className="relative py-24 lg:py-32">
         <div className="absolute inset-0">
-          <img src="/img/f-3.jpg" alt="" className="w-full h-full object-cover" />
+          <img src="https://cdn.sunriseobx.co/img/site/f-3.jpg" alt="" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-navy-900/80" />
         </div>
         <div className="relative max-w-4xl mx-auto px-6 text-center">

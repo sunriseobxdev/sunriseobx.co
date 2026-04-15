@@ -22,7 +22,7 @@ export const metadata: Metadata = {
       "Elite Outer Banks construction company specializing in hurricane-resistant homes, beachfront construction, and FORTIFIED roofing. Serving OBX with 20+ years experience.",
     images: [
       {
-        url: "/img/Beach-houses-1500.jpg",
+        url: "https://cdn.sunriseobx.co/img/site/Beach-houses-1500.jpg",
         width: 1500,
         height: 1000,
         alt: "Sunrise Construction - Outer Banks beachfront homes",
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
     title: "Sunrise Construction | Premier Outer Banks Construction Company",
     description:
       "Elite Outer Banks construction company. Hurricane-resistant homes, FORTIFIED roofing, Wincore windows. 20+ years experience.",
-    images: ["/img/Beach-houses-1500.jpg"],
+    images: ["https://cdn.sunriseobx.co/img/site/Beach-houses-1500.jpg"],
   },
   robots: {
     index: true,
@@ -52,8 +52,8 @@ const jsonLd = {
   description:
     "Premier Outer Banks construction company specializing in hurricane-resistant homes, beachfront construction, Wincore windows, FORTIFIED roofing, siding, and exterior renovations.",
   url: "https://sunriseobx.co",
-  logo: "https://sunriseobx.co/img/Sunrise-Logo.svg",
-  image: "https://sunriseobx.co/img/Beach-houses-1500.jpg",
+  logo: "https://cdn.sunriseobx.co/img/site/Sunrise-Logo.svg",
+  image: "https://cdn.sunriseobx.co/img/site/Beach-houses-1500.jpg",
   telephone: "+1-252-619-7966",
   email: "hello@sunriseobx.co",
   address: {
