@@ -49,10 +49,10 @@ const services = [
 ];
 
 const projects = [
-  { image: "https://cdn.sunriseobx.co/img/site/project-1.jpg", title: "AZEK Lap Siding Makeover", location: "Southern Shores" },
-  { image: "https://cdn.sunriseobx.co/img/site/project-5.jpg", title: "ViWinco Impact Window Install", location: "Duck" },
-  { image: "https://cdn.sunriseobx.co/img/site/project-3.jpg", title: "TimberTech Deck & Railing", location: "Nags Head" },
-  { image: "https://cdn.sunriseobx.co/img/site/project-8.jpg", title: "Full Exterior Renovation", location: "Corolla" },
+  { image: "https://cdn.sunriseobx.co/img/portfolio/aerial-oceanfront-home-complete.jpg", title: "Oceanfront Home — Roof & Siding", location: "Duck" },
+  { image: "https://cdn.sunriseobx.co/img/portfolio/oceanfront-home-dunes-complete.jpg", title: "Beachfront Window Renovation", location: "Nags Head" },
+  { image: "https://cdn.sunriseobx.co/img/portfolio/aerial-roof-install-shingles.jpg", title: "Architectural Roof Replacement", location: "Kill Devil Hills" },
+  { image: "https://cdn.sunriseobx.co/img/portfolio/aerial-deck-balcony-siding-blue.jpg", title: "Deck & Balcony Restoration", location: "Southern Shores" },
 ];
 
 const certifications = [

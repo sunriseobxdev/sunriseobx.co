@@ -9,7 +9,7 @@ export const metadata: Metadata = {
     "Browse our portfolio of completed construction projects across the Outer Banks — roofing, siding, windows, and full exterior renovations.",
 };
 
-export const revalidate = 60; // revalidate every 60 seconds
+export const dynamic = "force-dynamic";
 
 interface CmsProject {
   id: string;
@@ -47,10 +47,22 @@ function getImage(proj: CmsProject): string {
 
 async function getProjects(): Promise<{ id: string; title: string; location?: string; services?: string; image: string; featured: boolean }[]> {
   try {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://sunriseobx-api:8080";
-    const res = await fetch(`${apiUrl}/api/cms/projects`, { next: { revalidate: 60 } });
-    if (!res.ok) return fallbackProjects;
-    const data: CmsProject[] = await res.json();
+    // Try internal k8s URL first, fall back to public
+    const urls = [
+      "http://sunriseobx-api.sunriseobx.svc.cluster.local:8080/api/cms/projects",
+      "http://sunriseobx-api:8080/api/cms/projects",
+      "https://api.sunriseobx.co/api/cms/projects",
+    ];
+    let res: Response | null = null;
+    for (const url of urls) {
+      try {
+        res = await fetch(url, { cache: "no-store", signal: AbortSignal.timeout(3000) });
+        if (res.ok) break;
+      } catch { continue; }
+    }
+    if (!res || !res.ok) return fallbackProjects;
+    const res2 = res; // rebind for type narrowing
+    const data: CmsProject[] = await res2.json();
     if (data.length === 0) return fallbackProjects;
     return data.map((p) => ({
       id: p.id,
