@@ -19,6 +19,15 @@ spec:
   domains:
     - cdn.sunriseobx.co
 ---
+apiVersion: networking.gke.io/v1
+kind: ManagedCertificate
+metadata:
+  name: sunriseobx-media-cert
+  namespace: sunriseobx
+spec:
+  domains:
+    - media.sunriseobx.co
+---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -26,7 +35,7 @@ metadata:
   namespace: sunriseobx
   annotations:
     kubernetes.io/ingress.global-static-ip-name: sunriseobx-ip
-    networking.gke.io/managed-certificates: sunriseobx-cert,sunriseobx-cdn-cert
+    networking.gke.io/managed-certificates: sunriseobx-cert,sunriseobx-cdn-cert,sunriseobx-media-cert
     kubernetes.io/ingress.class: gce
 spec:
   rules:
@@ -60,6 +69,16 @@ spec:
                 name: sunriseobx-cdn
                 port:
                   number: 8080
+    - host: media.sunriseobx.co
+      http:
+        paths:
+          - path: /*
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: sunriseobx-media
+                port:
+                  number: 9999
     - host: sunriseobx.co
       http:
         paths:

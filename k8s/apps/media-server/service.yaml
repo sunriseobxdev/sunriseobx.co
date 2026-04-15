@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: sunriseobx-media
+  namespace: sunriseobx
+  labels:
+    app: media
+  annotations:
+    cloud.google.com/app-protocols: '{"grpc":"HTTP2"}'
+spec:
+  type: ClusterIP
+  selector:
+    app: media
+  ports:
+    - port: 9999
+      targetPort: 9999
+      protocol: TCP
+      name: grpc

@@ -7,6 +7,7 @@ members = [
     "crates/sunrise-common",
     "crates/sunrise-sys",
     "crates/sunrise-cli",
+    "crates/sunrise-media-server",
     "crates/sunrise-web-sys",
 ]
 resolver = "2"

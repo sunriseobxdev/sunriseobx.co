@@ -1,0 +1,28 @@
+[package]
+name = "sunrise-media-server"
+version = "0.1.0"
+edition = "2021"
+description = "gRPC media filesystem server for SunriseOBX CDN — runs over HTTP/2 with QUIC upgrade path"
+
+[[bin]]
+name = "sunrise-media-server"
+path = "src/main.rs"
+
+[dependencies]
+tonic = "0.12"
+prost = "0.13"
+tokio = { workspace = true }
+tokio-stream = "0.1"
+serde = { workspace = true }
+serde_json = { workspace = true }
+reqwest = { version = "0.12", features = ["json"] }
+jsonwebtoken = "9"
+bytes = "1"
+log = { workspace = true }
+env_logger = "0.11"
+# gcp_auth removed — using metadata server directly for GKE
+async-stream = "0.3"
+chrono = { workspace = true }
+
+[build-dependencies]
+tonic-build = "0.12"

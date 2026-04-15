@@ -64,6 +64,18 @@ impl<T: HttpTransport> SunriseClient<T> {
         self.request(Method::Delete, path, None, query).await
     }
 
+    // --- Generic JSON helpers (public) ---
+
+    pub async fn get_json<R: serde::de::DeserializeOwned>(&self, path: &str, query: Vec<(String, String)>) -> Result<R, SunriseError> {
+        let body = self.get(path, query).await?;
+        serde_json::from_str(&body).map_err(|e| SunriseError::Deserialize(e.to_string()))
+    }
+
+    pub async fn delete_json<R: serde::de::DeserializeOwned>(&self, path: &str) -> Result<R, SunriseError> {
+        let body = self.delete(path, vec![]).await?;
+        serde_json::from_str(&body).map_err(|e| SunriseError::Deserialize(e.to_string()))
+    }
+
     // --- Auth ---
 
     pub async fn auth_login(&self, email: &str, password: &str) -> Result<LoginResponse, SunriseError> {

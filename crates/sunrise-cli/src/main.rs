@@ -5,6 +5,8 @@ use sunrise_common::types::*;
 use sunrise_sys::ReqwestTransport;
 use std::path::PathBuf;
 
+mod media_fs;
+
 #[derive(Parser)]
 #[command(name = "sunrise-cli")]
 #[command(about = "SunriseOBX admin CLI")]
@@ -81,6 +83,47 @@ enum Commands {
     Market {
         #[command(subcommand)]
         cmd: MarketCmd,
+    },
+    /// Media library management
+    Media {
+        #[command(subcommand)]
+        cmd: MediaCmd,
+    },
+    /// Mount CDN media as a local filesystem via gRPC + FUSE
+    MountMedia {
+        /// Mount point path (e.g., /mnt/sunriseobx)
+        mountpoint: String,
+        /// gRPC endpoint (default: https://media.sunriseobx.co:9999)
+        #[arg(long, env = "SUNRISE_MEDIA_URL", default_value = "https://media.sunriseobx.co:9999")]
+        media_url: String,
+    },
+}
+
+#[derive(Subcommand)]
+enum MediaCmd {
+    /// Browse files in a directory
+    Browse {
+        /// Path to browse (e.g., img/portfolio)
+        #[arg(default_value = "")]
+        path: String,
+    },
+    /// Upload a file
+    Upload {
+        /// Local file path
+        file: String,
+        /// Destination path in CDN (e.g., img/portfolio/)
+        #[arg(long, default_value = "img/uploads/")]
+        dest: String,
+    },
+    /// Delete a file
+    Delete {
+        /// CDN file path to delete
+        path: String,
+    },
+    /// Get CDN URL for a file
+    Url {
+        /// File path
+        path: String,
     },
 }
 
@@ -874,6 +917,65 @@ async fn run(cli: &Cli, client: &SunriseClient<ReqwestTransport>) -> Result<(), 
                 print_json(&data);
             }
         },
+        Commands::Media { cmd } => match cmd {
+            MediaCmd::Browse { path } => {
+                let resp: MediaBrowseResponse = client.get_json("/api/media/browse", vec![("path".to_string(), path.clone())]).await?;
+                if cli.json {
+                    print_json(&resp);
+                } else {
+                    println!("/{}", resp.prefix);
+                    for e in &resp.entries {
+                        let icon = if e.entry_type == "dir" { "📁" } else { "📄" };
+                        let size = e.size.map(|s| format!("  {}KB", s / 1024)).unwrap_or_default();
+                        println!("  {} {}{}", icon, e.name, size);
+                    }
+                }
+            }
+            MediaCmd::Upload { file, dest } => {
+                let file_path = std::path::Path::new(file);
+                let file_name = file_path.file_name().unwrap_or_default().to_string_lossy();
+                let data = std::fs::read(file_path).map_err(|e| sunrise_common::error::SunriseError::Other(format!("Failed to read file: {}", e)))?;
+
+                let client = reqwest::Client::new();
+                let token = cli.token.clone().or_else(load_token).unwrap_or_default();
+                let form = reqwest::multipart::Form::new()
+                    .text("path", dest.clone())
+                    .part("files", reqwest::multipart::Part::bytes(data).file_name(file_name.to_string()));
+
+                let resp = client.post(format!("{}/api/media/upload", cli.api_url))
+                    .header("Authorization", format!("Bearer {}", token))
+                    .multipart(form)
+                    .send()
+                    .await
+                    .map_err(|e| sunrise_common::error::SunriseError::Transport(e.to_string()))?;
+
+                let body: serde_json::Value = resp.json().await
+                    .map_err(|e| sunrise_common::error::SunriseError::Deserialize(e.to_string()))?;
+                println!("{}", serde_json::to_string_pretty(&body).unwrap_or_default());
+            }
+            MediaCmd::Delete { path } => {
+                let _: serde_json::Value = client.delete_json(&format!("/api/media/file?path={}", urlencoding(path))).await?;
+                println!("Deleted: {}", path);
+            }
+            MediaCmd::Url { path } => {
+                println!("https://cdn.sunriseobx.co/{}", path);
+            }
+        },
+        Commands::MountMedia { mountpoint, media_url } => {
+            let token = cli.token.clone().or_else(load_token)
+                .ok_or_else(|| sunrise_common::error::SunriseError::Auth("Not logged in. Run: sunrise-cli auth login".to_string()))?;
+            match media_fs::mount(media_url, &token, mountpoint) {
+                Ok(()) => println!("Unmounted."),
+                Err(e) => eprintln!("Mount error: {}", e),
+            }
+        },
     }
     Ok(())
+}
+
+fn urlencoding(s: &str) -> String {
+    s.bytes().map(|b| match b {
+        b'A'..=b'Z' | b'a'..=b'z' | b'0'..=b'9' | b'-' | b'_' | b'.' | b'/' => (b as char).to_string(),
+        _ => format!("%{:02X}", b),
+    }).collect()
 }

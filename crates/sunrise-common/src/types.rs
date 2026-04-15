@@ -348,6 +348,50 @@ pub struct CreateApiKeyResponse {
     pub name: String,
 }
 
+// --- Media / Filesystem ---
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct MediaEntry {
+    pub name: String,
+    #[serde(rename = "type")]
+    pub entry_type: String,
+    pub path: Option<String>,
+    pub url: Option<String>,
+    pub size: Option<u64>,
+    #[serde(rename = "contentType")]
+    pub content_type: Option<String>,
+    pub updated: Option<String>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct MediaBrowseResponse {
+    pub prefix: String,
+    pub entries: Vec<MediaEntry>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct FsStatResponse {
+    #[serde(rename = "type")]
+    pub entry_type: String,
+    pub size: u64,
+    pub modified: String,
+    #[serde(rename = "contentType")]
+    pub content_type: Option<String>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct FsDirEntry {
+    pub name: String,
+    #[serde(rename = "type")]
+    pub entry_type: String,
+    pub size: u64,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct FsReaddirResponse {
+    pub entries: Vec<FsDirEntry>,
+}
+
 // --- Generic ---
 
 #[derive(Debug, Serialize, Deserialize)]

@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sunriseobx-media
+  namespace: sunriseobx
+  labels:
+    app: media
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: media
+  template:
+    metadata:
+      labels:
+        app: media
+    spec:
+      tolerations:
+        - key: cloud.google.com/gke-spot
+          operator: Equal
+          value: "true"
+          effect: NoSchedule
+      containers:
+        - name: media
+          image: us-central1-docker.pkg.dev/sunriseobx-proj/sunriseobx-images/media-server:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 9999
+              protocol: TCP
+          env:
+            - name: PORT
+              value: "9999"
+            - name: GCS_CDN_BUCKET
+              value: sunriseobx-cdn
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: sunriseobx-secrets
+                  key: JWT_SECRET
+            - name: RUST_LOG
+              value: info
+          livenessProbe:
+            tcpSocket:
+              port: 10000
+            initialDelaySeconds: 3
+            periodSeconds: 10
+          readinessProbe:
+            tcpSocket:
+              port: 10000
+            initialDelaySeconds: 3
+            periodSeconds: 5
+          resources:
+            requests:
+              cpu: 15m
+              memory: 32Mi
+            limits:
+              cpu: 500m
+              memory: 128Mi

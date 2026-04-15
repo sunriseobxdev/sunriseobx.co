@@ -16,6 +16,7 @@ export const PRIVILEGES = {
   VIEW_INVOICES: "view_invoices",
   MANAGE_JOBS: "manage_jobs",
   VIEW_JOBS: "view_jobs",
+  MOUNT_MEDIA: "mount_media",
 } as const;
 
 export const ROLE_PRIVILEGES: Record<Role, string[]> = {
@@ -33,6 +34,7 @@ export const ROLE_PRIVILEGES: Record<Role, string[]> = {
     "view_invoices",
     "manage_jobs",
     "view_jobs",
+    "mount_media",
   ],
   manager: ["view_positions", "view_orders", "view_market", "view_audit", "view_payroll", "view_invoices", "view_jobs"],
   trader: ["trade", "view_positions", "view_orders", "view_market"],

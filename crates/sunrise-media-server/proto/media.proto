@@ -1,0 +1,90 @@
+syntax = "proto3";
+package sunrise.media;
+
+service MediaFs {
+  // Stat a file or directory
+  rpc Stat(StatRequest) returns (StatResponse);
+
+  // List directory contents
+  rpc ReadDir(ReadDirRequest) returns (ReadDirResponse);
+
+  // Read file — streams chunks back for large files
+  rpc Read(ReadRequest) returns (stream DataChunk);
+
+  // Write file — client streams chunks
+  rpc Write(stream WriteChunk) returns (WriteResponse);
+
+  // Delete file
+  rpc Delete(DeleteRequest) returns (OkResponse);
+
+  // Create directory
+  rpc Mkdir(MkdirRequest) returns (OkResponse);
+
+  // Rename/move
+  rpc Rename(RenameRequest) returns (OkResponse);
+}
+
+message StatRequest {
+  string path = 1;
+}
+
+message StatResponse {
+  bool is_dir = 1;
+  uint64 size = 2;
+  string modified = 3;
+  string content_type = 4;
+}
+
+message ReadDirRequest {
+  string path = 1;
+}
+
+message ReadDirResponse {
+  repeated DirEntry entries = 1;
+}
+
+message DirEntry {
+  string name = 1;
+  bool is_dir = 2;
+  uint64 size = 3;
+}
+
+message ReadRequest {
+  string path = 1;
+  uint64 offset = 2;
+  uint64 size = 3; // 0 = entire file
+}
+
+message DataChunk {
+  bytes data = 1;
+  uint64 offset = 2;
+  bool eof = 3;
+}
+
+message WriteChunk {
+  string path = 1;     // set on first chunk only
+  bytes data = 2;
+  bool finish = 3;     // set on last chunk
+  string content_type = 4; // set on first chunk only
+}
+
+message WriteResponse {
+  uint64 bytes_written = 1;
+}
+
+message DeleteRequest {
+  string path = 1;
+}
+
+message MkdirRequest {
+  string path = 1;
+}
+
+message RenameRequest {
+  string from = 1;
+  string to = 2;
+}
+
+message OkResponse {
+  bool ok = 1;
+}

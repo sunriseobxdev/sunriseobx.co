@@ -8,4 +8,6 @@ resources:
   - pkg/deployment.yaml
   - cdn/deployment.yaml
   - cdn/service.yaml
+  - media-server/deployment.yaml
+  - media-server/service.yaml
   - ingress/ingress.yaml
