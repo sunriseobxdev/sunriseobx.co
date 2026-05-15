@@ -91,7 +91,7 @@ export default function EstimateViewPage() {
             <div style={{ textAlign: "right" }}>
               <div style={{ fontSize: "0.8rem", color: "#9fb3c8" }}>121 Pine Grove Lane</div>
               <div style={{ fontSize: "0.8rem", color: "#9fb3c8" }}>Point Harbor, NC 27964</div>
-              <div style={{ fontSize: "0.8rem", color: "#9fb3c8", marginTop: "0.25rem" }}>(252) 305-4313</div>
+              <div style={{ fontSize: "0.8rem", color: "#9fb3c8", marginTop: "0.25rem" }}>(252) 619-7966</div>
             </div>
           </div>
         </div>
@@ -200,14 +200,14 @@ export default function EstimateViewPage() {
             <div style={{ textAlign: "center" }}>
               <h3 style={{ color: "#627d98", fontWeight: 700, margin: "0 0 0.25rem" }}>Estimate Declined</h3>
               <p style={{ color: "#627d98", fontSize: "0.85rem", margin: 0 }}>
-                No problem. If you change your mind or have questions, call us at (252) 305-4313.
+                No problem. If you change your mind or have questions, call us at (252) 619-7966.
               </p>
             </div>
           ) : isExpired ? (
             <div style={{ textAlign: "center" }}>
               <h3 style={{ color: "#d97706", fontWeight: 700, margin: "0 0 0.25rem" }}>Estimate Expired</h3>
               <p style={{ color: "#627d98", fontSize: "0.85rem", margin: 0 }}>
-                This estimate has expired. Contact us at (252) 305-4313 for an updated quote.
+                This estimate has expired. Contact us at (252) 619-7966 for an updated quote.
               </p>
             </div>
           ) : (
@@ -239,7 +239,7 @@ export default function EstimateViewPage() {
                 </button>
               </div>
               <p style={{ color: "#9fb3c8", fontSize: "0.7rem", textAlign: "center", marginTop: "0.75rem" }}>
-                Questions? Call (252) 305-4313 or reply to the email we sent you.
+                Questions? Call (252) 619-7966 or reply to the email we sent you.
               </p>
             </div>
           )}

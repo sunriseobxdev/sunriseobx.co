@@ -471,7 +471,7 @@ paymentsRouter.post(
                   <div style="background:#ecfdf5;border:1px solid #a7f3d0;padding:1rem;border-radius:8px;text-align:center;margin:1.5rem 0;">
                     <span style="color:#059669;font-weight:700;font-size:1.1rem;">&#10003; Paid in Full</span>
                   </div>
-                  <p style="color:#666;font-size:0.85rem;">If you have any questions, contact us at (252) 305-4313.</p>
+                  <p style="color:#666;font-size:0.85rem;">If you have any questions, contact us at (252) 619-7966.</p>
                   <hr style="border:none;border-top:1px solid #ddd;margin:2rem 0;" />
                   <p style="color:#999;font-size:0.8rem;">Sunrise Construction Services LLC<br/>121 Pine Grove Lane, Point Harbor, NC 27964</p>
                 </div>`

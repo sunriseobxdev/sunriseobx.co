@@ -276,7 +276,7 @@ invoiceRouter.post(
             </a>
           </div>
           ${pdfUrl ? `<p style="text-align: center;"><a href="${pdfUrl}" style="color: #f97316; font-size: 0.85rem;">Download PDF</a></p>` : ""}
-          <p style="color: #666; font-size: 0.85rem;">If you have any questions, please contact us at (252) 305-4313 or reply to this email.</p>
+          <p style="color: #666; font-size: 0.85rem;">If you have any questions, please contact us at (252) 619-7966 or reply to this email.</p>
           <hr style="border: none; border-top: 1px solid #ddd; margin: 2rem 0;" />
           <p style="color: #999; font-size: 0.8rem;">Sunrise Construction Services LLC<br/>121 Pine Grove Lane, Point Harbor, NC 27964</p>
         </div>`
