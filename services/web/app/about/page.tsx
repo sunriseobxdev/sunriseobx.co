@@ -62,8 +62,7 @@ const values = [
 ];
 
 const team = [
-  { name: "Marc Chiasson", role: "President & CEO", image: "https://cdn.sunriseobx.co/img/site/team-1.jpg" },
-  { name: "Zachary Wayland", role: "Operations Director", image: "https://cdn.sunriseobx.co/img/site/team-2.jpg" },
+  { name: "Zachary Wayland", role: "President & CEO", image: "https://cdn.sunriseobx.co/img/site/zach-full.jpg" },
 ];
 
 export default function AboutPage() {
@@ -217,7 +216,7 @@ export default function AboutPage() {
           <div className="flex flex-wrap justify-center gap-8">
             {team.map((member) => (
               <div key={member.name} className="text-center group">
-                <div className="w-48 h-48 mx-auto rounded-2xl overflow-hidden mb-5 shadow-lg">
+                <div className="w-56 h-72 mx-auto rounded-2xl overflow-hidden mb-5 shadow-lg">
                   <img
                     src={member.image}
                     alt={member.name}
