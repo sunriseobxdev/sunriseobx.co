@@ -229,7 +229,7 @@ agreementsRouter.post(
         <p style="margin-top: 1.2em;"><strong>BETWEEN:</strong></p>
 
         <p style="text-align: center; margin: 1em 0;">
-          <strong>${j.customer_name || "_______________"}</strong><br/>
+          <strong>${j.customer_name ? escapeHtml(j.customer_name) : "_______________"}</strong><br/>
           ${clientAddrHtml}<br/>
           (the &ldquo;Client&rdquo;)
         </p>
