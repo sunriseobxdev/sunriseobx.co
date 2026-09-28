@@ -2,6 +2,10 @@ import { Router } from "express";
 import { authMiddleware } from "../middleware/auth.js";
 import { requirePrivilege } from "../middleware/rbac.js";
 import { getPool } from "../lib/db.js";
+import {
+  normalizePaymentSchedule,
+  validatePaymentSchedule,
+} from "../lib/payment-schedule.js";
 import { sendJobUpdate } from "../lib/email.js";
 
 export const jobsRouter = Router();
@@ -43,6 +47,16 @@ jobsRouter.post("/", requirePrivilege("manage_jobs"), async (req, res) => {
     assigned_to, permit_status, notes,
   } = req.body;
 
+  const phases = normalizePaymentSchedule(req.body.payment_schedule);
+  const scheduleError = validatePaymentSchedule(
+    phases,
+    contract_amount != null ? Number(contract_amount) : null
+  );
+  if (scheduleError) {
+    res.status(400).json({ error: scheduleError });
+    return;
+  }
+
   const pool = getPool();
   let custId = customer_id;
 
@@ -69,8 +83,8 @@ jobsRouter.post("/", requirePrivilege("manage_jobs"), async (req, res) => {
     `INSERT INTO jobs (job_number, customer_id, title, description, service_type,
        job_address_line1, job_address_city, job_address_state, job_address_zip,
        contract_amount, deposit_amount, estimated_start, estimated_end,
-       assigned_to, permit_status, notes, created_by)
-     VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17)
+       assigned_to, permit_status, notes, payment_schedule, created_by)
+     VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18)
      RETURNING *`,
     [
       jobNumber, custId, title, description, service_type,
@@ -78,6 +92,7 @@ jobsRouter.post("/", requirePrivilege("manage_jobs"), async (req, res) => {
       contract_amount || null, deposit_amount || null,
       estimated_start || null, estimated_end || null,
       assigned_to || null, permit_status || "na", notes || null,
+      phases.length > 0 ? JSON.stringify(phases) : null,
       req.user?.userId,
     ]
   );
@@ -139,7 +154,35 @@ jobsRouter.put("/:id", requirePrivilege("manage_jobs"), async (req, res) => {
     assigned_to, permit_number, permit_status, notes,
   } = req.body;
 
+  // Absent key = leave the stored schedule alone. An explicit [] clears it
+  // back to a flat fee.
   const pool = getPool();
+  let scheduleParam: string | null | undefined;
+  if (req.body.payment_schedule !== undefined) {
+    const phases = normalizePaymentSchedule(req.body.payment_schedule);
+
+    // A partial update may not carry contract_amount; check against whatever
+    // the job will actually hold once this update lands.
+    let effectiveAmount =
+      contract_amount != null ? Number(contract_amount) : null;
+    if (effectiveAmount == null && phases.length > 0) {
+      const current = await pool.query(
+        `SELECT contract_amount FROM jobs WHERE id = $1`,
+        [req.params.id]
+      );
+      if (current.rows.length > 0 && current.rows[0].contract_amount != null) {
+        effectiveAmount = Number(current.rows[0].contract_amount);
+      }
+    }
+
+    const scheduleError = validatePaymentSchedule(phases, effectiveAmount);
+    if (scheduleError) {
+      res.status(400).json({ error: scheduleError });
+      return;
+    }
+    scheduleParam = phases.length > 0 ? JSON.stringify(phases) : null;
+  }
+
   const result = await pool.query(
     `UPDATE jobs SET
        title = COALESCE($1, title), description = COALESCE($2, description),
@@ -159,14 +202,16 @@ jobsRouter.put("/:id", requirePrivilege("manage_jobs"), async (req, res) => {
        permit_number = COALESCE($17, permit_number),
        permit_status = COALESCE($18, permit_status),
        notes = COALESCE($19, notes),
+       payment_schedule = CASE WHEN $20::boolean THEN $21::jsonb ELSE payment_schedule END,
        updated_at = NOW()
-     WHERE id = $20 RETURNING *`,
+     WHERE id = $22 RETURNING *`,
     [
       title, description, status, service_type,
       job_address_line1, job_address_city, job_address_state, job_address_zip,
       contract_amount, deposit_amount, deposit_paid,
       estimated_start, estimated_end, actual_start, actual_end,
       assigned_to, permit_number, permit_status, notes,
+      scheduleParam !== undefined, scheduleParam ?? null,
       req.params.id,
     ]
   );

@@ -4,10 +4,43 @@ import { requirePrivilege } from "../middleware/rbac.js";
 import { customerAuthMiddleware } from "../middleware/customer-auth.js";
 import { getPool } from "../lib/db.js";
 import { sendAgreementLink } from "../lib/email.js";
+import {
+  normalizePaymentSchedule,
+  renderCompensationHtml,
+  validatePaymentSchedule,
+} from "../lib/payment-schedule.js";
 
 export const agreementsRouter = Router();
 
 const BASE_URL = process.env.PUBLIC_URL || "https://sunriseobx.co";
+
+/**
+ * The standard boilerplate runs sections 2-6, then jumps to 10 because
+ * sections 7-9 are the Compensation clause. Splice Compensation in at that gap
+ * so the executed contract reads in numeric order instead of trailing the
+ * Governing Law section.
+ *
+ * Matched as a regex because older seeds of the template carried inline styles
+ * on the heading, and a template edited by hand may carry others.
+ */
+const COMPENSATION_ANCHOR = /<h4\b[^>]*>\s*Reimbursement of Expenses\s*<\/h4>/i;
+
+function composeBody(
+  boilerplate: string,
+  compensationBlock: string
+): string {
+  const m = COMPENSATION_ANCHOR.exec(boilerplate);
+  if (!m) {
+    // Unknown template shape — keep the historical layout rather than guessing.
+    return `${boilerplate}\n${compensationBlock}`;
+  }
+  return (
+    boilerplate.slice(0, m.index) +
+    compensationBlock +
+    "\n" +
+    boilerplate.slice(m.index)
+  );
+}
 
 // --- Templates ---
 
@@ -90,7 +123,7 @@ agreementsRouter.post(
   authMiddleware,
   requirePrivilege("manage_jobs"),
   async (req, res) => {
-    const { template_id, scope_of_work_html, compensation_html } = req.body;
+    const { template_id, scope_of_work_html } = req.body;
     const pool = getPool();
 
     // Get job info for rendering
@@ -106,6 +139,34 @@ agreementsRouter.post(
       return;
     }
 
+    const j = job.rows[0];
+
+    // A phased schedule may come in on the request, or be the one already
+    // stored on the job. An explicit empty array on the request means
+    // "flat fee", so only fall back to the job when the key is absent.
+    const phases = normalizePaymentSchedule(
+      req.body.payment_schedule !== undefined
+        ? req.body.payment_schedule
+        : j.payment_schedule
+    );
+
+    const contractAmount =
+      j.contract_amount != null ? Number(j.contract_amount) : null;
+
+    const scheduleError = validatePaymentSchedule(phases, contractAmount);
+    if (scheduleError) {
+      res.status(400).json({ error: scheduleError });
+      return;
+    }
+
+    // Callers may still post raw compensation HTML (the old contract); a
+    // payment schedule always wins because it is the structured source.
+    const compensationHtml =
+      phases.length > 0
+        ? renderCompensationHtml(contractAmount ?? 0, phases)
+        : req.body.compensation_html ||
+          renderCompensationHtml(contractAmount ?? 0, []);
+
     // Get template boilerplate if provided
     let boilerplate = "";
     if (template_id) {
@@ -118,7 +179,6 @@ agreementsRouter.post(
       }
     }
 
-    const j = job.rows[0];
     const today = new Date().toLocaleDateString("en-US", {
       year: "numeric",
       month: "long",
@@ -174,21 +234,29 @@ agreementsRouter.post(
           ${scope_of_work_html}
         </div>
 
-        ${boilerplate}
-
-        <h3>Compensation</h3>
+        ${composeBody(
+          boilerplate,
+          `<h3>Compensation</h3>
         <div style="margin: 0.5em 0;">
-          ${compensation_html}
-        </div>
+          ${compensationHtml}
+        </div>`
+        )}
 
         </div>
       </div>
     `;
 
     const result = await pool.query(
-      `INSERT INTO job_agreements (job_id, template_id, scope_of_work_html, compensation_html, full_html)
-       VALUES ($1, $2, $3, $4, $5) RETURNING *`,
-      [req.params.id, template_id || null, scope_of_work_html, compensation_html, fullHtml]
+      `INSERT INTO job_agreements (job_id, template_id, scope_of_work_html, compensation_html, payment_schedule, full_html)
+       VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,
+      [
+        req.params.id,
+        template_id || null,
+        scope_of_work_html,
+        compensationHtml,
+        phases.length > 0 ? JSON.stringify(phases) : null,
+        fullHtml,
+      ]
     );
 
     res.status(201).json(result.rows[0]);

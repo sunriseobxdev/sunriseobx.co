@@ -561,6 +561,11 @@ ALTER TABLE invoices ADD COLUMN IF NOT EXISTS stripe_payment_intent_id VARCHAR(2
 ALTER TABLE invoices ADD COLUMN IF NOT EXISTS paid_at TIMESTAMPTZ;
 ALTER TABLE invoices ADD COLUMN IF NOT EXISTS viewed_at TIMESTAMPTZ;
 
+-- Phased payment schedules. An ordered array of
+-- { label?, amount, due_on } objects; NULL/empty means flat fee.
+ALTER TABLE jobs ADD COLUMN IF NOT EXISTS payment_schedule JSONB;
+ALTER TABLE job_agreements ADD COLUMN IF NOT EXISTS payment_schedule JSONB;
+
 CREATE TABLE IF NOT EXISTS estimates (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   estimate_number VARCHAR(50) UNIQUE NOT NULL,

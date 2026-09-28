@@ -15,6 +15,11 @@ import {
   thStyle,
   tdStyle,
 } from "@/lib/desk-styles";
+import PaymentScheduleEditor, {
+  PaymentPhase,
+  phaseTotal,
+  serializePhases,
+} from "./PaymentScheduleEditor";
 
 interface Job {
   id: string;
@@ -40,6 +45,7 @@ interface JobDetail extends Job {
   job_address_zip: string;
   deposit_amount: number | null;
   deposit_paid: boolean;
+  payment_schedule: { label: string | null; amount: number; due_on: string }[] | null;
   actual_start: string | null;
   actual_end: string | null;
   permit_number: string;
@@ -186,6 +192,14 @@ export default function JobsPage() {
   const [onboardLink, setOnboardLink] = useState<string | null>(null);
   const [linkCopied, setLinkCopied] = useState(false);
   const [viewingAgreement, setViewingAgreement] = useState<AgreementDetail | null>(null);
+  const [phases, setPhases] = useState<PaymentPhase[]>([]);
+
+  // Revise-agreement panel on the detail view
+  const [reviseOpen, setReviseOpen] = useState(false);
+  const [revisePhases, setRevisePhases] = useState<PaymentPhase[]>([]);
+  const [reviseScope, setReviseScope] = useState("");
+  const [reviseBusy, setReviseBusy] = useState(false);
+  const [reviseError, setReviseError] = useState<string | null>(null);
 
   useEffect(() => {
     loadJobs();
@@ -203,6 +217,8 @@ export default function JobsPage() {
   async function loadJobDetail(id: string) {
     const data = await apiFetch(`/api/jobs/${id}`);
     setSelectedJob(data);
+    setReviseOpen(false);
+    setReviseError(null);
     setView("detail");
   }
 
@@ -214,12 +230,28 @@ export default function JobsPage() {
   async function handleCreate() {
     setSaving(true);
     try {
+      const amt = form.contract_amount ? parseFloat(form.contract_amount) : 0;
+      const schedule = serializePhases(phases);
+
+      if (schedule.length > 0 && amt > 0) {
+        const total = phaseTotal(phases);
+        if (Math.abs(total - amt) > 0.005) {
+          alert(
+            `Payment schedule totals $${total.toFixed(2)} but the contract amount is $${amt.toFixed(2)}. ` +
+              `The installments must add up to the contract amount.`
+          );
+          setSaving(false);
+          return;
+        }
+      }
+
       const job = await apiFetch("/api/jobs/", {
         method: "POST",
         body: JSON.stringify({
           ...form,
           contract_amount: form.contract_amount ? parseFloat(form.contract_amount) : null,
           deposit_amount: form.deposit_amount ? parseFloat(form.deposit_amount) : null,
+          payment_schedule: schedule,
         }),
       });
 
@@ -230,16 +262,14 @@ export default function JobsPage() {
           const templates = await apiFetch("/api/agreements/templates");
           const templateId = templates?.[0]?.id || null;
 
-          const amt = form.contract_amount ? parseFloat(form.contract_amount) : 0;
-          const dep = form.deposit_amount ? parseFloat(form.deposit_amount) : 0;
-          const compensationHtml = `<p>7. For the services rendered, the Client will provide compensation to the Contractor for the flat fee of <strong>$${amt.toLocaleString("en-US", { minimumFractionDigits: 2 })}</strong>.</p>${dep > 0 ? `<p><strong>PAYMENT SCHEDULE:</strong></p><ul><li>Deposit: $${dep.toLocaleString("en-US", { minimumFractionDigits: 2 })} due upon signing</li><li>Balance: $${(amt - dep).toLocaleString("en-US", { minimumFractionDigits: 2 })} due upon completion</li></ul>` : ""}<p>8. The above Compensation includes all applicable sales tax, and duties as required by law.</p>`;
-
+          // The API renders the Compensation clause from the structured
+          // schedule, so the contract language lives in exactly one place.
           const agreement = await apiFetch(`/api/agreements/jobs/${job.id}/agreements`, {
             method: "POST",
             body: JSON.stringify({
               template_id: templateId,
               scope_of_work_html: form.scope_of_work.includes("<") ? form.scope_of_work : form.scope_of_work.split(/\n\n+/).map(p => `<p>${p.replace(/\n/g, "<br/>")}</p>`).join("\n"),
-              compensation_html: compensationHtml,
+              payment_schedule: schedule,
             }),
           });
 
@@ -261,6 +291,7 @@ export default function JobsPage() {
       if (!onboardLink) {
         setView("list");
         setForm({ ...emptyForm });
+        setPhases([]);
       }
       loadJobs();
     } catch (err) {
@@ -268,6 +299,92 @@ export default function JobsPage() {
       alert("Failed to create job");
     } finally {
       setSaving(false);
+    }
+  }
+
+  /**
+   * Open the revise panel for a job, seeded with its current schedule and the
+   * scope of work from its most recent agreement.
+   */
+  async function openRevise(j: JobDetail) {
+    setReviseError(null);
+    setRevisePhases(
+      (j.payment_schedule || []).map((p) => ({
+        label: p.label ?? "",
+        amount: String(p.amount),
+        due_on: p.due_on,
+      }))
+    );
+
+    let scope = "";
+    const latest = (j.agreements || [])[(j.agreements || []).length - 1];
+    if (latest) {
+      try {
+        const detail = await apiFetch(`/api/agreements/jobs/${j.id}/agreements/${latest.id}`);
+        scope = detail?.scope_of_work_html || "";
+      } catch {
+        /* fall through with an empty scope — operator can paste it */
+      }
+    }
+    setReviseScope(scope);
+    setReviseOpen(true);
+  }
+
+  /**
+   * Save the schedule onto the job and issue a fresh agreement from it.
+   * The previous agreement is left in place as the historical record.
+   */
+  async function issueRevisedAgreement(j: JobDetail) {
+    setReviseBusy(true);
+    setReviseError(null);
+    try {
+      const schedule = serializePhases(revisePhases);
+      const amt = j.contract_amount ? Number(j.contract_amount) : 0;
+
+      if (schedule.length > 0 && amt > 0) {
+        const total = phaseTotal(revisePhases);
+        if (Math.abs(total - amt) > 0.005) {
+          setReviseError(
+            `Payment schedule totals ${usd.format(total)} but the contract amount is ${usd.format(amt)}.`
+          );
+          return;
+        }
+      }
+      if (!reviseScope.trim()) {
+        setReviseError("Scope of work is required to issue an agreement.");
+        return;
+      }
+
+      await apiFetch(`/api/jobs/${j.id}`, {
+        method: "PUT",
+        body: JSON.stringify({ payment_schedule: schedule }),
+      });
+
+      const templates = await apiFetch("/api/agreements/templates");
+      const templateId = templates?.[0]?.id || null;
+
+      await apiFetch(`/api/agreements/jobs/${j.id}/agreements`, {
+        method: "POST",
+        body: JSON.stringify({
+          template_id: templateId,
+          scope_of_work_html: reviseScope,
+          payment_schedule: schedule,
+        }),
+      });
+
+      setReviseOpen(false);
+      loadJobDetail(j.id);
+    } catch (err) {
+      let msg = err instanceof Error ? err.message : String(err);
+      try {
+        const parsed = JSON.parse(msg);
+        if (parsed?.error) msg = parsed.error;
+      } catch {
+        /* not JSON — show the raw message */
+      }
+      setReviseError(msg);
+    } finally {
+      setReviseBusy(false);
     }
   }
 
@@ -362,6 +479,22 @@ export default function JobsPage() {
               <div><strong style={{ color: colors.label }}>Service:</strong> {j.service_type || "—"}</div>
               <div><strong style={{ color: colors.label }}>Contract:</strong> {j.contract_amount ? usd.format(j.contract_amount) : "—"}</div>
               <div><strong style={{ color: colors.label }}>Deposit:</strong> {j.deposit_amount ? usd.format(j.deposit_amount) : "—"} {j.deposit_paid ? "(Paid)" : ""}</div>
+              <div>
+                <strong style={{ color: colors.label }}>Payment terms:</strong>{" "}
+                {(j.payment_schedule || []).length > 0
+                  ? `${(j.payment_schedule || []).length} phases`
+                  : "Flat fee"}
+              </div>
+              {(j.payment_schedule || []).length > 0 && (
+                <ol style={{ margin: "0.35rem 0 0 1.1rem", padding: 0, fontSize: "0.75rem" }}>
+                  {(j.payment_schedule || []).map((p, i) => (
+                    <li key={i} style={{ margin: "0.2rem 0" }}>
+                      <strong style={{ color: colors.heading }}>{usd.format(p.amount)}</strong>
+                      {p.label ? ` (${p.label})` : ""} — {p.due_on}
+                    </li>
+                  ))}
+                </ol>
+              )}
               <div><strong style={{ color: colors.label }}>Permit:</strong> {j.permit_number || "—"} ({j.permit_status})</div>
               <div><strong style={{ color: colors.label }}>ETA:</strong> {j.estimated_start || "—"} → {j.estimated_end || "—"}</div>
               <div><strong style={{ color: colors.label }}>Address:</strong> {j.job_address_line1} {j.job_address_city}, {j.job_address_state} {j.job_address_zip}</div>
@@ -385,10 +518,76 @@ export default function JobsPage() {
         </div>
 
         {/* Agreements */}
-        {(j.agreements || []).length > 0 && (
-          <div style={{ ...cardStyle, marginTop: "1.5rem" }}>
-            <h3 style={{ color: colors.heading, fontSize: "0.85rem", fontWeight: 700, marginBottom: "0.75rem" }}>Agreements</h3>
-            {(j.agreements || []).map((agr: Agreement) => {
+        <div style={{ ...cardStyle, marginTop: "1.5rem" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "0.75rem" }}>
+            <h3 style={{ color: colors.heading, fontSize: "0.85rem", fontWeight: 700, margin: 0, flex: 1 }}>Agreements</h3>
+            <button
+              style={{ ...buttonPrimary, fontSize: "0.65rem", padding: "0.35rem 0.75rem" }}
+              onClick={() => (reviseOpen ? setReviseOpen(false) : openRevise(j))}
+            >
+              {reviseOpen
+                ? "Cancel"
+                : (j.agreements || []).length > 0
+                  ? "Revise Payment Schedule"
+                  : "New Agreement"}
+            </button>
+          </div>
+
+          {reviseOpen && (
+            <div
+              style={{
+                border: `1px solid ${colors.borderLight}`,
+                borderRadius: "8px",
+                padding: "1rem",
+                marginBottom: "1rem",
+                background: "rgba(148,163,184,0.05)",
+              }}
+            >
+              <p style={{ color: colors.muted, fontSize: "0.7rem", marginTop: 0 }}>
+                Issues a new agreement for this job with the schedule below. The
+                existing agreement stays on file as the historical record — send
+                the new link to the customer to have them sign the revised terms.
+              </p>
+
+              <PaymentScheduleEditor
+                phases={revisePhases}
+                onChange={setRevisePhases}
+                contractAmount={j.contract_amount ? Number(j.contract_amount) : 0}
+              />
+
+              <div style={{ marginTop: "1rem" }}>
+                <label style={labelStyle}>Scope of Work (HTML)</label>
+                <textarea
+                  style={{ ...inputStyle, minHeight: "160px", resize: "vertical", fontFamily: "monospace", fontSize: "0.75rem", color: colors.heading, background: colors.input }}
+                  value={reviseScope}
+                  onChange={(e) => setReviseScope(e.target.value)}
+                />
+                <p style={{ color: colors.muted, fontSize: "0.65rem", marginTop: "0.25rem" }}>
+                  Pre-filled from the most recent agreement on this job.
+                </p>
+              </div>
+
+              {reviseError && (
+                <p style={{ color: colors.danger, fontSize: "0.7rem", marginTop: "0.5rem" }}>{reviseError}</p>
+              )}
+
+              <button
+                style={{ ...buttonPrimary, fontSize: "0.7rem", padding: "0.4rem 0.9rem", marginTop: "0.75rem", opacity: reviseBusy ? 0.6 : 1 }}
+                onClick={() => issueRevisedAgreement(j)}
+                disabled={reviseBusy}
+              >
+                {reviseBusy ? "Issuing..." : "Issue Agreement"}
+              </button>
+            </div>
+          )}
+
+          {(j.agreements || []).length === 0 && !reviseOpen && (
+            <p style={{ color: colors.muted, fontSize: "0.75rem", margin: 0 }}>
+              No agreement on this job yet.
+            </p>
+          )}
+
+          {(j.agreements || []).map((agr: Agreement) => {
               const link = `${typeof window !== "undefined" ? window.location.origin : ""}/onboard/${agr.id}`;
               return (
                 <div key={agr.id} style={{ padding: "0.75rem", borderRadius: "8px", background: agr.status === "signed" ? "rgba(16,185,129,0.06)" : "rgba(249,115,22,0.05)", border: `1px solid ${agr.status === "signed" ? "rgba(16,185,129,0.2)" : "rgba(249,115,22,0.15)"}`, marginBottom: "0.5rem" }}>
@@ -432,8 +631,7 @@ export default function JobsPage() {
                 </div>
               );
             })}
-          </div>
-        )}
+        </div>
 
         {/* Agreement Viewer Modal */}
         {viewingAgreement && (
@@ -718,6 +916,13 @@ export default function JobsPage() {
                 <input style={inputStyle} type="number" value={form.deposit_amount} onChange={F("deposit_amount")} placeholder="15000" />
               </div>
             </div>
+
+            <PaymentScheduleEditor
+              phases={phases}
+              onChange={setPhases}
+              contractAmount={Number(form.contract_amount) || 0}
+            />
+
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <label style={labelStyle}>Estimated Start</label>
@@ -775,7 +980,7 @@ export default function JobsPage() {
                 )}
                 <button
                   style={{ ...buttonSecondary, marginTop: "0.75rem", fontSize: "0.75rem" }}
-                  onClick={() => { setOnboardLink(null); setView("list"); setForm({ ...emptyForm }); }}
+                  onClick={() => { setOnboardLink(null); setView("list"); setForm({ ...emptyForm }); setPhases([]); }}
                 >
                   Done — Go to Jobs List
                 </button>
