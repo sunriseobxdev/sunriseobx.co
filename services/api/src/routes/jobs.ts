@@ -25,6 +25,90 @@ async function nextJobNumber(): Promise<string> {
   return `${prefix}${String(lastNum + 1).padStart(3, "0")}`;
 }
 
+/**
+ * The client's mailing address, read off a job request body.
+ *
+ * A job carries two addresses that are not the same thing: the client's own
+ * address (they are the party to the contract) and the job site. They were
+ * previously conflated — the desk never asked for the client's address at all,
+ * so agreements printed a bare state code where the client's address belongs.
+ * These fields are namespaced `customer_address_*` to keep them clearly apart
+ * from the job's `job_address_*`.
+ */
+interface CustomerAddress {
+  provided: boolean;
+  phone: string | null;
+  line1: string | null;
+  line2: string | null;
+  city: string | null;
+  state: string | null;
+  zip: string | null;
+}
+
+function readCustomerAddress(body: Record<string, unknown>): CustomerAddress {
+  const pick = (key: string): string | null => {
+    const v = body[key];
+    if (typeof v !== "string") return null;
+    const t = v.trim();
+    return t.length > 0 ? t : null;
+  };
+
+  const addr: CustomerAddress = {
+    provided: false,
+    phone: pick("customer_phone"),
+    line1: pick("customer_address_line1"),
+    line2: pick("customer_address_line2"),
+    city: pick("customer_address_city"),
+    state: pick("customer_address_state"),
+    zip: pick("customer_address_zip"),
+  };
+
+  addr.provided =
+    addr.phone !== null ||
+    addr.line1 !== null ||
+    addr.line2 !== null ||
+    addr.city !== null ||
+    addr.state !== null ||
+    addr.zip !== null;
+
+  return addr;
+}
+
+/**
+ * Fill in the customer's details, leaving anything this request did not supply
+ * exactly as it was. COALESCE rather than assignment, so saving a job without
+ * retyping the client's address cannot erase it.
+ */
+async function updateCustomerAddress(
+  customerId: string,
+  addr: CustomerAddress,
+  fullName?: string | null
+): Promise<void> {
+  const pool = getPool();
+  await pool.query(
+    `UPDATE customers SET
+       full_name     = COALESCE($1, full_name),
+       phone         = COALESCE($2, phone),
+       address_line1 = COALESCE($3, address_line1),
+       address_line2 = COALESCE($4, address_line2),
+       city          = COALESCE($5, city),
+       state         = COALESCE($6, state),
+       zip           = COALESCE($7, zip),
+       updated_at    = NOW()
+     WHERE id = $8`,
+    [
+      fullName && String(fullName).trim() ? String(fullName).trim() : null,
+      addr.phone,
+      addr.line1,
+      addr.line2,
+      addr.city,
+      addr.state,
+      addr.zip,
+      customerId,
+    ]
+  );
+}
+
 // List jobs
 jobsRouter.get("/", requirePrivilege("manage_jobs"), async (_req, res) => {
   const pool = getPool();
@@ -57,6 +141,11 @@ jobsRouter.post("/", requirePrivilege("manage_jobs"), async (req, res) => {
     return;
   }
 
+  // The client's mailing address is theirs, not the job site's. Keep them
+  // apart: the contract names the client by their own address and the job
+  // site separately.
+  const custAddr = readCustomerAddress(req.body);
+
   const pool = getPool();
   let custId = customer_id;
 
@@ -70,11 +159,28 @@ jobsRouter.post("/", requirePrivilege("manage_jobs"), async (req, res) => {
       custId = existing.rows[0].id;
     } else {
       const created = await pool.query(
-        `INSERT INTO customers (email, full_name) VALUES ($1, $2) RETURNING id`,
-        [customer_email.toLowerCase().trim(), customer_name || null]
+        `INSERT INTO customers (email, full_name, phone, address_line1, address_line2, city, state, zip)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING id`,
+        [
+          customer_email.toLowerCase().trim(),
+          customer_name || null,
+          custAddr.phone,
+          custAddr.line1,
+          custAddr.line2,
+          custAddr.city,
+          custAddr.state,
+          custAddr.zip,
+        ]
       );
       custId = created.rows[0].id;
     }
+  }
+
+  // An existing customer keeps whatever they already have unless this request
+  // actually supplies a value — COALESCE so a blank field never erases a
+  // address that is already on file.
+  if (custId && (custAddr.provided || customer_name)) {
+    await updateCustomerAddress(custId, custAddr, customer_name);
   }
 
   const jobNumber = await nextJobNumber();
@@ -105,7 +211,13 @@ jobsRouter.get("/:id", requirePrivilege("manage_jobs"), async (req, res) => {
   const pool = getPool();
   const job = await pool.query(
     `SELECT j.*, c.full_name AS customer_name, c.email AS customer_email,
-            c.phone AS customer_phone, c.address_line1 AS customer_address
+            c.phone AS customer_phone,
+            c.address_line1 AS customer_address_line1,
+            c.address_line2 AS customer_address_line2,
+            c.city AS customer_address_city,
+            c.state AS customer_address_state,
+            c.zip AS customer_address_zip,
+            c.address_line1 AS customer_address
      FROM jobs j LEFT JOIN customers c ON j.customer_id = c.id
      WHERE j.id = $1`,
     [req.params.id]
@@ -220,6 +332,19 @@ jobsRouter.put("/:id", requirePrivilege("manage_jobs"), async (req, res) => {
     res.status(404).json({ error: "Not found" });
     return;
   }
+
+  // The client's own address lives on the customer record, not the job. Update
+  // it here too so the desk has one place to correct an address that is
+  // printing wrong on an agreement.
+  const custAddr = readCustomerAddress(req.body);
+  if (custAddr.provided && result.rows[0].customer_id) {
+    await updateCustomerAddress(
+      result.rows[0].customer_id,
+      custAddr,
+      typeof req.body.customer_name === "string" ? req.body.customer_name : null
+    );
+  }
+
   res.json(result.rows[0]);
 });
 

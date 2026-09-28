@@ -39,6 +39,11 @@ interface JobDetail extends Job {
   description: string;
   customer_phone: string;
   customer_address: string;
+  customer_address_line1: string | null;
+  customer_address_line2: string | null;
+  customer_address_city: string | null;
+  customer_address_state: string | null;
+  customer_address_zip: string | null;
   job_address_line1: string;
   job_address_city: string;
   job_address_state: string;
@@ -162,12 +167,61 @@ const STATUS_COLORS: Record<string, "success" | "warning" | "info" | "muted" | "
 
 const usd = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" });
 
+const sectionHeadingStyle: React.CSSProperties = {
+  color: colors.heading,
+  fontSize: "0.72rem",
+  fontWeight: 700,
+  letterSpacing: "0.08em",
+  textTransform: "uppercase",
+  marginTop: "0.75rem",
+  paddingTop: "0.75rem",
+  borderTop: `1px solid ${colors.borderLight}`,
+};
+
+/**
+ * One-line postal address. Mirrors the API's formatter: a state code on its own
+ * is not an address, so a customer with nothing on file renders as empty rather
+ * than as the bare word "NC".
+ */
+function formatAddr(parts: {
+  line1?: string | null;
+  line2?: string | null;
+  city?: string | null;
+  state?: string | null;
+  zip?: string | null;
+}): string {
+  const c = (v?: string | null) => (typeof v === "string" ? v.trim() : "");
+  const line1 = c(parts.line1);
+  const line2 = c(parts.line2);
+  const city = c(parts.city);
+  const state = c(parts.state);
+  const zip = c(parts.zip);
+  if (!line1 && !city && !zip) return "";
+  const locality = [city, [state, zip].filter(Boolean).join(" ")].filter(Boolean).join(", ");
+  return [line1, line2, locality].filter(Boolean).join(", ");
+}
+
+const emptyAddrForm = {
+  customer_phone: "",
+  customer_address_line1: "",
+  customer_address_line2: "",
+  customer_address_city: "",
+  customer_address_state: "NC",
+  customer_address_zip: "",
+};
+
 const emptyForm = {
   title: "",
   description: "",
   service_type: "",
   customer_email: "",
   customer_name: "",
+  customer_phone: "",
+  customer_address_line1: "",
+  customer_address_line2: "",
+  customer_address_city: "",
+  customer_address_state: "NC",
+  customer_address_zip: "",
   job_address_line1: "",
   job_address_city: "",
   job_address_state: "NC",
@@ -193,6 +247,32 @@ export default function JobsPage() {
   const [linkCopied, setLinkCopied] = useState(false);
   const [viewingAgreement, setViewingAgreement] = useState<AgreementDetail | null>(null);
   const [phases, setPhases] = useState<PaymentPhase[]>([]);
+  const [sameAsClient, setSameAsClient] = useState(false);
+
+  // While "same as client" is ticked, the job site tracks the client's address.
+  useEffect(() => {
+    if (!sameAsClient) return;
+    setForm((p) =>
+      p.job_address_line1 === p.customer_address_line1 &&
+      p.job_address_city === p.customer_address_city &&
+      p.job_address_state === p.customer_address_state &&
+      p.job_address_zip === p.customer_address_zip
+        ? p
+        : {
+            ...p,
+            job_address_line1: p.customer_address_line1,
+            job_address_city: p.customer_address_city,
+            job_address_state: p.customer_address_state,
+            job_address_zip: p.customer_address_zip,
+          }
+    );
+  }, [
+    sameAsClient,
+    form.customer_address_line1,
+    form.customer_address_city,
+    form.customer_address_state,
+    form.customer_address_zip,
+  ]);
 
   // Revise-agreement panel on the detail view
   const [reviseOpen, setReviseOpen] = useState(false);
@@ -200,6 +280,12 @@ export default function JobsPage() {
   const [reviseScope, setReviseScope] = useState("");
   const [reviseBusy, setReviseBusy] = useState(false);
   const [reviseError, setReviseError] = useState<string | null>(null);
+
+  // Client mailing-address editor on the detail view
+  const [addrOpen, setAddrOpen] = useState(false);
+  const [addrForm, setAddrForm] = useState({ ...emptyAddrForm });
+  const [addrBusy, setAddrBusy] = useState(false);
+  const [addrError, setAddrError] = useState<string | null>(null);
 
   useEffect(() => {
     loadJobs();
@@ -292,6 +378,7 @@ export default function JobsPage() {
         setView("list");
         setForm({ ...emptyForm });
         setPhases([]);
+        setSameAsClient(false);
       }
       loadJobs();
     } catch (err) {
@@ -385,6 +472,42 @@ export default function JobsPage() {
       setReviseError(msg);
     } finally {
       setReviseBusy(false);
+    }
+  }
+
+  /** Load the client's address into the editor from the job detail. */
+  function openAddr(j: JobDetail) {
+    setAddrForm({
+      customer_phone: j.customer_phone || "",
+      customer_address_line1: j.customer_address_line1 || "",
+      customer_address_line2: j.customer_address_line2 || "",
+      customer_address_city: j.customer_address_city || "",
+      customer_address_state: j.customer_address_state || "NC",
+      customer_address_zip: j.customer_address_zip || "",
+    });
+    setAddrError(null);
+    setAddrOpen(true);
+  }
+
+  /**
+   * Save the client's mailing address. It belongs to the customer record, so
+   * this rides on the job PUT rather than touching the job's own job_address_*
+   * fields — the two addresses stay independent.
+   */
+  async function saveCustomerAddress(j: JobDetail) {
+    setAddrBusy(true);
+    setAddrError(null);
+    try {
+      await apiFetch(`/api/jobs/${j.id}`, {
+        method: "PUT",
+        body: JSON.stringify(addrForm),
+      });
+      setAddrOpen(false);
+      loadJobDetail(j.id);
+    } catch (e) {
+      setAddrError(e instanceof Error && e.message ? e.message : "Could not save the address.");
+    } finally {
+      setAddrBusy(false);
     }
   }
 
@@ -497,7 +620,7 @@ export default function JobsPage() {
               )}
               <div><strong style={{ color: colors.label }}>Permit:</strong> {j.permit_number || "—"} ({j.permit_status})</div>
               <div><strong style={{ color: colors.label }}>ETA:</strong> {j.estimated_start || "—"} → {j.estimated_end || "—"}</div>
-              <div><strong style={{ color: colors.label }}>Address:</strong> {j.job_address_line1} {j.job_address_city}, {j.job_address_state} {j.job_address_zip}</div>
+              <div><strong style={{ color: colors.label }}>Job site:</strong> {formatAddr({ line1: j.job_address_line1, city: j.job_address_city, state: j.job_address_state, zip: j.job_address_zip }) || "—"}</div>
             </div>
             <div style={{ marginTop: "1rem", display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
               {j.status === "draft" && <button style={{ ...buttonPrimary, fontSize: "0.75rem", padding: "0.4rem 0.75rem" }} onClick={() => updateJobStatus(j.id, "pending")}>Mark Pending</button>}
@@ -508,12 +631,80 @@ export default function JobsPage() {
 
           {/* Customer Info */}
           <div style={cardStyle}>
-            <h3 style={{ color: colors.heading, fontSize: "0.85rem", fontWeight: 700, marginBottom: "0.75rem" }}>Customer</h3>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "0.75rem" }}>
+              <h3 style={{ color: colors.heading, fontSize: "0.85rem", fontWeight: 700, margin: 0, flex: 1 }}>Customer</h3>
+              <button
+                style={{ ...buttonSecondary, fontSize: "0.65rem", padding: "0.3rem 0.65rem" }}
+                onClick={() => (addrOpen ? setAddrOpen(false) : openAddr(j))}
+              >
+                {addrOpen ? "Cancel" : "Edit Address"}
+              </button>
+            </div>
             <div style={{ fontSize: "0.8rem", color: colors.body, lineHeight: 1.8 }}>
               <div><strong style={{ color: colors.label }}>Name:</strong> {j.customer_name || "—"}</div>
               <div><strong style={{ color: colors.label }}>Email:</strong> {j.customer_email || "—"}</div>
               <div><strong style={{ color: colors.label }}>Phone:</strong> {j.customer_phone || "—"}</div>
+              <div>
+                <strong style={{ color: colors.label }}>Mailing address:</strong>{" "}
+                {formatAddr({
+                  line1: j.customer_address_line1,
+                  line2: j.customer_address_line2,
+                  city: j.customer_address_city,
+                  state: j.customer_address_state,
+                  zip: j.customer_address_zip,
+                }) || (
+                  <span style={{ color: colors.warning }}>
+                    not set — the agreement will print a blank line here
+                  </span>
+                )}
+              </div>
             </div>
+
+            {addrOpen && (
+              <div style={{ marginTop: "0.9rem", paddingTop: "0.9rem", borderTop: `1px solid ${colors.borderLight}` }}>
+                <p style={{ color: colors.muted, fontSize: "0.7rem", marginTop: 0 }}>
+                  The client&rsquo;s own address, not the job site. Saving here
+                  updates the customer record; reissue the agreement afterwards
+                  for it to appear on the contract.
+                </p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label style={{ ...labelStyle, fontSize: "0.65rem" }}>Street Address</label>
+                    <input style={inputStyle} value={addrForm.customer_address_line1} onChange={(e) => setAddrForm((p) => ({ ...p, customer_address_line1: e.target.value }))} />
+                  </div>
+                  <div>
+                    <label style={{ ...labelStyle, fontSize: "0.65rem" }}>Apt / Suite</label>
+                    <input style={inputStyle} value={addrForm.customer_address_line2} onChange={(e) => setAddrForm((p) => ({ ...p, customer_address_line2: e.target.value }))} />
+                  </div>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3" style={{ marginTop: "0.5rem" }}>
+                  <div>
+                    <label style={{ ...labelStyle, fontSize: "0.65rem" }}>City</label>
+                    <input style={inputStyle} value={addrForm.customer_address_city} onChange={(e) => setAddrForm((p) => ({ ...p, customer_address_city: e.target.value }))} />
+                  </div>
+                  <div>
+                    <label style={{ ...labelStyle, fontSize: "0.65rem" }}>State</label>
+                    <input style={inputStyle} value={addrForm.customer_address_state} onChange={(e) => setAddrForm((p) => ({ ...p, customer_address_state: e.target.value }))} />
+                  </div>
+                  <div>
+                    <label style={{ ...labelStyle, fontSize: "0.65rem" }}>ZIP</label>
+                    <input style={inputStyle} value={addrForm.customer_address_zip} onChange={(e) => setAddrForm((p) => ({ ...p, customer_address_zip: e.target.value }))} />
+                  </div>
+                </div>
+                <div style={{ marginTop: "0.5rem" }}>
+                  <label style={{ ...labelStyle, fontSize: "0.65rem" }}>Phone</label>
+                  <input style={inputStyle} value={addrForm.customer_phone} onChange={(e) => setAddrForm((p) => ({ ...p, customer_phone: e.target.value }))} />
+                </div>
+                {addrError && <p style={{ color: colors.danger, fontSize: "0.7rem", marginTop: "0.5rem" }}>{addrError}</p>}
+                <button
+                  style={{ ...buttonPrimary, fontSize: "0.7rem", padding: "0.4rem 0.9rem", marginTop: "0.75rem", opacity: addrBusy ? 0.6 : 1 }}
+                  onClick={() => saveCustomerAddress(j)}
+                  disabled={addrBusy}
+                >
+                  {addrBusy ? "Saving..." : "Save Address"}
+                </button>
+              </div>
+            )}
           </div>
         </div>
 
@@ -879,6 +1070,44 @@ export default function JobsPage() {
                 <input style={inputStyle} value={form.customer_name} onChange={F("customer_name")} placeholder="Tom Winter" />
               </div>
             </div>
+
+            {/* Client's own mailing address — this is the party to the
+                contract, and is often not where the work happens. */}
+            <div style={sectionHeadingStyle}>Client Mailing Address</div>
+            <p style={{ color: colors.muted, fontSize: "0.7rem", margin: "-0.35rem 0 0.5rem" }}>
+              Where the client lives or receives mail. This is what prints as
+              the Client&rsquo;s address on the agreement — the job site is
+              entered separately below.
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label style={labelStyle}>Street Address</label>
+                <input style={inputStyle} value={form.customer_address_line1} onChange={F("customer_address_line1")} placeholder="118 Blackbeard Way" />
+              </div>
+              <div>
+                <label style={labelStyle}>Apt / Suite (optional)</label>
+                <input style={inputStyle} value={form.customer_address_line2} onChange={F("customer_address_line2")} placeholder="Unit 4" />
+              </div>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div>
+                <label style={labelStyle}>City</label>
+                <input style={inputStyle} value={form.customer_address_city} onChange={F("customer_address_city")} placeholder="Raleigh" />
+              </div>
+              <div>
+                <label style={labelStyle}>State</label>
+                <input style={inputStyle} value={form.customer_address_state} onChange={F("customer_address_state")} />
+              </div>
+              <div>
+                <label style={labelStyle}>ZIP</label>
+                <input style={inputStyle} value={form.customer_address_zip} onChange={F("customer_address_zip")} placeholder="27601" />
+              </div>
+            </div>
+            <div>
+              <label style={labelStyle}>Client Phone</label>
+              <input style={inputStyle} value={form.customer_phone} onChange={F("customer_phone")} placeholder="(252) 555-0134" />
+            </div>
+
             <div>
               <label style={labelStyle}>Service Type</label>
               <select style={inputStyle} value={form.service_type} onChange={F("service_type")}>
@@ -888,22 +1117,47 @@ export default function JobsPage() {
                 ))}
               </select>
             </div>
+
+            <div style={sectionHeadingStyle}>Job Site Address</div>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", margin: "-0.35rem 0 0.5rem" }}>
+              <input
+                id="same-as-client"
+                type="checkbox"
+                checked={sameAsClient}
+                onChange={(e) => {
+                  const on = e.target.checked;
+                  setSameAsClient(on);
+                  if (on) {
+                    setForm((p) => ({
+                      ...p,
+                      job_address_line1: p.customer_address_line1,
+                      job_address_city: p.customer_address_city,
+                      job_address_state: p.customer_address_state,
+                      job_address_zip: p.customer_address_zip,
+                    }));
+                  }
+                }}
+              />
+              <label htmlFor="same-as-client" style={{ color: colors.muted, fontSize: "0.7rem", cursor: "pointer" }}>
+                Job site is the same as the client&rsquo;s address
+              </label>
+            </div>
             <div>
               <label style={labelStyle}>Job Address</label>
-              <input style={inputStyle} value={form.job_address_line1} onChange={F("job_address_line1")} placeholder="22 Ocean Blvd" />
+              <input style={inputStyle} value={form.job_address_line1} onChange={F("job_address_line1")} placeholder="22 Ocean Blvd" disabled={sameAsClient} />
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div>
                 <label style={labelStyle}>City</label>
-                <input style={inputStyle} value={form.job_address_city} onChange={F("job_address_city")} placeholder="Southern Shores" />
+                <input style={inputStyle} value={form.job_address_city} onChange={F("job_address_city")} placeholder="Southern Shores" disabled={sameAsClient} />
               </div>
               <div>
                 <label style={labelStyle}>State</label>
-                <input style={inputStyle} value={form.job_address_state} onChange={F("job_address_state")} />
+                <input style={inputStyle} value={form.job_address_state} onChange={F("job_address_state")} disabled={sameAsClient} />
               </div>
               <div>
                 <label style={labelStyle}>ZIP</label>
-                <input style={inputStyle} value={form.job_address_zip} onChange={F("job_address_zip")} placeholder="27949" />
+                <input style={inputStyle} value={form.job_address_zip} onChange={F("job_address_zip")} placeholder="27949" disabled={sameAsClient} />
               </div>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -980,7 +1234,7 @@ export default function JobsPage() {
                 )}
                 <button
                   style={{ ...buttonSecondary, marginTop: "0.75rem", fontSize: "0.75rem" }}
-                  onClick={() => { setOnboardLink(null); setView("list"); setForm({ ...emptyForm }); setPhases([]); }}
+                  onClick={() => { setOnboardLink(null); setView("list"); setForm({ ...emptyForm }); setPhases([]); setSameAsClient(false); }}
                 >
                   Done — Go to Jobs List
                 </button>

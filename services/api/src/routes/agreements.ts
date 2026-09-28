@@ -5,10 +5,12 @@ import { customerAuthMiddleware } from "../middleware/customer-auth.js";
 import { getPool } from "../lib/db.js";
 import { sendAgreementLink } from "../lib/email.js";
 import {
+  escapeHtml,
   normalizePaymentSchedule,
   renderCompensationHtml,
   validatePaymentSchedule,
 } from "../lib/payment-schedule.js";
+import { formatAddress, formatAddressLines } from "../lib/address.js";
 
 export const agreementsRouter = Router();
 
@@ -129,7 +131,8 @@ agreementsRouter.post(
     // Get job info for rendering
     const job = await pool.query(
       `SELECT j.*, c.full_name AS customer_name, c.email AS customer_email,
-              c.address_line1, c.city, c.state, c.zip
+              c.phone AS customer_phone,
+              c.address_line1, c.address_line2, c.city, c.state, c.zip
        FROM jobs j LEFT JOIN customers c ON j.customer_id = c.id
        WHERE j.id = $1`,
       [req.params.id]
@@ -185,8 +188,27 @@ agreementsRouter.post(
       day: "numeric",
     });
 
-    // Build client address string with proper spacing
-    const clientAddr = [j.address_line1, j.city, j.state || "NC"].filter(Boolean).join(", ") + (j.zip ? ` ${j.zip}` : "");
+    // The client's mailing address and the job site are two different things —
+    // an owner in Raleigh often builds on the Outer Banks. The party block gets
+    // the client's address; the job site is named in Services Provided below.
+    const clientAddrLines = formatAddressLines({
+      line1: j.address_line1,
+      line2: j.address_line2,
+      city: j.city,
+      state: j.state,
+      zip: j.zip,
+    });
+    const clientAddrHtml =
+      clientAddrLines.length > 0
+        ? clientAddrLines.map((l) => escapeHtml(l)).join("<br/>")
+        : "_______________";
+
+    const jobSiteAddr = formatAddress({
+      line1: j.job_address_line1,
+      city: j.job_address_city,
+      state: j.job_address_state,
+      zip: j.job_address_zip,
+    });
 
     // Render full agreement HTML
     const fullHtml = `
@@ -208,7 +230,7 @@ agreementsRouter.post(
 
         <p style="text-align: center; margin: 1em 0;">
           <strong>${j.customer_name || "_______________"}</strong><br/>
-          ${clientAddr || "_______________"}<br/>
+          ${clientAddrHtml}<br/>
           (the &ldquo;Client&rdquo;)
         </p>
 
@@ -233,6 +255,13 @@ agreementsRouter.post(
         <div style="margin: 0.8em 0 0.8em 2em;">
           ${scope_of_work_html}
         </div>
+        ${
+          jobSiteAddr
+            ? `<p>The Services will be performed at the following property (the &ldquo;Job Site&rdquo;): <strong>${escapeHtml(
+                jobSiteAddr
+              )}</strong>. Where the Job Site differs from the Client&rsquo;s address set out above, the Client represents that it is authorized to contract for work at the Job Site.</p>`
+            : ""
+        }
 
         ${composeBody(
           boilerplate,
