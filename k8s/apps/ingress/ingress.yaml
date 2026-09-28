@@ -28,6 +28,24 @@ spec:
   domains:
     - media.sunriseobx.co
 ---
+# Turn on the load balancer's own HTTP -> HTTPS redirect. Without this the
+# GCLB serves the site happily on plain http:// — no redirect, no HSTS — so a
+# customer who types the domain gets an unencrypted session carrying their
+# login cookie. 301 so browsers and search engines remember it.
+#
+# Safe only because every host on this ingress already terminates TLS with a
+# valid certificate; a host redirected to an https:// it cannot serve would
+# break outright.
+apiVersion: networking.gke.io/v1beta1
+kind: FrontendConfig
+metadata:
+  name: sunriseobx-frontend-config
+  namespace: sunriseobx
+spec:
+  redirectToHttps:
+    enabled: true
+    responseCodeName: MOVED_PERMANENTLY_DEFAULT
+---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -36,6 +54,7 @@ metadata:
   annotations:
     kubernetes.io/ingress.global-static-ip-name: sunriseobx-ip
     networking.gke.io/managed-certificates: sunriseobx-cert,sunriseobx-cdn-cert,sunriseobx-media-cert
+    networking.gke.io/v1beta1.FrontendConfig: sunriseobx-frontend-config
     kubernetes.io/ingress.class: gce
 spec:
   rules:
